@@ -1,0 +1,80 @@
+version: '1.0'
+services:
+  
+  #Apache Service
+  api-apache:
+    build:
+      context: ./
+      dockerfile: ./docker/services/loc/api-apache/api-apache.dockerfile
+    image: ubuntu/apache2:latest
+    container_name: api-apache
+    restart: always
+    env_file:
+      - ./docker/.env
+    ports:
+      - 8080:80
+      - 4430:443
+    volumes:
+      - ./:/var/www/html
+    links:
+      - api-php
+    depends_on:
+      - api-php
+    networks:
+      network:
+        ipv4_address: 192.168.56.4
+
+  #PHP Service
+  api-php:
+    build:
+      context: ./
+      dockerfile: ./docker/services/loc/api-php/api-php.dockerfile
+    image: nanoninja/php-fpm:8.1
+    container_name: api-php
+    restart: always
+    env_file:
+      - ./docker/.env
+    ports:
+      - 9000:9000
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    links:
+      - api-mysql      
+    networks:
+      network:
+        ipv4_address: 192.168.56.3
+
+  #MySQL Database Service
+  api-mysql:
+    build:
+      context: ./
+      dockerfile: ./docker/services/loc/api-mysql/api-mysql.dockerfile
+    image: ubuntu/mysql:latest
+    container_name: api-mysql
+    restart: always
+    env_file:
+      - ./docker/.env
+    ports:
+      - 30306:3306
+    volumes:
+      - api-data:/var/lib/mysql:rw
+    networks:
+      network:
+        ipv4_address: 192.168.56.2
+
+#docker Networks
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.56.0/16
+          gateway: 192.168.56.1
+
+#Volumes
+volumes:
+  api-data:
+
+
+# Add 192.168.56.4 myboutique.local to /etc/hosts
