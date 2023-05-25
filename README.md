@@ -101,7 +101,7 @@ it.
 Data is available from the following link in the form of a zip file containing csv files
 with the raw data. Each csv file includes a header row before the data rows
 matching the following data definition.
-- [Data available here](/step41/boutique/data/data.zip)
+- [Data available here](/data/data.zip)
 
 ### Users:
 The user data includes both password plaintext and password hash so that you
@@ -109,8 +109,8 @@ can verify that your password hashing works or feel free to generate new hashes
 for the passwords. The hashes present were generated using the golang bcrypt
 library an example of plaintext/hash:
 
-Password: testing
-Hash: $$2a$$10$$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
+- Password: testing
+- Hash: \\$2a\\$10\\$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
 
 ### Users Columns:
 - id *int*
