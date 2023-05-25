@@ -1,6 +1,6 @@
 # My Boutique - Developer Sample Take-Home Exercise
 
-- [My Boutique](https://myboutique.local).
+- [My Boutique](https://myboutique.loc)
 
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, inventory,
@@ -101,7 +101,7 @@ it.
 Data is available from the following link in the form of a zip file containing csv files
 with the raw data. Each csv file includes a header row before the data rows
 matching the following data definition.
-Data available: https://s3.amazonaws.com/commentsold-share/data.zip
+- [Data available here](/step41/boutique/data/data.zip)
 
 ### Users:
 The user data includes both password plaintext and password hash so that you
@@ -110,86 +110,86 @@ for the passwords. The hashes present were generated using the golang bcrypt
 library an example of plaintext/hash:
 
 Password: testing
-Hash: \$2a\$10\$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
+Hash: $$2a$$10$$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
 
 ### Users Columns:
-- id int
-- name string
-- email string
-- password_hash string
-- password_plain string
-- superadmin boolean
-- shop_name string
-- remember_token varchar(100)
-- created_at timestamp
-- updated_at timestamp
-- card_brand string
-- card_last_four string
-- trial_ends_at timestamp
-- shop_domain string
-- is_enabled boolean
-- billing_plan string
-- trial_starts_at timestamp
+- id *int*
+- name *string*
+- email *string*
+- password_hash *string*
+- password_plain *string*
+- superadmin *boolean*
+- shop_name *string*
+- remember_token *varchar(100)*
+- created_at *timestamp*
+- updated_at *timestamp*
+- card_brand *string*
+- card_last_four *string*
+- trial_ends_at *timestamp*
+- shop_domain *string*
+- is_enabled *boolean*
+- billing_plan *string*
+- trial_starts_at *timestamp*
 
 ### Products Columns:
-- id int
-- product_name string
-- description text
-- style text
-- brand text
-- created_at timestamp
-- updated_at timestamp
-- url string
-- product_type string
-- shipping_price int
-- note text
-- admin_id int
+- id *int*
+- product_name *string*
+- description *text*
+- style *text*
+- brand *text*
+- created_at *timestamp*
+- updated_at *timestamp*
+- url *string*
+- product_type *string*
+- shipping_price *int*
+- note *text*
+- admin_id *int*
 
 ### Inventory Columns:
-- id int
-- product_id int
-- quantity int
-- color text
-- size text
-- weight double
-- price_cents int
-- sale_price_cents int
-- cost_cents int
-- sku string
-- length double
-- width double
-- height double
-- note text
+- id *int*
+- product_id *int*
+- quantity *int*
+- color *text*
+- size *text*
+- weight *double*
+- price_cents *int*
+- sale_price_cents *int*
+- cost_cents *int*
+- sku *string*
+- length *double*
+- width *double*
+- height *double*
+- note *text*
 
 ### Orders Columns: (Orders represent an order in the system linked to a product)
-- id int
-- product_id int
-- street_address text
-- apartment text
+- id *int*
+- product_id *int*
+- street_address *text*
+- apartment *text*
 
 ## Code Test - Full Stack 5 (additional database fields)
-- city text
-- state text
+- city *text*
+- state *text*
 - country_code string 
-- zip text
-- phone_number string
-- email text
-- name string
-- order_status string
-- payment_ref text
-- transaction_id string
-- payment_amt_cents int
-- ship_charged_cents int
-- ship_cost_cents int
+- zip *text*
+- phone_number *string*
+- email *text*
+- name *string*
+- order_status *string*
+- payment_ref *text*
+- transaction_id *string*
+- payment_amt_cents *int*
+- ship_charged_cents *int*
+- ship_cost_cents *int*
 - subtotal_cents int 
-- total_cents int
-- shipper_name text
-- payment_date timestamp
-- shipped_date timestamp
-- tracking_number text
-- tax_total_cents int 
-- created_at timestamp 
-- updated_at timestamp
+- total_cents *int*
+- shipper_name *text*
+- payment_date *timestamp*
+- shipped_date *timestamp*
+- tracking_number *text*
+- tax_total_cents *int*
+- created_at *timestamp*
+- updated_at *timestamp*
 
 ## Code Test - Full Stack 6
 - N/A
