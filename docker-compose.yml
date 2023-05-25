@@ -1,4 +1,4 @@
-version: '1.0'
+version: '3.7'
 services:
   
   #Apache Service
@@ -10,19 +10,19 @@ services:
     container_name: api-apache
     restart: always
     env_file:
-      - ./docker/.env
+      - ./.env
     ports:
-      - 8080:80
-      - 4430:443
+      - 8081:80
+      - 4431:443
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html/myboutique.loc
     links:
       - api-php
     depends_on:
       - api-php
     networks:
       network:
-        ipv4_address: 192.168.56.4
+        ipv4_address: 192.168.0.4
 
   #PHP Service
   api-php:
@@ -33,17 +33,17 @@ services:
     container_name: api-php
     restart: always
     env_file:
-      - ./docker/.env
+      - ./.env
     ports:
-      - 9000:9000
+      - 9001:9000
     working_dir: /var/www/html
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html/myboutique.loc
     links:
       - api-mysql      
     networks:
       network:
-        ipv4_address: 192.168.56.3
+        ipv4_address: 192.168.0.3
 
   #MySQL Database Service
   api-mysql:
@@ -54,14 +54,14 @@ services:
     container_name: api-mysql
     restart: always
     env_file:
-      - ./docker/.env
+      - ./.env
     ports:
-      - 30306:3306
+      - 33061:3306
     volumes:
       - api-data:/var/lib/mysql:rw
     networks:
       network:
-        ipv4_address: 192.168.56.2
+        ipv4_address: 192.168.0.2
 
 #docker Networks
 networks:
@@ -69,12 +69,12 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.56.0/16
-          gateway: 192.168.56.1
+        - subnet: 192.168.0.0/16
+          gateway: 192.168.0.1
 
 #Volumes
 volumes:
   api-data:
 
 
-# Add 192.168.56.4 myboutique.local to /etc/hosts
+# Add 192.168.0.4 myboutique.loc to /etc/hosts

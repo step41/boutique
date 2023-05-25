@@ -1,8 +1,6 @@
-## About Boutique
+# My Boutique - Developer Sample Take-Home Exercise
 
 - [My Boutique](https://myboutique.local).
-
-This is an exercise project based in the following criteria:
 
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, inventory,
@@ -22,7 +20,7 @@ demonstrate your capabilities with web development. Please do not feel obligated
 to implement all features listed.
 
 ## Features:
-PLEASE NOTE: You should plan to implement some version of B along with one
+*Please Note:* You should plan to implement some version of B along with one
 of D or E as a minimum feature set.
 
 ## Code Test - Full Stack 1
@@ -64,11 +62,11 @@ Display the Product Name, sku, quantity, color, size, price and cost
 Show the total count of inventory items in the system for the user
 Allow the user to filter the list for a specific product id or sku
 
-Optionally:
+*Optionally:*
 
 Allow the user to filter based on items with inventory below a threshold
 
-OR
+*OR*
 
 ### E. Order Display and Interaction:
 List all orders in the system for products on the logged in user account and
@@ -80,7 +78,7 @@ applicable), tracking number (if applicable)
 Show a total of sales for all orders
 Show the average sale total across all orders
 
-Optionally:
+*Optionally:*
 
 Allow the user to filter orders based on product or SKU
 Optionally show the filtered totals for the filtered order set
@@ -100,101 +98,98 @@ You own whatever code you write, and are free to do whatever you want with
 it.
 
 ### Data Format:
-
 Data is available from the following link in the form of a zip file containing csv files
 with the raw data. Each csv file includes a header row before the data rows
 matching the following data definition.
 Data available: https://s3.amazonaws.com/commentsold-share/data.zip
 
 ### Users:
-
 The user data includes both password plaintext and password hash so that you
 can verify that your password hashing works or feel free to generate new hashes
 for the passwords. The hashes present were generated using the golang bcrypt
 library an example of plaintext/hash:
 
 Password: testing
-Hash: $2a$10$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
+Hash: \$2a\$10\$.IM7LoxN3zNdzlicXhCpkuct2S2xuuMhuKtWRk0Wgr1zelSG1F/G6
 
 ### Users Columns:
-id int
-name string
-email string
-password_hash string
-password_plain string
-superadmin boolean
-shop_name string
-remember_token varchar(100)
-created_at timestamp
-updated_at timestamp
-card_brand string
-card_last_four string
-trial_ends_at timestamp
-shop_domain string
-is_enabled boolean
-billing_plan stringtrial_starts_at timestamp
+- id int
+- name string
+- email string
+- password_hash string
+- password_plain string
+- superadmin boolean
+- shop_name string
+- remember_token varchar(100)
+- created_at timestamp
+- updated_at timestamp
+- card_brand string
+- card_last_four string
+- trial_ends_at timestamp
+- shop_domain string
+- is_enabled boolean
+- billing_plan string
+- trial_starts_at timestamp
 
 ### Products Columns:
-id int
-product_name string
-description text
-style text
-brand text
-created_at timestamp
-updated_at timestamp
-url string
-product_type string
-shipping_price int
-note text
-admin_id int
+- id int
+- product_name string
+- description text
+- style text
+- brand text
+- created_at timestamp
+- updated_at timestamp
+- url string
+- product_type string
+- shipping_price int
+- note text
+- admin_id int
 
 ### Inventory Columns:
-id int
-product_id int
-quantity int
-color text
-size text
-weight double
-price_cents int
-sale_price_cents int
-cost_cents int
-sku string
-length double
-width double
-height double
-note text
-Orders
-Orders represent an order in the system linked to a product along with
+- id int
+- product_id int
+- quantity int
+- color text
+- size text
+- weight double
+- price_cents int
+- sale_price_cents int
+- cost_cents int
+- sku string
+- length double
+- width double
+- height double
+- note text
 
-### Orders Columns:
-id int
-product_id int
-street_address text
-apartment text
+### Orders Columns: (Orders represent an order in the system linked to a product)
+- id int
+- product_id int
+- street_address text
+- apartment text
 
-## Code Test - Full Stack 5
-city text
-state text
-country_code string 
-zip text
-phone_number string
-email text
-name string
-order_status string
-payment_ref text
-transaction_id string
-payment_amt_cents int
-ship_charged_cents int
-ship_cost_cents int
-subtotal_cents int 
-total_cents int
-shipper_name text
-payment_date timestamp
-shipped_date timestamp
-tracking_number text
-tax_total_cents int 
-created_at timestamp 
-updated_at timestamp
+## Code Test - Full Stack 5 (additional database fields)
+- city text
+- state text
+- country_code string 
+- zip text
+- phone_number string
+- email text
+- name string
+- order_status string
+- payment_ref text
+- transaction_id string
+- payment_amt_cents int
+- ship_charged_cents int
+- ship_cost_cents int
+- subtotal_cents int 
+- total_cents int
+- shipper_name text
+- payment_date timestamp
+- shipped_date timestamp
+- tracking_number text
+- tax_total_cents int 
+- created_at timestamp 
+- updated_at timestamp
 
 ## Code Test - Full Stack 6
-N/A
+- N/A

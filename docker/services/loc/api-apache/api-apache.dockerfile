@@ -1,4 +1,4 @@
-FROM ubuntu/apache2:latest
+FROM ubuntu/apache2:2.4-22.10_beta
 
 # metadata
 LABEL org.opencontainers.image.authors="Step41 Services <services@step41.com>"
@@ -19,13 +19,14 @@ RUN apt-get update && apt-get install -y procps \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # add content and configs
-COPY ./docker/services/loc/api-apache/api-apache-entrypoint.sh                                     /
-COPY ./docker/services/loc/api-apache/etc/apache2/apache2.conf                                     /etc/apache2/apache2.conf
-COPY ./docker/services/loc/api-apache/etc/apache2/mods-available/alias.conf                        /etc/apache2/mods-available/alias.conf
-COPY ./docker/services/loc/api-apache/etc/apache2/sites-available/10-myboutique.local.conf         /etc/apache2/sites-available/10-myboutique.local.conf
+COPY ./docker/services/loc/api-apache/api-apache-entrypoint.sh                                      /
+COPY ./docker/services/loc/api-apache/etc/apache2/apache2.conf                                      /etc/apache2/apache2.conf
+COPY ./docker/services/loc/api-apache/etc/apache2/mods-available/alias.conf                         /etc/apache2/mods-available/alias.conf
+COPY ./docker/services/loc/api-apache/etc/apache2/sites-available/10-myboutique.loc.conf            /etc/apache2/sites-available/10-myboutique.loc.conf
 
 # add dirs for logging and sites
-RUN mkdir -p /var/log/apache2/10-myboutique.local
+RUN mkdir -p /var/log/apache2/myboutique.loc
+RUN mkdir -p /var/www/html/myboutique.loc
 
 # enable mods and sites
 RUN a2enmod rewrite
@@ -39,7 +40,7 @@ RUN a2enmod alias
 RUN a2enmod authn_core
 RUN a2enmod access_compat
 RUN a2dissite 000-default
-RUN a2ensite 10-myboutique.local
+RUN a2ensite 10-myboutique.loc
 
 # group and user perms
 RUN groupmod -g 1000 www-data \
