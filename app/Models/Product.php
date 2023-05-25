@@ -4,16 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
+    protected $table = 'products';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'admin_id',
+        'user_id',
         'product_name',
         'email',
         'password',
@@ -35,11 +40,19 @@ class Product extends Model
     }
 
     /**
-     * Get the inventory for a product.
+     * Get the stock for a product.
      */
-    public function inventory(): HasOne
+    public function stock(): HasOne
     {
-        return $this->hasOne(Inventory::class);
+        return $this->hasOne(Stock::class);
+    }
+
+    /**
+     * Get the user for a product.
+     */
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class)->orderBy('name');
     }
 
 }

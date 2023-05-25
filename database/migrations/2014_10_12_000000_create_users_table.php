@@ -13,6 +13,7 @@ return new class extends Migration
     {
         if (!Schema::hasTable('users')):
             Schema::create('users', function (Blueprint $table) {
+
                 $table->id();
                 $table->string('name');
                 $table->string('email')->unique();
@@ -31,6 +32,7 @@ return new class extends Migration
                 $table->boolean('is_enabled');
                 $table->rememberToken();
                 $table->timestamps();
+                
             });
         endif;
     }

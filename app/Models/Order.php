@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
+    use SoftDeletes;
+
+    protected $table = 'orders';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,6 +19,7 @@ class Order extends Model
      */
     protected $fillable = [
         'product_id',
+        'stock_id',
         'street_address',
         'apartment',
         'city',
@@ -44,6 +50,14 @@ class Order extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the stock for a given order.
+     */
+    public function stock(): BelongsTo
+    {
+        return $this->belongsTo(Stock::class);
     }
 
 }

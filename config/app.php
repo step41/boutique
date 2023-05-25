@@ -168,6 +168,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\BoutiqueServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -183,7 +185,20 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'Utilities' => App\Helpers\Utilities::class,
+        'ARR' => App\Facades\ArrayHelper::class,
+        'COM' => App\Facades\CommonHelper::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'DF' => Illuminate\Support\Facades\DirFileHelper::class,
+        'H' => App\Facades\HtmlHelper::class,
+        'INF' => App\Facades\InflectionHelper::class,
+        'J' => App\Facades\JudyHelper::class,
+        'NUM' => App\Facades\NumericHelper::class,
+        'RLG' => \RandomLib\Factory::class,
+        'STR' => App\Facades\StringHelper::class,
+        'T' => App\Facades\TranslationHelper::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
+        'UTF' => App\Facades\UTFHelper::class,
+
     ])->toArray(),
 
 ];

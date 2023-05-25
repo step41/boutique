@@ -13,31 +13,34 @@ return new class extends Migration
     {
         if (!Schema::hasTable('orders')):
             Schema::create('orders', function (Blueprint $table) {
+
                 $table->id();
-                $table->integer('product_id');
+                $table->foreignId('product_id')->constrained();
+                $table->foreignId('stock_id')->constrained();
                 $table->text('street_address');
                 $table->text('apartment');
                 $table->text('city');
                 $table->text('state');
-                $table->text('zip');
                 $table->string('country_code');
+                $table->text('zip');
                 $table->string('phone_number');
                 $table->text('email');
                 $table->string('name');
                 $table->string('order_status');
-                $table->text('payment_ref');
-                $table->string('transaction_id');
-                $table->integer('payment_amt_cents');
-                $table->integer('ship_charged_cents');
-                $table->integer('ship_cost_cents');
-                $table->integer('subtotal_cents');
-                $table->integer('total_cents');
+                $table->text('payment_ref')->nullable();
+                $table->string('transaction_id')->nullable();
+                $table->integer('payment_amt_cents')->nullable();
+                $table->integer('ship_charged_cents')->nullable();
+                $table->integer('ship_cost_cents')->nullable();
+                $table->integer('subtotal_cents')->nullable();
+                $table->integer('total_cents')->nullable();
                 $table->text('shipper_name');
                 $table->timestamp('payment_date');
                 $table->timestamp('shipped_date');
                 $table->text('tracking_number');
-                $table->integer('tax_total_cents');
+                $table->integer('tax_total_cents')->nullable();
                 $table->timestamps();
+
             });
         endif;
     }

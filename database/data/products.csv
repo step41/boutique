@@ -1,4 +1,4 @@
-"id","product_name","description","style","brand","created_at","updated_at","url","product_type","shipping_price","note","admin_id"
+"id","product_name","description","style","brand","created_at","updated_at","url","product_type","shipping_price","note","user_id"
 78,"Girl next door Hat","Girl next door Hat is an amazing Hat Product...Lorem ipsum dolor sit amet, ne est diceret platonem, ius viris fabulas ea. Amet elit putent ea sit, per accumsan verterem cu.","Girl next door","Ted Baker","2018-12-19 18:47:42","2019-01-28 00:16:41","","clothing",1475,"",33
 79,"Sports Wear Headphones","Sports Wear Headphones is an amazing Headphones Product...Lorem ipsum dolor sit amet, ne est diceret platonem, ius viris fabulas ea. Amet elit putent ea sit, per accumsan verterem cu.","Sports Wear","Won Hundred","2018-07-27 19:58:25","2018-08-08 09:20:14","","clothing",785,"",36
 80,"Preppy T-Shirt","Preppy T-Shirt is an amazing T-Shirt Product...Lorem ipsum dolor sit amet, ne est diceret platonem, ius viris fabulas ea. Amet elit putent ea sit, per accumsan verterem cu.","Preppy","Emerica","2018-03-08 09:22:36","2018-10-21 10:20:13","","clothing",738,"",39

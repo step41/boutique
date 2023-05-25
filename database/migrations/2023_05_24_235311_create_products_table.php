@@ -13,17 +13,19 @@ return new class extends Migration
     {
         if (!Schema::hasTable('products')):
             Schema::create('products', function (Blueprint $table) {
+
                 $table->id();
-                $table->integer('admin_id');
+                $table->foreignId('user_id')->constrained();
                 $table->string('product_type');
                 $table->string('product_name');
                 $table->text('description');
                 $table->text('style');
                 $table->text('brand');
                 $table->string('url');
-                $table->integer('shipping_price');
+                $table->integer('shipping_price')->nullable();
                 $table->text('note');
                 $table->timestamps();
+
             });
         endif;
     }

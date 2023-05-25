@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Helpers\Utilities;
+use Illuminate\Support\Facades\DB;
+use App\Facades\DirFileHelper as DF;
 
 class UserSeeder extends Seeder
 {
@@ -14,30 +15,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate();
+        DB::disableQueryLog();
+        // Truncation won't work with foreign key constraints so we'll just delete the table records since we're importing ids
+        DB::table('users')->delete();
         $file = base_path('database/data/users.csv');
-        $records = Utilities::csvImport($file);
-        foreach ($records as $r):
-            User::create([
-                'id' => $r['id'],
-                'name' => $r['name'],
-                'email' => $r['email'],
-                'password' => $r['password_plain'],
-                'password_hash' => $r['password_hash'],
-                'password_plain' => $r['password_plain'],
-                'superadmin' => $r['superadmin'],
-                'shop_name' => $r['shop_name'],
-                'remember_token' => $r['remember_token'],
-                'created_at' => $r['created_at'],
-                'updated_at' => $r['updated_at'],
-                'card_brand' => $r['card_brand'],
-                'card_last_four' => $r['card_last_four'],
-                'trial_ends_at' => $r['trial_ends_at'],
-                'shop_domain' => $r['shop_domain'],
-                'is_enabled' => $r['is_enabled'],
-                'billing_plan' => $r['billing_plan'],
-                'trial_starts_at' => $r['trial_starts_at'],
-            ]);
+        $records = DF::prepForSeed($file);
+        foreach ($records as $record):
+            // Add password hash using built-in bcrypt so we can eventually remove the password_hash and password_plain cols
+            $record['password'] = $record['password_plain'];
+            User::create($record);
         endforeach;
     }
 }

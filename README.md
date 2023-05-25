@@ -2,8 +2,26 @@
 
 - [My Boutique](https://myboutique.loc)
 
+## Setup:
+- Download and install Docker desktop app (if not already installed)
+- Download this git repo and extract to directory of your choice
+- Open a terminal window and navigate to your extracted directory
+- Copy the .env file (provided by take-home dev) to the root of your extracted directory
+- Run the following command to build your docker containers: `docker-compose up --build -d` (run `docker ps` after completion to ensure all containers are running successfully)
+- Run the following command to edit your local host entries: `sudo vim /etc/hosts` (you can use nano or editor of your choice)
+- Add the following entries to your hosts file:
+    -- 192.168.0.2	api-mysql
+    -- 192.168.0.3	api-php
+    -- 192.168.0.4  myboutique.loc
+- Save the changes and run the following command: `sudo service networking restart` 
+- Run the following command to import 3rd party packages: `composer update -o`
+- 
+
+
+
+
 ## Requirements:
-You have been given a data dump of fake ecommerce data for users, inventory,
+You have been given a data dump of fake ecommerce data for users, stock,
 products and orders (data format will be detailed below) from a hypothetical
 ecommerce system. Your task is to take that data and to build a web application
 that will provide a set of basic features for interacting with the data.
@@ -54,17 +72,17 @@ delete a product
 Then one of the following areas of functionality:
 
 ### D. Inventory Display and interaction:
-List all inventory records for the authenticated user and allow for navigation within the set.
+List all stock records for the authenticated user and allow for navigation within the set.
 
 
 ## Code Test - Full Stack 2
 Display the Product Name, sku, quantity, color, size, price and cost
-Show the total count of inventory items in the system for the user
+Show the total count of stock items in the system for the user
 Allow the user to filter the list for a specific product id or sku
 
 *Optionally:*
 
-Allow the user to filter based on items with inventory below a threshold
+Allow the user to filter based on items with stock below a threshold
 
 *OR*
 
@@ -143,11 +161,11 @@ library an example of plaintext/hash:
 - product_type *string*
 - shipping_price *int*
 - note *text*
-- admin_id *int*
+- user_id *int* (ref to users->id col)
 
-### Inventory Columns:
+### Stock Columns:
 - id *int*
-- product_id *int*
+- product_id *int* (ref to products->id col)
 - quantity *int*
 - color *text*
 - size *text*
@@ -163,7 +181,7 @@ library an example of plaintext/hash:
 
 ### Orders Columns: (Orders represent an order in the system linked to a product)
 - id *int*
-- product_id *int*
+- product_id *int* (ref to products->id col)
 - street_address *text*
 - apartment *text*
 
