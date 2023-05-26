@@ -1,23 +1,27 @@
-@extends('layouts.app')
+<?php 
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+    $output = '';
+    $status = '';
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    if (session('status')):
+        $status .= H::div(['class' => 'alert alert-success', 'role' => 'alert', 'text' => session('status')]);
+    endif;
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+    $output .= 
+        H::blade('layouts.head').
+        H::container(
+            H::div(['class' => 'row justify-content-center'])->inject(
+                H::div(['class' => 'col-md-8'])->inject(
+                    H::div(['class' => 'card'])->inject(
+                        H::div(['class' => 'card-header', 'text' => __('Dashboard')]).
+                        H::div(['class' => 'card-body', 'text' => $status.__('You are logged in!')])
+                    )
+                )
+            ).
+            ''
+        ).
+        H::blade('layouts.foot')
+    ;
+
+    echo $output;
+

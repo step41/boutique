@@ -624,6 +624,27 @@ class HtmlHelper {
 	}
 	
 	/**
+	 * Use dot notation pathing to include files.
+	 *
+	 * Provides an easy method for converting existing blade @include calls to work in standard PHP (non-blade files).
+	 *
+	 * @param null $path
+	 *
+	 * @return void
+	 */
+	public function blade($path = NULL, $args = array()) {
+		$output = '';
+		extract($args);
+		$file = realpath($_SERVER['DOCUMENT_ROOT']).'/../resources/views/'.str_replace('.', DIRECTORY_SEPARATOR, $path).'.blade.php';
+		if (file_exists($file)):
+			ob_start();
+			require($file); 
+			$output = ob_get_clean();
+		endif;
+		return $output;
+	}
+
+	/**
 	 * Create a body open tag element
 	 *
 	 * @param	string|array	$attribs		Element key-value attributes array
@@ -2387,6 +2408,18 @@ class HtmlHelper {
 	}
 	
 	/**
+	 * Generates an HTML meta csrf-token tag and returns results as an Element object.
+	 *
+	 * @param	string			$content		String of content to place in the content attribute
+	 * @return	object							Returns an Element object
+	 * @access	public
+	 * @since	5.0
+	 */
+	public function metacsrf($content = '') {
+		return $this->meta('csrf-token', $content);
+	}
+	
+	/**
 	 * Generates an HTML meta description tag and returns results as an Element object.
 	 *
 	 * @param	string			$content		String of content to place in the content attribute
@@ -2849,6 +2882,23 @@ class HtmlHelper {
 	}
 	
 	/**
+	 * Create a prefetch link element and return as an Element object.
+	 *
+	 * @param	string			$href			String value to assign to 'href' attribute
+	 * @return	object							Returns an object of type Element		
+	 * @access 	public
+	 * @since	5.0
+	 */
+	public function prefetch($href = '') {
+		return $this->link(array(
+			'rel' => 'dns-prefetch', 
+			'media' => FALSE, 
+			'type' => FALSE, 
+			'href' => $href
+		));
+	}
+	
+	/**
 	 * Create the HTML element specified by the method name and save it as 
 	 * an Element object. Add one or more key=value attributes to the object. 
 	 * Returns an object of type Element so additional methods can be run 
@@ -2971,7 +3021,7 @@ class HtmlHelper {
 			endif;
 			unset($attribs['cdata']);
 		endif;
-		$defaults = array('type' => 'text/javascript');
+		$defaults = array('type' => 'text/javascript', 'defer' => TRUE);
 		$attribs = $this->_merge($defaults, $attribs);
 		return $this->_make(__FUNCTION__, $attribs);
 	}
