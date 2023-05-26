@@ -25,6 +25,7 @@ return new class extends Migration
                 $table->integer('shipping_price')->nullable();
                 $table->text('note');
                 $table->timestamps();
+                $table->softDeletes();
 
             });
         endif;

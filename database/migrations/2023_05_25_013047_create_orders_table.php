@@ -40,6 +40,7 @@ return new class extends Migration
                 $table->text('tracking_number');
                 $table->integer('tax_total_cents')->nullable();
                 $table->timestamps();
+                $table->softDeletes();
 
             });
         endif;

@@ -48,11 +48,11 @@ class Product extends Model
     }
 
     /**
-     * Get the user for a product.
+     * Get the user for a given product.
      */
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class)->orderBy('name');
+        return $this->belongsTo(User::class);
     }
 
 }

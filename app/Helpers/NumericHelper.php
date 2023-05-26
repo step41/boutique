@@ -22,7 +22,7 @@ use Log;
  *
  * @package		Helpers
  * @author		Jeff Todnem
- * @since 		5.0  
+ * @since 		1.0  
  */
 class NumericHelper {
 

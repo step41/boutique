@@ -32,6 +32,7 @@ return new class extends Migration
                 $table->boolean('is_enabled');
                 $table->rememberToken();
                 $table->timestamps();
+                $table->softDeletes();
                 
             });
         endif;

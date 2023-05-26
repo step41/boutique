@@ -7,14 +7,17 @@
 - Download this git repo and extract to directory of your choice
 - Open a terminal window and navigate to your extracted directory
 - Copy the .env file (provided by take-home dev) to the root of your extracted directory
-- Run the following command to build your docker containers: `docker-compose up --build -d` (run `docker ps` after completion to ensure all containers are running successfully)
+- Run the following command to build your docker containers: `docker-compose up --build -d`
+- Run `docker ps` after completion to ensure all containers are running successfully
+- You can run `docker logs <container_name>` if you run into issues with a particular container
 - Run the following command to edit your local host entries: `sudo vim /etc/hosts` (you can use nano or editor of your choice)
 - Add the following entries to your hosts file:
-    -- 192.168.0.2	api-mysql
-    -- 192.168.0.3	api-php
-    -- 192.168.0.4  myboutique.loc
+- - 192.168.0.2	api-mysql
+- - 192.168.0.3	api-php
+- - 192.168.0.4  myboutique.loc
 - Save the changes and run the following command: `sudo service networking restart` 
 - Run the following command to import 3rd party packages: `composer update -o`
+- Run the following command to build and seed the database: `php artisan migrate:fresh --seed` (~20 mins to complete)
 - 
 
 
