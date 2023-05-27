@@ -1,0 +1,665 @@
+/* ======== Begin Bootstrap 3 Media Queries ======== */
+	/* ==== Mobile First Method ==== */
+		/* Custom, iPhone Retina */ 
+		@media only screen and (min-width : 320px) {}
+		/* Extra Small Devices, Phones */ 
+		@media only screen and (min-width : 480px) {}
+		/* Small Devices, Tablets */
+		@media only screen and (min-width : 768px) {}
+		/* Medium Devices, Desktops */
+		@media only screen and (min-width : 992px) {}
+		/* Large Devices, Wide Screens */
+		@media only screen and (min-width : 1200px) {}
+	/* ==== Non-Mobile First Method ==== */
+		/* Large Devices, Wide Screens */
+		@media only screen and (max-width : 1200px) {}
+		/* Medium Devices, Desktops */
+		@media only screen and (max-width : 992px) {}
+		/* Small Devices, Tablets */
+		@media only screen and (max-width : 768px) {}
+		/* Extra Small Devices, Phones */ 
+		@media only screen and (max-width : 480px) {}
+		/* Custom, iPhone Retina */ 
+		@media only screen and (max-width : 320px) {}
+/* ======== End Bootstrap 3 Media Queries ======== */
+
+/* 
+	Bootstrap Specific Variables 
+
+	Note: To get "lighter" and "darker" versions of any hex value:
+	1. Open Fireworks and create a new document
+	2. Create a new Rectangle of any size on the canvas
+	3. Fill the rectangle with your base (starting) hex color
+	4. With the rectangle selected go Filters > Adjust Color > Brightness and Contrast
+	5. Confirm bitmap conversion message
+	6. Adjust the Brightness slider down (-16) for darker, or up (+16) for lighter and click OK to save changes.
+	7. Capture the hex value of the now-altered rectangle.
+*/
+
+/* Default Color Palette */
+$palette-color-1: #fff;
+$palette-color-2: #f9f9f9;
+$palette-color-3: #f5f5f5;
+$palette-color-4: #eee;
+$palette-color-5: #ddd;
+$palette-color-6: #ccc;
+$palette-color-7: #bbb;
+$palette-color-8: #aaa;
+$palette-color-9: #999;
+$palette-color-10: #888;
+$palette-color-11: #777;
+$palette-color-12: #666;
+$palette-color-13: #555;
+$palette-color-14: #444;
+$palette-color-15: #333;
+$palette-color-16: #222;
+$palette-color-17: #111;
+$palette-color-18: #0a0a0a;
+$palette-color-19: #060606;
+$palette-color-20: #000;
+
+/* Brand Colors */
+$brand-default-lighter: $palette-color-9;
+$brand-default: $palette-color-10;
+$brand-default-darker: $palette-color-11;
+$brand-success-lighter: #6cc86c;
+$brand-success: #5cb85c;
+$brand-success-darker: #48a448;
+$brand-info-lighter: #6bd0ee;
+$brand-info: #5bc0de;
+$brand-info-darker: #47acca;
+$brand-warning-lighter: #ffbd5e;
+$brand-warning: #f0ad4e;
+$brand-warning-darker: #dc993a;
+$brand-danger-lighter: #e9635f;
+$brand-danger: #d9534f;
+$brand-danger-darker: #c53f3b;
+
+/* Application Variables */
+$font-size: 1.1em; /* 1.1em w/ Google Fonts - .9em w/ Standard Fonts */
+$font-family-icons: origincms;
+$font-family-serif: 'Noticia Text', 'freight-text-pro', Georgia, Cambria, 'Times New Roman' ,Times, serif;
+$font-family-sanserif: 'Roboto Condensed', Roboto, Helvetica, Arial, 'Trebuchet MS', sans-serif;
+$font-family: $font-family-sanserif;
+$font-family-form-fields: 'Roboto Condensed';
+
+/* Colors */
+$color: $palette-color-13;
+$color-lighter: $palette-color-12;
+$color-darker: $palette-color-14;
+$color-accent: #2a6496;
+$color-placeholder: $palette-color-9;
+
+/* Borders */
+$border-standard: 1px #ddd solid;
+$border-standard-color: #ddd;
+$border-standard-width: 1px;
+$border-standard-style: solid;
+$border-link: 1px #ddd dashed;
+$border-link-active: 1px #999 dashed;
+
+/* Inputs */
+$input-border: 1px #ccc solid;
+$input-bgcolor: #fff;
+$input-margin: 0;
+$input-padding: 2px 5px;
+$input-font-size: 90%;
+
+/* Menus */
+$menu-bgcolor: $palette-color-11;
+$menu-active-bgcolor: $palette-color-12;
+$menu-prime-bgcolor: $menu-active-bgcolor;
+$menu-prime-active-bgcolor: $palette-color-13;
+$menu-secondary-size: 50px;
+
+/* Buttons */
+$button-bgcolor: $palette-color-4;
+$button-active-bgcolor: $palette-color-5;
+$button-padding: 2px 4px;
+$button-margin: $input-margin;
+$button-border: $input-border;
+$button-color: $palette-color-13;
+
+/* Tables */
+$table-header-color: $palette-color-4;
+$table-gutter-color: $palette-color-5;
+$table-cell-padding: 2px 4px;
+
+/* Striping */
+$row-even-color: $palette-color-2;
+$row-odd-color: $palette-color-1;
+
+/* Application Mix-ins */
+/* 
+Center any item vertically - guaranteed! Note that this method can cause elements 
+to be blurry due to the element being placed on a “half pixel”. A solution for this 
+is to set its parent element to preserve-3d. Like following:
+.parent-element {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.element {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+*/
+
+@mixin scrollbars($color: #999, $size: 8px) {
+	// For webkit browsers (Chrome, Safari, Edge)
+	&::-webkit-scrollbar {
+		width:  $size;
+		height: $size;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: $color;
+	}
+	&::-webkit-scrollbar-track {
+		background-color: mix($color, white, 50%);
+	}
+	// For Firefox
+	& {
+		scrollbar-color: $color;
+		scrollbar-width: $size;
+		/* scrollbar-gutter: ; */
+	}
+	// For Internet Explorer
+	& {
+		scrollbar-face-color: $color;
+		scrollbar-track-color: mix($color, white, 50%);;
+	}
+}
+
+@mixin rotate180 {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+@mixin rotate90 {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+@mixin rotate270 {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	transform: rotate(270deg);
+}
+@mixin fliphorizontal {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);
+	-webkit-transform: scale(-1, 1);
+	-moz-transform: scale(-1, 1);
+	-ms-transform: scale(-1, 1);
+	-o-transform: scale(-1, 1);
+	transform: scale(-1, 1);
+}
+@mixin flipvertical {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
+	-webkit-transform: scale(1, -1);
+	-moz-transform: scale(1, -1);
+	-ms-transform: scale(1, -1);
+	-o-transform: scale(1, -1);
+	transform: scale(1, -1);
+}
+@mixin centervertparent { 
+	-ms-transform: preserve-3d;
+	-moz-transform: preserve-3d;
+	-o-transform: preserve-3d;
+  	-webkit-transform: preserve-3d;
+  	transform: preserve-3d;
+}
+@mixin centervert { 
+	-ms-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+  	-webkit-transform: translateY(-50%);
+	position: relative;
+	top: 50%;
+  	transform: translateY(-50%);
+}
+@mixin noboxshadow {
+	-ms-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	-o-box-shadow: none !important;
+  	-webkit-box-shadow: none !important;
+  	box-shadow: none !important;
+}
+@mixin notransform {
+	-ms-transform: none !important;
+	-moz-transform: none !important;
+	-o-transform: none !important;
+  	-webkit-transform: none !important;
+  	box-shadow: none !important;
+}
+@mixin clear {
+	&:before,
+	&:after {
+		content: " ";
+		display: table;
+	}
+	&:after {
+		clear: both;
+	}
+}
+@mixin even {
+	background-color: $row-even-color;
+}
+@mixin odd {
+	background-color: $row-odd-color;
+}
+@mixin icon {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	display: inline-block;
+	font-family: $font-family-icons;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 1;
+	min-width: 20px;
+	speak: none;
+	text-transform: none;
+}
+@mixin noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+		 -moz-user-select: none; /* Old versions of Firefox */
+		  -ms-user-select: none; /* Internet Explorer/Edge */
+			  user-select: none; /* Non-prefixed version, currently
+									supported by Chrome, Edge, Opera and Firefox */
+}
+@mixin sticky {
+	position: relative;
+	position: -webkit-sticky;
+	position: sticky;
+}
+@mixin textlink {
+	&:hover {
+		@include opacity(.7);
+	}
+	color: $color;
+	text-decoration: none;
+}
+@mixin hidetext {
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+@mixin br0 {
+	@include border-radius(0 !important);
+}
+@mixin br0btm {
+	@include border-bottom-radius(0 !important);
+}
+@mixin br0top {
+	@include border-top-radius(0 !important);
+}
+@mixin br0lft {
+	@include border-top-left-radius(0 !important);
+	@include border-bottom-left-radius(0 !important);
+}
+@mixin br0rgt {
+	@include border-top-right-radius(0 !important);
+	@include border-bottom-right-radius(0 !important);
+}
+@mixin br1 {
+	@include border-radius(1px);
+}
+@mixin br2 {
+	@include border-radius(2px);
+}
+@mixin br2rgt {
+	@include border-right-radius(2px);
+}
+@mixin br3 {
+	@include border-radius(3px);
+}
+@mixin br3top {
+	@include border-top-radius(3px);
+}
+@mixin br4 {
+	@include border-radius(4px);
+}
+@mixin br4i {
+	@include border-radius(4px !important);
+}
+@mixin br4bl {
+	@include border-bottom-left-radius(4px);
+}
+@mixin br4br {
+	@include border-bottom-right-radius(4px);
+}
+@mixin br4btm {
+	@include border-bottom-radius(4px);
+}
+@mixin br4lft {
+	@include border-left-radius(4px);
+}
+@mixin br4lfti {
+	@include border-left-radius(4px !important);
+}
+@mixin br4rgt {
+	@include border-right-radius(4px);
+}
+@mixin br4rgti {
+	@include border-right-radius(4px !important);
+}
+@mixin br4tl {
+	@include border-top-left-radius(4px);
+}
+@mixin br4top {
+	@include border-top-radius(4px);
+}
+@mixin br4tr {
+	@include border-top-right-radius(4px);
+}
+@mixin br5 {
+	@include border-radius(5px);
+}
+@mixin br5i {
+	@include border-radius(5px !important);
+}
+@mixin br5top {
+	@include border-top-radius(5px);
+}
+@mixin br6 {
+	@include border-radius(6px);
+}
+@mixin br6btm {
+	@include border-bottom-radius(6px);
+}
+@mixin br6top {
+	@include border-top-radius(6px);
+}
+@mixin br7 {
+	@include border-radius(7px);
+}
+@mixin br7top {
+	@include border-top-radius(7px);
+}
+@mixin br8 {
+	@include border-radius(8px);
+}
+@mixin br9 {
+	@include border-radius(9px);
+}
+@mixin br10br {
+	@include border-bottom-right-radius(10px);
+}
+@mixin br10 {
+	@include border-radius(10px);
+}
+@mixin br11 {
+	@include border-radius(11px);
+}
+@mixin br12 {
+	@include border-radius(12px);
+}
+@mixin br13 {
+	@include border-radius(13px);
+}
+@mixin br14 {
+	@include border-radius(14px);
+}
+@mixin br15 {
+	@include border-radius(15px);
+}
+@mixin br16 {
+	@include border-radius(16px);
+}
+@mixin br17 {
+	@include border-radius(17px);
+}
+@mixin br18 {
+	@include border-radius(18px);
+}
+@mixin br19 {
+	@include border-radius(19px);
+}
+@mixin br20 {
+	@include border-radius(20px);
+}
+@mixin br50p {
+	@include border-radius(50%);
+}
+@mixin tabular {
+	background-color: $table-gutter-color;
+	border-collapse: separate;
+	border-spacing: 1px;
+	margin: 9px 0;
+	width: 100%;
+	tr:nth-child(even) { 
+		background-color: $row-even-color;
+	}
+	tr:nth-child(odd) { 
+		background-color: $row-odd-color; 
+	}
+}
+@mixin input {
+	@include br3;
+	background-color: $input-background-color;
+	border: $input-border;
+	font-family: $font-family-serif;
+	font-size: $input-font-size;
+	margin: $input-margin;
+	padding: $input-padding;
+}
+@mixin button {
+	@include br3;
+	background-color: $button-background-color;
+	border: $button-border;
+	color: $button-color;
+	font-size: 80%;
+	margin: $button-margin;
+	padding: $button-padding;
+	&:hover {
+		background-color: $button-hover-background-color;	
+	}
+}
+@mixin setHeadings($beg, $end, $size, $dec) {
+	$cur: $beg;
+	$end: $end + 1;
+	@while $cur != $end {
+		h#{$cur} {
+			font-size: $size;
+			font-weight: 700;
+			color: $color;
+		}
+		$cur: $cur + 1;
+		$size: $size - $dec;
+	}
+}
+@mixin opacity($value) {
+	@if $value {
+		$ievalue: $value * 100;
+		-khtml-opacity: $value;
+		-moz-opacity: $value;
+		-ms-filter: alpha(opacity=#{$ievalue});
+		-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$ievalue});
+		filter: alpha(opacity=#{$ievalue});
+		opacity: $value;		
+	}
+}
+@mixin background-size($value) {
+	@if $value {
+		-webkit-background-size: $value;
+		-moz-background-size: $value;
+		-o-background-size: $value;
+		background-size: $value;
+	}
+}
+@mixin box-shadow($value) {
+	@if $value {
+		-ms-box-shadow: $value;
+		-moz-box-shadow: $value;
+		-o-box-shadow: $value;
+		-webkit-box-shadow: $value;
+		box-shadow: $value;
+	}
+}
+@mixin overlayFade($pos, $color, $beg:75%, $end:100%) {
+	@if $pos and $color {
+		background-image: linear-gradient($pos, rgba($color, $color, $color, 0 ) $beg, rgba($color, $color, $color, 1) $end);
+		background-image: -moz-linear-gradient($pos, rgba($color, $color, $color, 0 ) $beg, rgba($color, $color, $color, 1) $end);
+		background-image: -ms-linear-gradient($pos, rgba($color, $color, $color, 0 ) $beg, rgba($color, $color, $color, 1) $end);
+		background-image: -o-linear-gradient($pos, rgba($color, $color, $color, 0 ) $beg, rgba($color, $color, $color, 1) $end);
+		background-image: -webkit-linear-gradient($pos, rgba($color, $color, $color, 0 ) $beg, rgba($color, $color, $color, 1) $end);
+		content: '\00a0';
+		height: 100%;
+		position: absolute;
+		width: 100%;	
+	}
+}
+
+/*
+$duration options: value in seconds. Ex: .5s, 2s, .1s
+$function options: [ ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(x1, y1, x2, y2)]
+$property options: [ all | none | -specific-identifier ] // See https://developer.mozilla.org/en-US/docs/Web/CSS/transition-property for more details
+*/
+@mixin transition($duration, $property, $function) {
+	-webkit-transition: $duration $property $function;
+	-moz-transition: $duration $property $function;
+	-o-transition: $duration $property $function;
+	-ms-transition: $duration $property $function;
+	transition: $duration $property $function;
+}
+@mixin transitionEaseAll($duration) {
+	@if $duration {
+		@include transition($duration, all, ease);
+	}
+}
+/* 
+Compass flex box related mixin functions 
+-----------------------------------------------------------
+display-box
+box-orient(horizontal | vertical | inline-axis | block-axis | inherit)
+box-align(start | end | center | baseline | stretch)
+box-direction(normal | reverse | inherit)
+box-lines(single | multiple)
+box-pack(start | end | center | justify)
+box-flex($flex) 				// mixin which takes an int argument for box flex. Apply this to the children inside the box.
+box-flex-group($group) 			// mixin which takes an int argument for flexible grouping
+box-ordinal-group($group)		// mixin which takes an int argument for ordinal grouping and rearranging the order
+*/
+@mixin display-flex {
+	display: -webkit-box;	
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+@mixin flex-align-content($value) {
+	-ms-flex-line-pack: $value;
+	-webkit-align-content: $value;
+	-moz-align-content: $value;
+	-ms-align-content: $value;
+	align-content: $value;
+}
+@mixin flex-align($value) {
+	-ms-flex-align: $value;
+	-webkit-box-align: $value;
+	-moz-box-align: $value;
+	-ms-box-align: $value;
+	box-align: $value;
+	-webkit-align-items: flex-$value;
+	-moz-align-items: flex-$value;
+	-ms-align-items: flex-$value;
+	align-items: flex-$value;
+}
+@mixin flex-justify-content($value) {
+	-webkit-box-pack: $value;
+	-moz-box-pack: $value;
+	-ms-flex-pack: $value;
+	-webkit-justify-content: flex-$value;
+	-moz-justify-content: flex-$value;
+	-ms-justify-content: flex-$value;
+	justify-content: flex-$value;
+}
+@mixin flex($value) {
+	-webkit-box-flex: $value;
+	-moz-box-flex: $value;
+	-ms-box-flex: $value;
+	flex: $value;
+}
+@function is-direction($value) {
+	$is-keyword: index((to top, to top right, to right top, to right, to bottom right, to right bottom, to bottom, to bottom left, to left bottom, to left, to left top, to top left), $value);
+	$is-angle: type-of($value) == 'number' and index('deg' 'grad' 'turn' 'rad', unit($value));
+	@return $is-keyword or $is-angle;
+}
+
+@mixin linear-gradient($direction, $list...) { 
+	// Direction has been omitted and happens to be a color-stop
+	@if is-direction($direction) == false {
+		$list: $direction, $list;
+		$direction: 180deg;
+	}	
+	background: nth(nth($list, 1), 1);
+	//background: -webkit-linear-gradient(legacy-direction(direction), $list);
+	background: -webkit-linear-gradient($direction, $list);
+	background: linear-gradient($direction, $list);
+}
+@mixin linear-gradient-wrap-white($direction, $color) {
+	@include gradient($direction, (#fff, $color, #fff)); 
+}
+@mixin linear-gradient-jigsaw($color1, $color2:transparent) {
+	background: -webkit-linear-gradient(-135deg, $color2 5px, transparent 0) 0 5px, -webkit-linear-gradient(135deg, $color2 5px, $color1 0) 0 5px;
+	//background: -moz-linear-gradient(-135deg, $color2 5px, transparent 0) 0 5px, -moz-linear-gradient(135deg, $color2 5px, $color1 0) 0 5px;
+	//background: -o-linear-gradient(-135deg, $color2 5px, transparent 0) 0 5px, -o-linear-gradient(135deg, $color2 5px, $color1 0) 0 5px;
+	background: linear-gradient(-135deg, $color2 5px, transparent 0) 0 5px, linear-gradient(135deg, $color2 5px, $color1 0) 0 5px;
+}
+@mixin wordbreak {
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}
+
+/* Animations */
+@-webkit-keyframes glowing-default {
+	0% { background-color: $brand-default; -webkit-box-shadow: 0 0 3px $brand-default; border-color: $brand-default;}
+	50% { background-color: $brand-default-lighter; -webkit-box-shadow: 0 0 10px $brand-default-lighter; border-color: $brand-default-lighter; }
+	100% { background-color: $brand-default; -webkit-box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+}
+@-moz-keyframes glowing-default {
+	0% { background-color: $brand-default; -moz-box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+	50% { background-color: $brand-default-lighter; -moz-box-shadow: 0 0 10px $brand-default-lighter; border-color: $brand-default-lighter; }
+	100% { background-color: $brand-default; -moz-box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+}
+@-o-keyframes glowing-default {
+	0% { background-color: $brand-default; box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+	50% { background-color: $brand-default-lighter; box-shadow: 0 0 10px $brand-default-lighter; border-color: $brand-default-lighter; }
+	100% { background-color: $brand-default; box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+}
+@keyframes glowing-default {
+	0% { background-color: $brand-default; box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+	50% { background-color: $brand-default-lighter; box-shadow: 0 0 10px $brand-default-lighter; border-color: $brand-default-lighter; }
+	100% { background-color: $brand-default; box-shadow: 0 0 3px $brand-default; border-color: $brand-default; }
+}
+@mixin glowing-default($dur:1500ms) {
+	-webkit-animation: glowing-default $dur infinite;
+	-moz-animation: glowing-default $dur infinite;
+	-o-animation: glowing-default $dur infinite;
+	animation: glowing-default $dur infinite;
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};      
+}

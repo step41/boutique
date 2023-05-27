@@ -792,7 +792,7 @@ class HtmlHelper {
 				$this->div(['class' => 'row justify-content-center'])->inject(
 					$this->div(['class' => 'col-md-8'])->inject(
 						$this->div(['class' => 'card'])->inject(
-							$this->div(['class' => 'card-header', 'text' => $attribs['title']]).
+							$this->div(['class' => 'card-header', 'text' => $this->strong($attribs['title'])]).
 							$this->div(['class' => 'card-body', 'text' => $attribs['text']])
 						)
 					)

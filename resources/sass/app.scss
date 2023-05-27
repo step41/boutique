@@ -6,3 +6,37 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Variables
+@import 'mixins';
+
+// Variables
+@import 'modals';
+
+body {
+    background-color: darken($body-tertiary-bg-dark, 7);
+}
+.list {
+    padding-left: 0;
+    li {
+        list-style: none;
+        margin: 0;
+    }
+}
+.list-striped {
+    li {
+        padding: .5rem;
+        &:nth-of-type(odd) {
+            background-color: darken($body-tertiary-bg-dark, 5);
+        }
+        a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
+}
+.list-hover {
+    li:hover {
+        background-color: darken($body-tertiary-bg-dark, 6);
+    }
+}

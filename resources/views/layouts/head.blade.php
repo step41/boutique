@@ -37,7 +37,7 @@
 
     $output .= 
         H::doctype().
-        H::htmlopen(['lang' => str_replace('_', '-', app()->getLocale())]).
+        H::htmlopen(['lang' => str_replace('_', '-', app()->getLocale()), 'data-bs-theme' => 'dark']).
             H::head(
                 H::metacharset().
                 H::metaport().
@@ -54,7 +54,9 @@
                 H::stylesheet('/css/app.css').
                 
                 H::comment('Scripts').
+                H::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js').
                 H::script('/js/app.js').
+                H::script('/js/boutique_libraries.js').
 
                 //@vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -62,7 +64,7 @@
             ).
             H::body(['close' => FALSE]).
                 H::div(['id' => 'app', 'close' => FALSE]).
-                    H::nav(['class' => 'navbar navbar-expand-md navbar-light bg-white shadow-sm'])->inject(
+                    H::nav(['class' => 'navbar navbar-expand-md navbar-dark shadow-lg'])->inject(
                         H::container(
                             H::a(['class' => 'navbar-brand', 'href' => url('/'), 'text' => config('app.name')]).
                             H::button([

@@ -14,12 +14,16 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    //.combine([
-    //    'resources/js/libraries/boutique/1.0/Boutique.js',
-    //    'resources/js/libraries/boutique/1.0/Boutique.Storage.js',
-    //    'resources/js/libraries/boutique/1.0/Boutique.Messages.js',
-    //    'resources/js/libraries/boutique/1.0/Boutique.Utilities.js',
-    //], 'public/js/boutique_libraries.js').minify('public/js/boutique_libraries.js')
+    .combine([
+        'resources/js/libraries/boutique/1.0/Boutique.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Inflection.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Utilities.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Settings.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Messages.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Storage.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Validator.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Controllers.Product.js',
+    ], 'public/js/boutique_libraries.js').minify('public/js/boutique_libraries.js')
     .sass('resources/sass/app.scss', 'public/css')
     .options({
         processCssUrls: false

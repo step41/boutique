@@ -26,6 +26,7 @@ class ProductController extends Controller
      */
     public function __construct(Product $model, ProductRepository $repository)
     {
+        $this->middleware('auth');
         $this->model = $model;
         $this->repository = $repository;
     }
@@ -33,6 +34,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -42,7 +44,7 @@ class ProductController extends Controller
         endif;
 
         $input = $request->all();
-        $products = $this->model;
+        $products = $this->model->with('orders')->with('stock')->with('user');
         if (!empty($input['search'])):
             $products = $products->whereLike('product_name', $input['search']);
         endif;
@@ -50,6 +52,26 @@ class ProductController extends Controller
 
         return view('pages.product.index', compact('products'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
