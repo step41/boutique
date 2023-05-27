@@ -1,0 +1,19 @@
+.table-scroll {
+	display: block;
+	position: relative;
+}
+.table-scroll-content {
+	display: block;
+	height: 250px; /*FIX THE HEIGHT YOU NEED*/
+	overflow-y: auto;
+	position: relative;
+}
+.table-scroll .table-fixed, 
+.table-scroll .header-fixed 
+{
+	background-color: #fff;
+	left: 0;
+	position: absolute;
+	top: 0;
+	z-index: 1020;
+}

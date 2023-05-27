@@ -1,0 +1,1 @@
+(function($){$.fn.alterClass=function(c,d){var e=this;if(c.indexOf('*')===-1){e.removeClass(c);return!d?e:e.addClass(d)}var f=new RegExp('\\s'+c.replace(/\*/g,'[A-Za-z0-9-_]+').split(' ').join('\\s|\\s')+'\\s','g');e.each(function(i,a){var b=' '+a.className+' ';while(f.test(b)){b=b.replace(f,' ')}a.className=$.trim(b)});return!d?e:e.addClass(d)}})(jQuery);

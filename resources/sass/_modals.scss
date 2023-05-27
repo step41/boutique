@@ -1,0 +1,134 @@
+.modal-content {
+	@include br9;
+}
+.modal-backdrop {
+	background-color: #000;
+	position: fixed;
+}
+@media (min-width: 768px) {
+	.modal-dialog {
+		margin: 30px auto;
+	}
+	.modal-dialog:not(.modal-full):not(.modal-lg) {
+		max-width: 600px;
+		width: auto;
+	}
+	.modal-content {
+		-webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+	}
+	.modal-sm {
+		width: 300px;
+	}
+}
+@media (min-width: 992px) {
+	.modal-lg {
+		width: 900px;
+	}
+}
+
+.modal .btn-modal-close {
+	cursor: pointer;
+	display: none;
+	float: right;
+	font-size: 200%;
+	margin: 0;
+	padding: 0;
+}
+.modal .modal-header:hover .btn-modal-close {
+	display: block;
+}
+.modal .modal-header {
+	@include br6top;
+	border-width: 1px;
+	border-style: solid;
+}
+.modal .modal-header,
+.modal .modal-header h1,
+.modal .modal-header h2,
+.modal .modal-header h3,
+.modal .modal-header h4,
+.modal .modal-header h5,
+.modal .modal-header h6,
+.modal .btn {
+	color: #fff;
+}
+.modal .modal-header h3 {
+	font-weight: bold;
+	margin-bottom: 0 !important;
+	margin-top: 0 !important;
+}
+.modal .modal-header h1 { font-size: 220%; }
+.modal .modal-header h2 { font-size: 200%; }
+.modal .modal-header h3 { font-size: 180%; }
+.modal .modal-header h4 { font-size: 160%; }
+.modal .modal-header h5 { font-size: 140%; }
+.modal .modal-header h6 { font-size: 120%; }
+
+.modal .modal-body {
+	@include clearfix;
+	border-bottom: 1px transparent solid !important;
+	border-left: 1px #f5f5f5 solid !important;
+	border-right: 1px #f5f5f5 solid !important;
+	border-top: 1px transparent solid !important;
+	overflow: visible !important;
+}
+.modal .modal-footer {
+	@include br6btm;
+	border-bottom: 1px #f5f5f5 solid !important;
+	border-left: 1px #f5f5f5 solid !important;
+	border-right: 1px #f5f5f5 solid !important;
+	border-top: 1px transparent solid !important;
+}
+.modal .modal-header,
+.modal .btn {
+	background-color: $brand-default;
+	border-color: $brand-default-darker;
+}
+.modal-info .modal-header,
+.modal-info .btn {
+	background-color: $brand-info;
+	border-color: $brand-info-darker;
+}
+.modal-success .modal-header,
+.modal-success .btn {
+	background-color: $brand-success;
+	border-color: $brand-success-darker;
+}
+.modal-warning .modal-header,
+.modal-warning .btn {
+	background-color: $brand-warning;
+	border-color: $brand-warning-darker;
+}
+.modal-danger .modal-header,
+.modal-danger .btn {
+	background-color: $brand-danger;
+	border-color: $brand-danger-darker;
+}
+.modal .control-label {
+	color: $palette-color-13;
+	text-align: left;
+}
+.modal-full {
+	@include clear;
+	min-width: 300px;
+	width: calc(100% - 30px);
+}
+.modal-full .modal-content {
+	height: 100%;
+	min-height: 100%;
+	height: auto;
+}
+/* Expand height to accommodate internal modals but just the outer body portion */
+.modal-full > .modal-content > .modal-body {
+	min-height: 600px;
+}
+.modal-lg {
+	@include clear;
+	min-width: 300px;
+}
+.modal-open .modal {
+	overflow: visible;
+}
+
+

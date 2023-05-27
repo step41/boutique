@@ -78,8 +78,9 @@ RUN apt-get update && apt-get upgrade -y \
 COPY ./docker/services/loc/api-php/usr/local/etc/php/conf.d/uploads.ini                             /usr/local/etc/php/conf.d/uploads.ini
 COPY ./docker/services/loc/api-php/usr/local/etc/php-fpm.d/www.conf                                 /usr/local/etc/php-fpm.d/www.conf
 
-# create logging dir
+# create logging and run dir
 RUN mkdir -p /var/log/php-fpm
+RUN mkdir -p /run/php-fpm
 
 # some utility installations
 RUN apt-get update && apt-get install -y procps \

@@ -1,7 +1,7 @@
 <?php 
 
     $output = $content = $items = '';
-    $title = __('Products');
+    $title = __('My Products');
 
     if (!empty($products)):
         foreach ($products as $product):

@@ -1,6 +1,11 @@
 {
+    "/js/jquery.min.js": "/js/jquery.min.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/boutique_packages.js": "/js/boutique_packages.js",
+    "/js/boutique_packages.min.js": "/js/boutique_packages.min.js",
     "/js/boutique_libraries.js": "/js/boutique_libraries.js",
-    "/js/boutique_libraries.min.js": "/js/boutique_libraries.min.js"
+    "/js/boutique_libraries.min.js": "/js/boutique_libraries.min.js",
+    "/css/boutique_packages.css": "/css/boutique_packages.css",
+    "/css/boutique_packages.min.css": "/css/boutique_packages.min.css"
 }

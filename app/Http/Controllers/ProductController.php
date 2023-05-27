@@ -44,11 +44,11 @@ class ProductController extends Controller
         endif;
 
         $input = $request->all();
-        $products = $this->model->with('orders')->with('stock')->with('user');
+        $products = $this->model->with('orders')->with('stock')->with('user')->where('user_id', Auth::user()->id);
         if (!empty($input['search'])):
             $products = $products->whereLike('product_name', $input['search']);
         endif;
-        $products = $products->paginate(10);
+        $products = $products->orderBy('product_name')->paginate(10);
 
         return view('pages.product.index', compact('products'));
     }

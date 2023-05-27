@@ -79,7 +79,7 @@ class HtmlHelper {
 	 * @access 	protected
 	 * @since	1.0
 	 */
-	protected $_booleanAttribs = 'autofocus|checked|required';
+	protected $_booleanAttribs = 'autofocus|checked|defer|required';
 
 	/**
 	 * Array holding self-closing void element types
@@ -690,6 +690,47 @@ class HtmlHelper {
 	public function bodyopen($attribs = array()) {
 		$attribs = array_merge($attribs, array('close' => FALSE));
 		return $this->_make('body', $attribs);
+	}
+	
+ 	/**
+	 * Generate a printf-able HTML string wrapper for dialog elements
+	 *
+	 * Elements requiring replacement: 
+	 * 		1. Dialog Class (in additional to default classes)
+	 * 		2. Dialog ID (appended with _dialog)
+	 *		3. Dialog Title (for dialog header area)
+	 *		4. Dialog Text (for dialog message area)
+	 *		5. Dialog Buttons (a close button is already provided by default)
+	 *
+	 * @param	string		$prefix				Prefix string to assign to various button attributes
+	 * @param	string		$classes			One or more CSS classes separated by spaces
+	 * @return	string							Returns an HTML string or Element class object
+	 * @access 	public
+	 * @since	1.0
+	 */ 
+	public function boutiqueDialog($prefix = NULL, $classes = '') {
+		$uuid = STR::mbstrtolower(STR::uid(6));
+		$prefix = (isset($prefix) && is_string($prefix) && $prefix) ? $prefix : 'btn_'.$uuid;
+		$classes = (isset($classes) && is_string($classes) && $classes) ? $classes : '';
+		return 
+		$this->div(array('class' => 'modal fade %s', 'id' => '%s_dialog', 'data-keyboard' => 'false', 'aria-modal' => 'true', 'role' => 'dialog', 'data-backdrop' => 'static'))->inject(
+			$this->div(array('class' => 'modal-dialog '.$classes))->inject(
+				$this->div(array('class' => 'modal-content'))->inject(
+					$this->div(array('class' => 'modal-header'))->inject(
+						$this->h1(array('class' => 'modal-title fs-4', 'text' => '%s')).
+						$this->button(['class' => 'btn-close', 'data-bs-dismiss' => 'modal', 'aria-label' => 'Close'])
+					).
+					$this->div(array('class' => 'modal-body', 'text' => '%s')).
+					$this->div(array('class' => 'modal-footer'))->inject(
+						$this->div(array('class' => 'btn-group'))->inject(
+							$this->btn(array('id' => 'dialog_close_'.$uuid, 'prefix' => $prefix, 'action' => 'close', 'text' => T::_('Close'), 'data-dismiss' => 'modal')).
+							$this->btn(array('id' => 'dialog_help_'.$uuid, 'prefix' => $prefix, 'action' => 'help', 'text' => T::_('Help'), 'class' => 'btn-help')).
+							'%s'
+						)
+					)
+				)
+			)
+		);
 	}
 	
 	/**

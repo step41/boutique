@@ -1,5 +1,7 @@
 		
 var Boutique = Boutique || {};
+var API_PATH = '';
+
 
 ; (function() {
 

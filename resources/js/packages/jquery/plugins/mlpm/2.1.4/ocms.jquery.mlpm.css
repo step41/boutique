@@ -1,0 +1,128 @@
+.mlpm-wrapper {
+	overflow: hidden;
+	margin: 0;
+	min-height: 100%;
+	min-width: 100%;
+	padding: 0;
+	position: absolute;
+}
+
+.mlpm-wrapper .mlpm-level-holder {
+	background-color: #777;
+	min-height: 100%;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	width: auto;
+	zoom: 1;
+}
+
+.mlpm-wrapper .ltr {
+	-moz-box-shadow: 5px 0 5px -5px #333;
+	-webkit-box-shadow: 5px 0 5px -5px #333;
+	box-shadow: 5px 0 5px -5px #333;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#333,direction=90,strength=2);
+	left: 0;
+	margin-left: -100%;
+}
+
+.mlpm-wrapper .rtl {
+	-moz-box-shadow: 5px 0 5px 5px #333;
+	-webkit-box-shadow: 5px 0 5px 5px #333;
+	box-shadow: 5px 0 5px 5px #333;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#333,direction=270,strength=2);
+	margin-right: -100%;
+	right: 0;
+}
+
+.mlpm-wrapper .mlpm-inactive {
+	background: #777;
+}
+
+.mlpm-wrapper h2 {
+	background-color: #555;
+	border-bottom: 1px #444 solid;
+	color: #fff;
+	font-size: 1.4em;
+	font-weight: bold;
+	line-height: .9em;
+	margin: 0;
+	min-height: 50px;
+	padding: 15px 10px;
+}
+
+.mlpm-wrapper ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mlpm-wrapper li {
+	border-top: 1px solid #666;
+	cursor: pointer;
+	padding: .4em .4em .4em .4em;
+}
+
+.mlpm-wrapper li:last-child {
+	border-bottom: 1px solid #666;
+}
+
+.mlpm-wrapper li:hover {
+	background-color: #666;
+}
+
+.mlpm-wrapper a:first-of-type {
+	color: #fff;
+	display: block;
+	line-height: 1em;
+	min-height: 34px;
+	outline: none;
+	overflow: hidden;
+	padding: .2em .2em;
+	text-decoration: none;
+}
+.mlpm-wrapper a:last-of-type {
+	@include centervert;
+	color: #fff;
+	display: block;
+	line-height: 1em;
+	height: 34px;
+	outline: none;
+	overflow: hidden;
+	padding: .2em .2em;
+	float: right;
+	text-decoration: none;
+	width: 34px;
+}
+
+.mlpm-wrapper a:first-of-type:hover {
+	color: #ffe;
+}
+
+.mlpm-wrapper .mlpm-backitem {
+	background: #777;
+	border-top: 1px solid #666;
+	display: block;
+	padding: .4em .4em .4em .4em;
+}
+
+.mlpm-wrapper .float-right {
+	float: right;
+}
+
+.mlpm-wrapper .float-left {
+	float: left;
+	margin-right: .4em;
+}
+
+.mlpm-wrapper .cursor-pointer {
+	cursor: pointer;
+}
+
+.mlpm-wrapper .icons-ltr {
+	padding: 0 0 0 .4em;
+}
+
+.mlpm-wrapper .icons-rtl {
+	padding: 0 .15em 0 0;
+}

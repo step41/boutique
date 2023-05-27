@@ -1,5 +1,7 @@
 		
 var Boutique = Boutique || {};
+var API_PATH = '';
+
 
 ; (function() {
 
@@ -5481,7 +5483,7 @@ var Boutique = Boutique || {};
 					
 					// Load item record if valid id is passed
 					if (BCP.itemId) {
-						BCP.edit();
+						//BCP.edit();
 					}
 					
 				});		

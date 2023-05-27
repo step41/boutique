@@ -1,0 +1,1 @@
+$.fn.shiftClick=function(){var d;var e=this;e.click(function(a){if(!d){d=this;return}if(a.shiftKey){var b=e.index(this);var c=e.index(d);e.slice(Math.min(b,c),Math.max(b,c)+1).attr('checked',d.checked).trigger('change')}d=this})};

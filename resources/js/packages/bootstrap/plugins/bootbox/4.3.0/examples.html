@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My page</title>
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+</head>
+<body>
+
+    <p>Content here. <a class="alert" href=#>Alert!</a></p>
+
+    <!-- JS dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+
+    <!-- bootbox code -->
+    <script src="bootbox.min.js"></script>
+    <script>
+        $(document).on("click", ".alert", function(e) {
+            bootbox.alert("Hello world!", function() {
+                console.log("Alert Callback");
+            });
+        });
+
+		bootbox.alert("Hello world!", function() {
+		  Example.show("Hello world callback");
+		});
+		
+		bootbox.prompt("What is your name?", function(result) {                
+		  if (result === null) {                                             
+			Example.show("Prompt dismissed");                              
+		  } else {
+			Example.show("Hi <b>"+result+"</b>");                          
+		  }
+		});
+			
+		bootbox.dialog({
+		  message: "I am a custom dialog",
+		  title: "Custom title",
+		  buttons: {
+			success: {
+			  label: "Success!",
+			  className: "btn-success",
+			  callback: function() {
+				Example.show("great success");
+			  }
+			},
+			danger: {
+			  label: "Danger!",
+			  className: "btn-danger",
+			  callback: function() {
+				Example.show("uh oh, look out!");
+			  }
+			},
+			main: {
+			  label: "Click ME!",
+			  className: "btn-primary",
+			  callback: function() {
+				Example.show("Primary button");
+			  }
+			}
+		  }
+		});
+		
+		var some_html = '<img src="images/bootstrap_logo.png" width="100px"/><br />';
+		some_html += '<h2>You can use custom HTML too!</h2><br />';
+		some_html += '<h4>Just be sure to mind your quote marks</h4>';
+		bootbox.alert(some_html);
+
+		
+    </script>
+<div class="container">
+        <h1>Examples</h1>
+
+        <p><b>Please note:</b> the ‘Example’ object used in the following examples
+        simply displays a notification to help illustrate when each callback is invoked. It is nothing
+        to do with Bootbox itself, but you may <a href="js/example.js">view its source</a> if you’re
+        interested in how it works.</p>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Alert
+                    <a href="#" data-bb="alert_callback" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Confirm
+                    <a href="#" data-bb="confirm" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Prompt
+                    <a href="#" data-bb="prompt" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></a>
+                </p>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Custom Dialog
+                    <a href="#" data-bb="dialog" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></a>
+                </p>
+			</div>
+		</div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    Custom HTML Contents
+                    <a href="#" data-bb="custom_html" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></a>
+                </p>
+          </div>
+        </div>
+</div>
+
+</body>
+
+</html>

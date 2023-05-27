@@ -1,0 +1,1 @@
+(function($){$.ucfirst=function(a){var b=a;var c=b.split(' ');var d=c.length;var i,part,first,rest,word;var e=[];for(i=0;i<d;i++){part=c[i];first=part[0].toUpperCase();rest=part.substring(1,part.length);word=first+rest;e.push(word)}return e.join(' ')}})(jQuery);

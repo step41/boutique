@@ -279,7 +279,7 @@
 					
 					// Load item record if valid id is passed
 					if (BCP.itemId) {
-						BCP.edit();
+						//BCP.edit();
 					}
 					
 				});		

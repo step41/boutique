@@ -10,8 +10,8 @@
 // Variables
 @import 'mixins';
 
-// Variables
-@import 'modals';
+// Packages
+@import 'packages';
 
 body {
     background-color: darken($body-tertiary-bg-dark, 7);
