@@ -1,10 +1,12 @@
 <?php 
 
     $output = $content = $status = '';
-    $title = __('Dashboard');
+    $title = __('Products');
 
-    if (session('status')):
-        $status .= H::div(['class' => 'alert alert-success', 'role' => 'alert', 'text' => session('status')]);
+    if (!empty($products)):
+        $content .= $products->links();
+    else:
+
     endif;
 
     $content .= 

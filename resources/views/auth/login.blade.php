@@ -1,3 +1,40 @@
+<?php
+
+    $output = $content = '';
+    $title = __('Login');
+    $content .= 
+        H::form(['action' => route('login')])->inject(
+            H::boutiqueEmail([], $errors).
+            H::boutiquePassword([], $errors).
+            H::div(['class' => 'row mb-3'])->inject(
+                H::div(['class' => 'col-md-6 offset-md-4'])->inject(
+                    H::div(['class' => 'form-check'])->inject(
+                        H::checkbox([
+                            'id' => 'remember',
+                            'class' => 'form-check-input',
+                            'checked' => old('remember'),
+                        ]).
+                        H::label(['for' => 'remember', 'class' => 'form-check-label', 'text' => __('Remember Me')])
+                    )
+                )
+            ).    
+            H::div(['class' => 'row mb-0'])->inject(
+                H::div(['class' => 'col-md-8 offset-md-4'])->inject(
+                    H::submit(['class' => 'btn-primary', 'text' => $title]).
+                    ((Route::has('password.request')) ? H::a([
+                        'class' => 'btn btn-link', 
+                        'href' => route('password.request'), 
+                        'text' => __('Forgot Your Password?')
+                    ]) : '')
+                )                                    
+            )
+        )
+    ;
+    $output = H::boutiqueLayout(['title' => $title, 'text' => $content]);
+
+    echo $output;
+
+/*
 @extends('layouts.app')
 
 @section('content')

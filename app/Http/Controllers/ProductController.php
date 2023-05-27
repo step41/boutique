@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Auth;
@@ -35,15 +35,20 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (!Auth::user()->hasPermissionTo('Read Product')) {
+        if (!Auth::user()->hasPermissionTo('view products')):
             abort('401', '401');
-        }
+        endif;
 
-        $products = $this->model->get();
+        $input = $request->all();
+        $products = $this->model;
+        if (!empty($input['search'])):
+            $products = $products->whereLike('product_name', $input['search']);
+        endif;
+        $products = $products->paginate(10);
 
-        return view('admin.pages.product.index', compact('products'));
+        return view('pages.product.index', compact('products'));
     }
 
     /**

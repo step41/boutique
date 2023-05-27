@@ -52,7 +52,7 @@ return [
          * basic default value but you may easily change it to any table you like.
          */
 
-        'user_has_permissions' => 'user_has_permissions',
+        'model_has_permissions' => 'model_has_permissions',
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -60,7 +60,7 @@ return [
          * basic default value but you may easily change it to any table you like.
          */
 
-        'user_has_roles' => 'user_has_roles',
+        'model_has_roles' => 'model_has_roles',
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -107,8 +107,8 @@ return [
      * When set to true the package implements teams using the 'team_foreign_key'. If you want
      * the migrations to register the 'team_foreign_key', you must set this to true
      * before doing the migration. If you already did the migration then you must make a new
-     * migration to also add 'team_foreign_key' to 'roles', 'user_has_roles', and
-     * 'user_has_permissions'(view the latest version of package's migration file)
+     * migration to also add 'team_foreign_key' to 'roles', 'model_has_roles', and
+     * 'model_has_permissions'(view the latest version of package's migration file)
      */
 
     'teams' => false,

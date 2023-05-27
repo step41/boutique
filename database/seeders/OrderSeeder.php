@@ -16,7 +16,6 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
         DB::disableQueryLog();
-        // Truncation won't work with foreign key constraints so we'll just delete the table records since we're importing ids
         DB::table('orders')->delete();
         $file = base_path('database/data/orders.csv');
         $records = DF::prepForSeed($file);

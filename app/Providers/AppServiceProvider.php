@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(254);
+
+        Paginator::useBootstrap();
+    
+        Builder::macro('whereLike', function(string $column, string $search) {
+            return $this->orWhere($column, 'LIKE', '%'.$search.'%');
+        });
+
     }
 
 }

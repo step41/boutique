@@ -19,14 +19,12 @@ class Product extends Model
      */
     protected $fillable = [
         'user_id',
+        'product_type',
         'product_name',
-        'email',
-        'password',
         'description',
         'style',
         'brand',
         'url',
-        'product_type',
         'shipping_price',
         'note',
     ];

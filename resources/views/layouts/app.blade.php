@@ -6,6 +6,8 @@
     $links = '';
     $content = '';
 
+    //dd($errors->has('email'));
+
     if (Auth::guest()):
         if (Route::has('login')):
             $links .= H::li(['class' => 'nav-item', 'text' => H::a(['class' => 'nav-link', 'href' => route('login'), 'text' => __('Login')])]);

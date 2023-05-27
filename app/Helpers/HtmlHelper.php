@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\ViewErrorBag;
 use Illuminate\Support\Facades\Config 		as CFG;
 use App\Facades\ArrayHelper 				as ARR;
 use App\Facades\CommonHelper 				as COM;
@@ -56,7 +57,7 @@ class HtmlHelper {
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_attribs = array();
 	
@@ -65,18 +66,27 @@ class HtmlHelper {
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_attributes = array(
 		'accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate', 'onabort', 'onblur', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'oninput', 'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata', 'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onpause', 'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreadystatechange', 'onreset', 'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled', 'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting', 'xml:lang', 'xml:space', 'xml:base'
 	);
 
 	/**
+	 * Partial pattern string holding element attributes that do not require a value assignment
+	 *
+	 * @param	string
+	 * @access 	protected
+	 * @since	1.0
+	 */
+	protected $_booleanAttribs = 'autofocus|checked|required';
+
+	/**
 	 * Array holding self-closing void element types
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_closed = array(
 		'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'
@@ -87,7 +97,7 @@ class HtmlHelper {
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_colorNameToRGBs = array(
         'blue'          => 'rgb(0,56,168)',
@@ -112,7 +122,7 @@ class HtmlHelper {
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_doctypes = array(
 		'xhtml11'			=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
@@ -141,7 +151,7 @@ class HtmlHelper {
 	 *
 	 * @param	array
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_elements = array(
 		'phrasing elements', 'a', 'p', 'hr', 'pre', 'ul', 'ol', 'dl', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hgroup', 'address', 'blockquote', 'ins', 'del', 'object', 'map', 'noscript', 'section', 'nav', 'article', 'aside', 'header', 'footer', 'video', 'audio', 'figure', 'table', 'form', 'fieldset', 'menu', 'canvas', 'details', 'link', 'style', 'meta name', 'meta http-equiv=refresh', 'meta http-equiv=default-style', 'meta charset', 'meta http-equiv=content-type', 'script', 'noscript', 'command', 'a', 'em', 'strong', 'small', 'mark', 'abbr', 'dfn', 'i', 'b', 's', 'u', 'code', 'var', 'samp', 'kbd', 'sup', 'sub', 'q', 'cite', 'span', 'bdo', 'bdi', 'br', 'wbr', 'ins', 'del', 'img', 'embed', 'object', 'iframe', 'map', 'area', 'script', 'noscript', 'ruby', 'video', 'audio', 'input', 'textarea', 'select', 'button', 'label', 'output', 'datalist', 'keygen', 'progress', 'command', 'canvas', 'time', 'meter'
@@ -152,7 +162,7 @@ class HtmlHelper {
 	 *
 	 * @param	string
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected $_elm;
 	
@@ -161,7 +171,7 @@ class HtmlHelper {
 	 *
 	 * @return	string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function __toString() {
 		return $this->build();
@@ -176,7 +186,7 @@ class HtmlHelper {
 	 * @param	boolean			$close			If FALSE, method will only output the opening element, otherwise element will be closed.
 	 * @return	string							Returns an HTML string of one or more elements with attributes	
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _build($close = TRUE) {
 		$q = (isset($this->_attribs['escapequotes'])) ? '\"' : '"';
@@ -188,12 +198,15 @@ class HtmlHelper {
 		foreach($this->_attribs as $key => $value):
 			$value = (is_bool($value)) ? (($value) ? $key : NULL) : $value;
 			if (isset($value)):
-				if (is_scalar($value)):
-					$build .= ($key != 'text') ? ' '.$key.'='.$q.htmlentities($value).$q : '';
-				else:
-					$msg = T::_('The method %s() failed because a value of type '.gettype($value).' was passed. Value: '.json_encode($value));
-					//Log::error(sprintf($msg, __FUNCTION__).'. '.debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 15));
-					Log::warning(sprintf($msg, __FUNCTION__));
+				if (!is_scalar($value)):
+					$value = json_encode($value);
+				endif;
+				if ($key != 'text'):
+					$build .= ' '.$key;
+					// Add value for non-bool attribs
+					if (!preg_match('/('.$this->_booleanAttribs.')/', $key)):
+						$build .= '='.$q.htmlentities($value).$q;
+					endif;
 				endif;
 			endif;
 		endforeach;
@@ -211,7 +224,7 @@ class HtmlHelper {
 	 *
 	 * @return	void
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _clr() {
 		$this->_elm = NULL;
@@ -224,7 +237,7 @@ class HtmlHelper {
 	 * @param	mixed			$object			A class object or other unspecified type	
 	 * @return	boolean							Returns TRUE if valid object, otherwise FALSE
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _isValidObject($object = NULL) {
 		if (isset($object) && is_object($object)):
@@ -244,7 +257,7 @@ class HtmlHelper {
 	 * @param	int				$counter		Counter used for recursive indents
 	 * @return	object							Returns an Element object
 	 * @access	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _list($elm = 'ul', $list = array(), $attribs = array(), $counter = 0) {
 		$space = (isset($attribs['space'])) ? $attribs['space'] : '&nbsp;';
@@ -273,7 +286,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _make($elm = NULL, $attribs = array()) {
 		$object = new self();
@@ -300,7 +313,7 @@ class HtmlHelper {
 	 * @param	mixed			$value2			The second value to merge
 	 * @return	array							Returns an array	
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _merge($value1 = array(), $value2 = array()) {
 		$array = array();
@@ -329,7 +342,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	array							Returns an attribs array (modified if validate attribute is present)	
 	 * @access 	protected
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	protected function _setValidation($attribs = array()) {
 		$attribs = (isset($attribs) && is_array($attribs)) ? $attribs : array();
@@ -359,20 +372,19 @@ class HtmlHelper {
 		elseif (isset($attribs['required']) && $attribs['required']):
 			$attribs['data-validate'] = array('required' => TRUE);
 		endif;
-		/* 20200316 - Commenting out for now until we can build in full validation for Boutique
 		if (isset($label, $name, $attribs['data-validate'])):
-			// Retrieve current CSRF token id for current form
-			$ttl = CFG::get('options', 'csrfExpiration'); 
-			$newcache = array();
-			$newcache[$name] = array('label' => $label, 'data-validate' => $attribs['data-validate']); 
 			$attribs['data-validate'] = json_encode($attribs['data-validate']);
-			$cacheId = MC::validationId();
-			if ($oldcache = MC::cache($cacheId)):
-				$newcache = array_merge($oldcache, $newcache);
-			endif;
-			MC::cache($cacheId, $newcache, $ttl);
+			// 20200316 - Commenting out for now until we can build in full validation for Boutique
+			// Retrieve current CSRF token id for current form
+			//$ttl = CFG::get('options', 'csrfExpiration'); 
+			//$newcache = array();
+			//$newcache[$name] = array('label' => $label, 'data-validate' => $attribs['data-validate']); 
+			//$cacheId = MC::validationId();
+			//if ($oldcache = MC::cache($cacheId)):
+			//	$newcache = array_merge($oldcache, $newcache);
+			//endif;
+			//MC::cache($cacheId, $newcache, $ttl);
 		endif;
- 		*/
 		unset(
 			$attribs['required'],
 			$attribs['validate']
@@ -389,7 +401,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function a($attribs = array()) {
 		if (isset($attribs) && is_string($attribs)):
@@ -408,7 +420,7 @@ class HtmlHelper {
 	 * @param	array			$sections		Array containing attributes for each section
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function accordion($parentId = NULL, $sections = array()) {
 		$output = '';
@@ -444,7 +456,7 @@ class HtmlHelper {
 	 * @param	string			$class			One or more class strings to add
 	 * @return	array							Returns an attributes array		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function addclass($attribs = array(), $class) {
 		if (isset($attribs) && isset($class)):
@@ -464,7 +476,7 @@ class HtmlHelper {
 	 * @param	string			$title			Alert title to include inside wrap
 	 * @return	string							Returns an HTML string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function alert($type = 'info', $message = '', $title = '') {
 		$type = (isset($type) && $type) ? $type : 'info';
@@ -490,7 +502,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function area($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -505,7 +517,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function article($attribs = array()) {
 		$defaults = array('role' => __FUNCTION__);
@@ -522,7 +534,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function aside($attribs = array()) {
 		$defaults = array('role' => 'complementary');
@@ -539,7 +551,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function b($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -554,7 +566,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function badge($attribs = array()) {
 		if (isset($attribs) && is_string($attribs)):
@@ -573,7 +585,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function banner($attribs = array()) {
 		$defaults = array('role' => 'banner');
@@ -588,7 +600,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function bit($type, $attribs = array()) {
 		if (isset($type) && isset($attribs)):
@@ -613,7 +625,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function bitbs($type, $attribs = array()) {
 		if (isset($type)):
@@ -650,7 +662,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function body($attribs = array()) {
 		return $this->_make('body', $attribs);
@@ -661,7 +673,7 @@ class HtmlHelper {
 	 *
 	 * @return	string							Returns a body close tag	
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function bodyclose() {
 		return $this->close('body');
@@ -673,7 +685,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function bodyopen($attribs = array()) {
 		$attribs = array_merge($attribs, array('close' => FALSE));
@@ -686,10 +698,185 @@ class HtmlHelper {
 	 * Returns an object of type Element so additional methods can be run 
 	 * against the object when required.
 	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @param	object			$errors		Validation errors (if present)
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueEmail($attribs = [], ViewErrorBag $errors) {
+		$defaults = [
+			'id' => 'email', 
+			'label' => __('Email Address'),
+			'value' => old('email'),
+			'autocomplete' => 'email',
+			'autofocus' => TRUE,
+			'required' => TRUE,
+		];
+		$attribs = $this->_merge($defaults, $attribs);
+		return $this->boutiqueInput('email', $attribs, $errors);
+	}
+
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	string			$type		Type of input element to create
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @param	object			$errors		Validation errors (if present)
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueInput($type = 'text', $attribs = [], ViewErrorBag $errors) {
+		if (is_string($attribs)):
+			$attribs = ['id' => $attribs];
+		endif;
+		$defaults = [
+			'id' => $attribs['id'],
+			'name' => $attribs['id'],
+			'label' => STR::slugToWords($attribs['id']),
+			'autocomplete' => $attribs['id'],
+			'nowrap' => TRUE,
+		];
+		$attribs = $this->_merge($defaults, $attribs);
+		$attribs = $this->addclass($attribs, (($errors->has($attribs['name'])) ? 'is-invalid' : ''));
+		$elm = $label = $alert = '';
+		$label .= $this->label([
+			'class' => 'col-md-4 col-form-label text-md-end', 
+			'for' => $attribs['name'], 
+			'text' => $attribs['label']
+		]);
+		if ($errors->has($attribs['name'])):
+			$alert .= $this->span([
+				'class' => 'invalid-feedback', 
+				'role' => 'alert', 
+				'text' => $this->strong($errors->first($attribs['name'])),
+			]);
+		endif;
+		unset($attribs['label']);
+		$elm .= 
+			$this->div(['class' => 'row mb-3'])->inject(
+				$label.
+				$this->div(['class' => 'col-md-6'])->inject(
+					$this->$type($attribs).
+					$alert
+				)
+			)
+		;
+		return $elm;
+	}
+	
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	string|array	$attribs	Element key-value attributes array
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueLayout($attribs = []) {
+		$defaults = ['title' => '', 'text' => ''];
+		if (is_string($attribs)):
+			$attribs = array('text' => $attribs);
+		endif;
+		$attribs = $this->_merge($defaults, $attribs);
+		$elm =  
+			$this->blade('layouts.head').
+			$this->container(
+				$this->div(['class' => 'row justify-content-center'])->inject(
+					$this->div(['class' => 'col-md-8'])->inject(
+						$this->div(['class' => 'card'])->inject(
+							$this->div(['class' => 'card-header', 'text' => $attribs['title']]).
+							$this->div(['class' => 'card-body', 'text' => $attribs['text']])
+						)
+					)
+				).
+				''
+			).
+			$this->blade('layouts.foot')
+		;
+		return $elm;
+	}
+
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @param	object			$errors		Validation errors (if present)
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiquePassword($attribs = [], ViewErrorBag $errors) {
+		$defaults = [
+			'id' => 'password', 
+			'label' => __('Password'),
+			'autocomplete' => 'current-password',
+			'required' => TRUE,
+		];
+		$attribs = $this->_merge($defaults, $attribs);
+		return $this->boutiqueInput('password', $attribs, $errors);
+	}
+	
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @param	object			$errors		Validation errors (if present)
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiquePasswordConfirm($attribs = [], ViewErrorBag $errors) {
+		$defaults = [
+			'id' => 'password-confirm',
+			'name' => 'password_confirmation',
+			'label' => __('Confirm Password'),
+			'autocomplete' => 'new-password',
+			'required' => TRUE,
+		];
+		$attribs = $this->_merge($defaults, $attribs);
+		return $this->boutiqueInput('password', $attribs, $errors);
+	}
+	
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @param	object			$errors		Validation errors (if present)
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueText($attribs = [], ViewErrorBag $errors) {
+		return $this->boutiqueInput('text', $attribs, $errors);
+	}
+	
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function box($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -704,7 +891,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function br($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -717,7 +904,7 @@ class HtmlHelper {
 	 * @param	array			$size			Size of button type to create. Defaults to normal (blank). OPTIONS:(xs|sm|''|lg|block)
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function btn($attribs = array(), $size = '') {
 		$defaults = array('type' => 'button', 'title' => '', 'text' => '');
@@ -751,7 +938,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function btnBlock($attribs = array()) {
 		return $this->btn($attribs, 'block');
@@ -766,7 +953,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function btnLg($attribs = array()) {
 		return $this->btn($attribs, 'lg');
@@ -781,7 +968,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function btnSm($attribs = array()) {
 		return $this->btn($attribs, 'sm');
@@ -796,7 +983,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function btnXs($attribs = array()) {
 		return $this->btn($attribs, 'xs');
@@ -811,7 +998,7 @@ class HtmlHelper {
 	 * @param	boolean			$close			If FALSE, method will only output the opening element, otherwise element will be closed.
 	 * @return	string							Returns an HTML string of one or more elements with attributes	
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function build($close = TRUE) {
 		return $this->_build($close);
@@ -826,7 +1013,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function button($attribs = array()) {
 		$defaults = array('type' => 'button');
@@ -841,7 +1028,7 @@ class HtmlHelper {
 	 * @param	string			$href			String value to assign to 'href' attribute
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function canonical($href = NULL) {
 		if (!isset($href)):
@@ -859,7 +1046,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function checkbox($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -874,7 +1061,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function checkboxToggle($attribs = array()) {
 		$overrides = array('value' => '1', 'nowrap' => TRUE);
@@ -898,7 +1085,7 @@ class HtmlHelper {
 	 * @param	int				$counter		Counter used for recursive indents
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function checklist($list = array(), $attribs = array(), $counter = 0) {
 		$list = array_filter($list);
@@ -934,7 +1121,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cite($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -946,7 +1133,7 @@ class HtmlHelper {
 	 * @param	string			$elm			The tag name of the element to close
 	 * @return	string							Returns the HTML closing tag string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function close($elm = NULL) {
 		return (!in_array($elm, $this->_closed)) ? '</'.$elm.'>' : ' />';
@@ -961,7 +1148,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function code($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -972,7 +1159,7 @@ class HtmlHelper {
 	 *
 	 * @return	array							Returns an array of color names => color rgb values
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function colorNameToRGBs() {
 		return $this->_colorNameToRGBs;
@@ -987,7 +1174,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function combobox($options = array(), $attribs = array()) {
 		$defaults = array('combobox' => TRUE);
@@ -1033,7 +1220,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		String comment or key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function comment($attribs = array()) {
 		$defaults = array('text' => '', 'type' => 'html');
@@ -1061,7 +1248,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		String comment or key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function commentBlock($attribs = array()) {
 		$defaults = array('text' => '', 'type' => 'block');
@@ -1078,7 +1265,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		String comment or key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function commentSingle($attribs = array()) {
 		$defaults = array('text' => '', 'type' => 'single');
@@ -1098,7 +1285,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function container($attribs = array()) {
 		if (is_string($attribs)):
@@ -1117,7 +1304,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function containerDanger($attribs = array()) {
 		$defaults = array();
@@ -1144,7 +1331,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function containerFluidDanger($attribs = array()) {
 		$defaults = array();
@@ -1171,7 +1358,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function containerFluid($attribs = array()) {
 		if (is_string($attribs)):
@@ -1187,7 +1374,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function csscheck($attribs = array(), $class = 'csscheck') {
 		$text = '';
@@ -1211,7 +1398,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssdelete($attribs = array()) {
 		return $this->csscheck($attribs, __FUNCTION__);
@@ -1223,7 +1410,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssgroup($attribs = array()) {
 		return $this->cssradio($attribs, __FUNCTION__);
@@ -1235,7 +1422,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssplus($attribs = array()) {
 		return $this->csscheck($attribs, __FUNCTION__);
@@ -1247,7 +1434,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssradio($attribs = array(), $class = 'cssradio') {
 		return $this->csscheck($attribs, $class);
@@ -1259,7 +1446,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssselect($attribs = array()) {
 		return $this->csscheck($attribs, __FUNCTION__);
@@ -1271,7 +1458,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function cssstar($attribs = array()) {
 		return $this->csscheck($attribs, __FUNCTION__);
@@ -1290,7 +1477,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function datalist($options = array(), $attribs = array()) {
 		$selected = NULL;
@@ -1319,7 +1506,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function date($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -1334,7 +1521,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function datetime($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -1349,7 +1536,7 @@ class HtmlHelper {
 	 * @param	string			$buttons		HTML string (or object of this class) containing one or more button elements to use in dialog footer area
 	 * @return	string							Returns an HTML string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function dialert($type = 'default', $message = '', $title = '', $buttons = '') {
 		if ($type && $message):
@@ -1371,7 +1558,7 @@ class HtmlHelper {
 	 * @param	string		$classes			One or more CSS classes separated by spaces
 	 * @return	string							Returns an HTML string or Element class object
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */ 
 	public function dialog($prefix = NULL, $classes = '') {
 		$uuid = STR::mbstrtolower(STR::uid(6));
@@ -1405,7 +1592,7 @@ class HtmlHelper {
 	 * @param	array		$attribs			Element key-value attributes array
 	 * @return	string							Returns an HTML string or Element class object
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function dialogPanelButtonAdvanced($prefix = '', $attribs = array()) {
 		$defaults = array(
@@ -1427,7 +1614,7 @@ class HtmlHelper {
 	 * @param	array		$attribs			Element key-value attributes array
 	 * @return	string							Returns an HTML string or Element class object
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function dialogPanelButtonGeneral($prefix = '', $attribs = array()) {
 		$defaults = array(
@@ -1449,7 +1636,7 @@ class HtmlHelper {
 	 * @param	string		$prefix				Unique identifier string for the dialog in question
 	 * @return	string							Returns an HTML string or Element class object
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function dialogPanelButtonsGeneralAdvanced($prefix = '') {
 		$btnSegment = $this->div(array('class' => 'btn-group segmented-control'))->inject(
@@ -1469,7 +1656,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function div($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1481,7 +1668,7 @@ class HtmlHelper {
 	 * @param	string			$type		Specific doctype to build
 	 * @return	string						Returns the full doctype string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function doctype($type = 'xhtml1-trans') {
 		return in_array($type, array_keys($this->_doctypes)) ? $this->_doctypes[$type] : ''; 
@@ -1496,7 +1683,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function em($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1511,7 +1698,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function email($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -1532,7 +1719,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function embedded($type = 'video', $code = '', $title = '', $description = '', $attribs = array()) {
 		$defaults = array();
@@ -1566,7 +1753,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function embeddedVideo($code = '', $title = '', $description = '', $attribs = array()) {
 		$type = 'video';
@@ -1578,7 +1765,7 @@ class HtmlHelper {
 	 *
 	 * @return	string						HTML string containing two standard favicon link tags
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function favicons() {
 		return 	$this->_make('link', array('rel' => 'shortcut icon', 'type' => 'image/gif', 'href' => '/favicon.gif'))->build().
@@ -1594,7 +1781,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function fieldset($attribs = array()) {
 		$defaults = array('legend' => '', 'text' => '');
@@ -1613,7 +1800,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function figcaption($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1628,7 +1815,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function figure($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1643,7 +1830,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function file($attribs = array()) {
 		$attribs = $this->addclass($attribs, 'form-control-file');
@@ -1659,7 +1846,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function footer($attribs = array()) {
 		$defaults = array('role' => 'complementary');
@@ -1695,7 +1882,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function form($attribs = array()) {
 		$defaults = array(
@@ -1729,7 +1916,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function formComments($attribs = array()) {
 		$defaults = array();
@@ -1743,7 +1930,7 @@ class HtmlHelper {
 	 * @param	string			$attribute		String attribute name
 	 * @return	mixed							Returns the value of the requested attributes
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function get($attribute) {
 		return $this->_attribs[$attribute];
@@ -1755,7 +1942,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h1($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1767,7 +1954,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h2($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1779,7 +1966,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h3($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1791,7 +1978,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h4($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1803,7 +1990,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h5($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1815,7 +2002,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function h6($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1827,7 +2014,7 @@ class HtmlHelper {
 	 * @param	string			$text			String value to assign to 'text' attribute
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function head($text = '') {
 		return $this->_make(__FUNCTION__, array('text' => $text));
@@ -1842,7 +2029,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function header($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1857,7 +2044,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function help($attribs = array()) {
 		$attribs = $this->addclass($attribs, 'help-block');
@@ -1873,7 +2060,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function hidden($attribs = array()) {
 		if (is_string($attribs)):
@@ -1891,7 +2078,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function hr($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1902,7 +2089,7 @@ class HtmlHelper {
 	 *
 	 * @return	string							Returns an HTML close tag	
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function htmlclose() {
 		return $this->close('html');
@@ -1914,7 +2101,7 @@ class HtmlHelper {
 	 * @param	string|array	$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function htmlopen($attribs = array()) {
 		$defaults = array('xmlns' => 'http://www.w3.org/1999/xhtml', 'lang' => 'en_US');
@@ -1931,7 +2118,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function i($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -1946,7 +2133,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function iframe($attribs = array()) {
 		$defaults = array('src' => '');
@@ -1963,7 +2150,7 @@ class HtmlHelper {
 	 * @param	array|string		$attribs	Element key-value attributes array or single string src attribute value
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function img($attribs = array()) {
 		if (is_string($attribs)):
@@ -1980,7 +2167,7 @@ class HtmlHelper {
 	 * @param	string|object		$value		Either a string or Element object type
 	 * @return	objec							Returns an object of type Element
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function inject($value = NULL) {
 		if (isset($value)):
@@ -2039,7 +2226,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function input($type = 'text', $attribs = array()) {
 		$defaults = array(
@@ -2062,7 +2249,7 @@ class HtmlHelper {
 		$cols = (isset($attribs['cols'])) ? $attribs['cols'] : FALSE;
 		$size = (isset($attribs['size'])) ? $attribs['size'] : FALSE;
 		$nowrap = (isset($attribs['nowrap'])) ? $attribs['nowrap'] : ((preg_match('/^(checkbox|hidden|radio)$/i', $type) && empty($attribs['label'])) ?: FALSE);
-		if (!preg_match('/^hidden$/i', $type)):
+		if (!preg_match('/^(checkbox|hidden)$/i', $type)):
 			$fcc = ((preg_match('/^pseudo$/i', $type)) ? 'pseudo-' : '').'form-control';
 			$attribs = $this->addclass($attribs, $fcc);
 		endif;
@@ -2073,6 +2260,7 @@ class HtmlHelper {
 			$attribs['name'] = $attribs['id'];
 		endif;
 		$attribs = $this->_setValidation($attribs);
+	
 		if ($noname):
 			unset($attribs['name']);
 		endif;
@@ -2126,7 +2314,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function inputWrap($input = NULL, $attribs = array()) {
 		if (isset($input) && isset($attribs) && is_array($attribs)):
@@ -2206,7 +2394,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns a label object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function it($type, $attribs = array()) {
 		if (isset($type)):
@@ -2233,7 +2421,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function label($attribs = array()) {
 		if (!is_array($attribs)):
@@ -2259,7 +2447,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function labelExpress($attribs = array()) {
 		if (!is_array($attribs)):
@@ -2284,7 +2472,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function legend($attribs = array()) {
 		$defaults = array();
@@ -2301,7 +2489,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function li($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2316,7 +2504,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function lines($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2331,7 +2519,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function link($attribs = array()) {
 		$defaults = array('rel' => 'stylesheet', 'media' => 'all', 'type' => 'text/css', 'href' => '');
@@ -2348,7 +2536,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function main($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2363,7 +2551,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function map($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2377,7 +2565,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function meta($name = '', $content = '') {
 		return $this->_make(__FUNCTION__, array('name' => $name, 'content' => $content));
@@ -2389,7 +2577,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metaauth($content = '') {
 		return $this->meta('author', $content);
@@ -2401,7 +2589,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metacharset($content = 'UTF-8') {
 		return $this->meta('charset', $content);
@@ -2413,7 +2601,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metacsrf($content = '') {
 		return $this->meta('csrf-token', $content);
@@ -2425,7 +2613,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metadesc($content = '') {
 		return $this->meta('description', $content);
@@ -2438,7 +2626,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metaedge() {
 		$comment = $this->comment('Always force latest IE rendering engine (even in intranet) & Chrome Frame');
@@ -2452,7 +2640,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metaequiv($equiv = 'Content-Type', $content = 'text/html; charset=UTF-8') {
 		return $this->_make('meta', array('http-equiv' => $equiv, 'content' => $content));
@@ -2464,7 +2652,7 @@ class HtmlHelper {
 	 * @param	string			$content		String value to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metagen($content = '') {
 		return $this->meta('generator', $content);
@@ -2476,7 +2664,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metakeys($content = '') {
 		return $this->meta('keywords', $content);
@@ -2489,7 +2677,7 @@ class HtmlHelper {
 	 * @param	string			$content		String of content to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metaprop($property = '', $content = '') {
 		return $this->_make('meta', array('property' => $property, 'content' => $content));
@@ -2512,7 +2700,7 @@ class HtmlHelper {
 	 * @param	string			$content		String value to place in the content attribute
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metaport($content = 'width=device-width, initial-scale=1') {
 		$comment = $this->comment('Set the viewport so this responsive site displays correctly on mobile devices');
@@ -2525,7 +2713,7 @@ class HtmlHelper {
 	 * @param	mixed			$value			Mixed valuerray containing one or more key-value attribute pairs
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function metarobots($value = NULL) {
 		$defaults = array('content' => 'noodp,noydir', 'hidden' => TRUE);
@@ -2553,7 +2741,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function module($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2568,7 +2756,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function nav($attribs = array()) {
 		$defaults = array('role' => 'navigation');
@@ -2591,7 +2779,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function navbar($attribs = array()) {
 		$attribs = $this->addclass($attribs, 'navbar navbar-default');
@@ -2646,7 +2834,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	string							Returns an HTML string		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function navtabs($attribs = array()) {
 		$defaults = array('tabs' => array());
@@ -2691,7 +2879,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function number($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -2706,7 +2894,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function noscript($attribs = array()) {
 		if (isset($attribs) && is_string($attribs)):
@@ -2726,7 +2914,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function ol($list = array(), $attributes = array()) {
 		if (is_array($list)):
@@ -2742,7 +2930,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs or a string to be used as a label
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function optgroup($attribs = array()) {
 		if (is_string($attribs)):
@@ -2760,7 +2948,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function option($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2774,7 +2962,7 @@ class HtmlHelper {
 	 * @param	int				$counter		Counter used for recursive indents / characters
 	 * @return	string							Returns an HTML string containing all options and (optional) optgroups
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function options($options = array(), $attribs = array(), $counter = 0, $optgroup = FALSE) {
 		$stroptions = '';
@@ -2845,7 +3033,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function p($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2860,7 +3048,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function password($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -2875,7 +3063,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function pre($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2887,7 +3075,7 @@ class HtmlHelper {
 	 * @param	string			$href			String value to assign to 'href' attribute
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function prefetch($href = '') {
 		return $this->link(array(
@@ -2908,7 +3096,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function pseudo($attribs = array()) {
 		$defaults = array(
@@ -2930,7 +3118,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function q($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -2945,7 +3133,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function radio($attribs = array()) {
 		return $this->input(__FUNCTION__, $attribs);
@@ -2960,7 +3148,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function range($attribs = array()) {
 		$defaults = array(
@@ -2980,7 +3168,7 @@ class HtmlHelper {
 	 * @param	string			$attrib		The string name of the attribute to remove
 	 * @return	void
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	function rem($attrib) {
 		if (isset($this->_attribs[$attrib])):
@@ -3006,7 +3194,7 @@ class HtmlHelper {
 	 * @param	string|array	$value			String containing the script 'src' or key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function script($attribs = array()) {
 		if (is_string($attribs)):
@@ -3035,7 +3223,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function search($attribs = array()) {
 		$elms = [];
@@ -3067,7 +3255,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function section($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3109,7 +3297,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function select($options = array(), $attribs = array(), $test = FALSE) {
 		$optcnt = (is_array($options)) ? ARR::countAll($options) : ((is_string($options)) ? STR::mbsubstrcount($options, 'option>') : 0);
@@ -3215,7 +3403,7 @@ class HtmlHelper {
 	 * @param	string			$value			Value to be assigned to attribute key
 	 * @return	object							Returns an Element object
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	function set($attribute, $value = '') {
 		if(!is_array($attribute)):
@@ -3235,7 +3423,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function slider($attribs = array()) {
 		$defaults = array(
@@ -3257,7 +3445,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function small($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3272,7 +3460,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function span($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3287,7 +3475,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function strong($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3302,7 +3490,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function style($attribs = array()) {
 		$defaults = array('type' => 'text/css', 'media' => 'screen');
@@ -3316,7 +3504,7 @@ class HtmlHelper {
 	 * @param	string			$href			String value to assign to 'href' attribute
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function stylesheet($href = '') {
 		return $this->link(array('href' => $href));
@@ -3331,7 +3519,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function sub($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3346,7 +3534,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function submit($attribs = array()) {
 		$defaults = array('type' => 'submit');
@@ -3363,7 +3551,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function sup($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3378,7 +3566,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function table($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3393,7 +3581,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function tbody($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3408,7 +3596,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function td($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3423,7 +3611,7 @@ class HtmlHelper {
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @return	object						Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function text($attribs = array()) {
 		if (is_string($attribs)):
@@ -3441,7 +3629,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function textarea($attribs = array()) {
 		$defaults = array(
@@ -3500,7 +3688,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function tfoot($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3515,7 +3703,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function th($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3530,7 +3718,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function thead($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3546,7 +3734,7 @@ class HtmlHelper {
 	 * @param	string			$datetime8601	Datetime string value in 8601 format
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function time($datetime = NULL, $datetime8601 = NULL) {
 		$attribs = array();
@@ -3568,7 +3756,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function tr($attribs = array()) {
 		return $this->_make(__FUNCTION__, $attribs);
@@ -3580,7 +3768,7 @@ class HtmlHelper {
 	 * @param	string			$text			String value to assign to 'text' attribute
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function title($text = '') {
 		return $this->_make(__FUNCTION__, array('text' => $text));
@@ -3593,7 +3781,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Array containing one or more key-value attribute pairs
 	 * @return	object							Returns an Element object
 	 * @access	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function ul($list = array(), $attribs = array()) {
 		if (is_array($list)):
@@ -3616,7 +3804,7 @@ class HtmlHelper {
 	 * @param	array			$attribs		Element key-value attributes array
 	 * @return	object							Returns an object of type Element		
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function video($src = '', $attribs = array()) {
 		$defaults = array('controls' => TRUE);
@@ -3634,7 +3822,7 @@ class HtmlHelper {
 	 * @param	string			$content		HTML strings or Element objects to contain within the wrapper
 	 * @return	object							Returns an HTML string
 	 * @access 	public
-	 * @since	5.0
+	 * @since	1.0
 	 */
 	public function wrapcont($attribs = array()) {
 		$defaults = array('class' => 'col-lg-12', 'text' => '');

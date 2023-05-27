@@ -1,3 +1,28 @@
+<?php
+
+    $output = $content = '';
+    $title = __('Confirm Password');
+    $content .= 
+        __('Please confirm your password before continuing.').
+        H::form(['action' => route('password.confirm')])->inject(
+            H::boutiquePassword([], $errors).
+            H::div(['class' => 'row mb-0'])->inject(
+                H::div(['class' => 'col-md-8 offset-md-4'])->inject(
+                    H::submit(['class' => 'btn-primary', 'text' => $title]).
+                    ((Route::has('password.request')) ? H::a([
+                        'class' => 'btn btn-link', 
+                        'href' => route('password.request'), 
+                        'text' => __('Forgot Your Password?')
+                    ]) : '')
+                )                                    
+            )
+        )
+    ;
+    $output = H::boutiqueLayout(['title' => $title, 'text' => $content]);
+
+    echo $output;
+
+/*
 @extends('layouts.app')
 
 @section('content')
@@ -47,3 +72,4 @@
     </div>
 </div>
 @endsection
+*/

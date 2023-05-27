@@ -22,6 +22,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'role_id',
         'name',
         'email',
         'password',
@@ -59,6 +60,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * Get the role for a given user.
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
     /**
      * Get the products for a user.
      */
