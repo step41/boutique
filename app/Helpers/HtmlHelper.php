@@ -835,8 +835,16 @@ class HtmlHelper {
 				$this->div(['class' => 'row justify-content-center'])->inject(
 					$this->div(['class' => 'col-md-12'])->inject(
 						$this->div(['class' => 'card'])->inject(
-							$this->div(['class' => 'card-header', 'text' => $this->strong($attribs['title'])]).
-							$this->div(['class' => 'card-body', 'text' => $attribs['text']])
+							$this->div([
+								'class' => 'card-header', 
+								'text' => 
+									$this->div(['class' => 'card-title float-start', 'text' => $this->h4($attribs['title'])]).
+									$this->div(['class' => 'card-actions float-end', 'text' => ((!empty($attribs['button'])) ? $attribs['button'] : '')])
+							]).
+							$this->div([
+								'class' => 'card-body', 
+								'text' => $attribs['text']
+							])
 						)
 					)
 				).

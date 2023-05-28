@@ -1,4 +1,6 @@
-		
+const LOCALE = 'en-us';
+const API_PATH = '';
+
 var Boutique = Boutique || {};
 
 ; (function() {

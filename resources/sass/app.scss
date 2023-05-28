@@ -18,13 +18,29 @@ body,
 textarea {
 	@include scrollbars();
 }
+.card {
+	.card-header {
+		padding-top: 1rem;
+		.card-title {
+			margin-top: .4rem;
+		}
+		.card-actions {
+			margin-top: .1rem;
+		}
+	}
+}
+.table {
+	a, a:hover, a:visited {
+		text-decoration: none;
+	}
+}
 
 /* Bootstrap overrides */
 body {
     background-color: darken($body-tertiary-bg-dark, 7);
     min-width: 360px;
 }
-input:not([type=checkbox]),
+input:not([type='checkbox']),
 select,
 textarea {
     &.form-control,
@@ -36,10 +52,17 @@ textarea {
 textarea {
     height: 8rem;
 	resize: vertical;
+	&[readonly] {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		resize: none;
+	}
+
 }
 .form-group.row {
     margin-bottom: .3rem;
 }
+
 
 /* Modals */
 .modal {
@@ -244,8 +267,25 @@ textarea {
 }
 
 
-/* 
 
+/* Break point styling */
+@media (max-width : 1200px) {
+	[data-bp='1200'] {
+		display: none;
+	}
+}
+
+
+
+
+
+
+.btn-first {
+	@include br4lfti;
+}
+.btn-last {
+	@include br4rgti;
+}
 .br4 {
 	@include br4;
 }
@@ -255,4 +295,3 @@ textarea {
 .br4rgt {
 	@include br4rgt;
 }
- */

@@ -149,7 +149,7 @@ class InflectionHelper {
 	 * @return	void
 	 */
 	public function __construct() {
-		$inflection = CFG::get('inflection');
+		$inflection = config('inflection');
 		static::$irregularWords = $inflection['irregular']; 
 		static::$splitWords = $inflection['splitwords']; 
 	}

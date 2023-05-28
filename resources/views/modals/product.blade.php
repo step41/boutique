@@ -14,7 +14,7 @@
                 'label' => T::_('Product Type'), 
                 'validate' => array(
                     'required' => TRUE,
-                    'lengthMax' => 100
+                    'lengthMax' => 100,
                 ), 
             )).
             H::text(array(
@@ -23,7 +23,7 @@
                 'maxlength' => '100',
                 'validate' => array(
                     'required' => TRUE,
-                    'lengthMax' => 100
+                    'lengthMax' => 100,
                 ), 
             )).
             H::textarea(array(
@@ -45,12 +45,15 @@
                 'id' => 'url', 
                 'label' => T::_('Product URL'), 
                 'validate' => array(
-                    'lengthMax' => 100
+                    'lengthMax' => 100,
                 ), 
             )).
             H::text(array(
                 'id' => 'shipping_price', 
                 'label' => T::_('Product Shipping Price'), 
+                'validate' => array(
+                    'integer' => TRUE,
+                ), 
             )).
             H::textarea(array(
                 'id' => 'note', 

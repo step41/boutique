@@ -6,6 +6,17 @@
 
 		initialized: [],
 
+		init: function() {
+
+			const BU = Boutique.Utilities;
+
+			BU.initBootbox();
+			BU.initHelpBlocks();
+			BU.initMultiModal();
+			BU.setModalScroll();
+
+		},
+		
 		initBootbox: function() {
 			bootbox.setDefaults({
 				locale: LOCALE,
@@ -15,12 +26,6 @@
 				animate: true,
 				className: "my-modal"	
 			});	
-		},
-		
-		initDropups: function() {
-			
-			Boutique.Utilities.resizeDropups();
-			
 		},
 		
 		initHelpBlocks: function(o) {
@@ -58,11 +63,6 @@
 		},
 
 		initMultiModal: function() {
-			/* 
-			UPDATE! Since Bootstrap 3.2.2, multi-modals are now fully supported in the base code. Leaving this function for posterity reasons only.
-
-			UPDATE#2: Apparently there are still some circumstances where default multi-modal behavior is broken (nested modals). So I'm re-implementing the following function.
-			*/
 
 			let indexBase = 1060;
 			let marginBase = 30;
@@ -75,22 +75,17 @@
 				let index = indexBase + (10 * count);
 				let margin = ((count + 1) * marginBase) + 'px';
 
+				self.css('z-index', index);
+				self.css('margin-top', margin);
+				$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
 
-				// Ensure there is at least one visible modal present and that it is not nested within another modal (eg; Search modal within Media modal)
-				//if (count > 0 && self.parents('.modal').length === 0) {
-					self.css('z-index', index);
-					self.css('margin-top', margin);
-					$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
-				//}
-
-				console.log('Showing modal #' + count + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 			});	
 
 			// Multi-modal scrolling fix - Re-establishes scrolling on underlying modal when closing top-most modal 
 			$(document).on('hidden.bs.modal', '.modal', function() {
 
 				let self = $(this);
-				console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
+
 				self.css('z-index', indexBase);
 				self.css('margin-top', marginBase + 'px');
 				$('.modal-backdrop.modal-stack').css('z-index', (indexBase - 1)).removeClass('modal-stack');
@@ -320,7 +315,9 @@
 
 	};
 
-	Boutique.Utilities.initMultiModal();
+	$(function() {
+		Boutique.Utilities.init();
+	});       
 
 })();
 

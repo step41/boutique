@@ -1,4 +1,6 @@
-		
+const LOCALE = 'en-us';
+const API_PATH = '';
+
 var Boutique = Boutique || {};
 
 ; (function() {
@@ -391,6 +393,17 @@ var Boutique = Boutique || {};
 
 		initialized: [],
 
+		init: function() {
+
+			const BU = Boutique.Utilities;
+
+			BU.initBootbox();
+			BU.initHelpBlocks();
+			BU.initMultiModal();
+			BU.setModalScroll();
+
+		},
+		
 		initBootbox: function() {
 			bootbox.setDefaults({
 				locale: LOCALE,
@@ -400,12 +413,6 @@ var Boutique = Boutique || {};
 				animate: true,
 				className: "my-modal"	
 			});	
-		},
-		
-		initDropups: function() {
-			
-			Boutique.Utilities.resizeDropups();
-			
 		},
 		
 		initHelpBlocks: function(o) {
@@ -443,11 +450,6 @@ var Boutique = Boutique || {};
 		},
 
 		initMultiModal: function() {
-			/* 
-			UPDATE! Since Bootstrap 3.2.2, multi-modals are now fully supported in the base code. Leaving this function for posterity reasons only.
-
-			UPDATE#2: Apparently there are still some circumstances where default multi-modal behavior is broken (nested modals). So I'm re-implementing the following function.
-			*/
 
 			let indexBase = 1060;
 			let marginBase = 30;
@@ -460,22 +462,17 @@ var Boutique = Boutique || {};
 				let index = indexBase + (10 * count);
 				let margin = ((count + 1) * marginBase) + 'px';
 
+				self.css('z-index', index);
+				self.css('margin-top', margin);
+				$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
 
-				// Ensure there is at least one visible modal present and that it is not nested within another modal (eg; Search modal within Media modal)
-				//if (count > 0 && self.parents('.modal').length === 0) {
-					self.css('z-index', index);
-					self.css('margin-top', margin);
-					$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
-				//}
-
-				console.log('Showing modal #' + count + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 			});	
 
 			// Multi-modal scrolling fix - Re-establishes scrolling on underlying modal when closing top-most modal 
 			$(document).on('hidden.bs.modal', '.modal', function() {
 
 				let self = $(this);
-				console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
+
 				self.css('z-index', indexBase);
 				self.css('margin-top', marginBase + 'px');
 				$('.modal-backdrop.modal-stack').css('z-index', (indexBase - 1)).removeClass('modal-stack');
@@ -705,7 +702,9 @@ var Boutique = Boutique || {};
 
 	};
 
-	Boutique.Utilities.initMultiModal();
+	$(function() {
+		Boutique.Utilities.init();
+	});       
 
 })();
 
@@ -859,11 +858,11 @@ var Boutique = Boutique || {};
 			frm = $(loc).find('form');
 			
 			// Check for non-200 errors 
-			if (status == 'error' && data.getResponseHeader('Boutique-Messages')) {
+			if (status == 'error' && data.getResponseHeader && data.getResponseHeader('Boutique-Messages')) {
 				data = data.getResponseHeader('Boutique-Messages');
 			}
 			// Check against async responses first
-			else if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
+			else if (xhr && xhr.getResponseHeader && xhr.getResponseHeader('Boutique-Messages')) {
 				data = xhr.getResponseHeader('Boutique-Messages');
 			}
 			// Check for sync responses next 
@@ -2987,6 +2986,7 @@ var Boutique = Boutique || {};
 	
 	Boutique.Controllers.Product = {
 		
+		action: null,
 		block: null,
 		lastId: null,
 		prefix: '#product',
@@ -2995,7 +2995,7 @@ var Boutique = Boutique || {};
 
 			const BCP = Boutique.Controllers.Product;
 			
-			$(BCP.prefix + '-list').off('click').on('click', function(e) {
+			$(BCP.prefix + '_table, ' + BCP.prefix + '_show').off('click').on('click', function(e) {
 
 				BCP.show(e);
 
@@ -3031,7 +3031,7 @@ var Boutique = Boutique || {};
 			
 				$.ajax({
 					type: 'delete',
-					url: '/products/' + id,
+					url: API_PATH + '/products/' + id,
 					data: BCP.formWrite.cerealize(),
 					beforeSend: function() {
 						BM.progress(BS.t('messageDeleting'), BCP.block);
@@ -3048,6 +3048,15 @@ var Boutique = Boutique || {};
 
 		},
 		
+		duplicate: function() {
+			
+			const BCP = Boutique.Controllers.Product;
+						
+			BCP.itemId = null;
+			$(BCP.formWrite).find('#id').val('');
+			
+		},
+		
 		edit: function(callback) {
 			
 			const BCP = Boutique.Controllers.Product;
@@ -3057,11 +3066,9 @@ var Boutique = Boutique || {};
 
 			if (BCP.itemId) {
 
-				BCP.reset();
-
 				$.ajax({
 					type: 'get',
-					url: '/products/' + BCP.itemId,
+					url: API_PATH + '/products/' + BCP.itemId,
 					beforeSend: function() {
 						BM.progress(BS.t('messageLoading'), BCP.block);
 					},
@@ -3074,7 +3081,9 @@ var Boutique = Boutique || {};
 						if (typeof (callback || undefined) === 'function') {
 							callback.call();
 						}
-
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCP.block);
 					}
 				});
 			}
@@ -3089,15 +3098,44 @@ var Boutique = Boutique || {};
 
 		},
 
+		index: function() {
+			
+			const BCP = Boutique.Controllers.Product;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+
+			BCP.block = $('body');
+
+			$.ajax({
+				type: 'get',
+				url: API_PATH + '/products',
+				data: BCP.formList.cerealize(),
+				beforeSend: function() {
+					BM.progress(BS.t('messageLoading'), BCP.block);
+				},
+				success: function(data, status, xhr) {
+					BCP.formList.find('tbody').html(data);		
+					BM.hide(BCP.block);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCP.block);
+				}
+			});
+			
+		},
+
 		init: function() {
 
 			const BCP = Boutique.Controllers.Product;
 			
 			BCP.dialog = $(BCP.prefix + '_dialog');
+			BCP.formList = $(BCP.prefix + '_form_list');
 			BCP.formWrite = $(BCP.prefix + '_form_write');
 			
+			BCP.action = null;
 			BCP.hide();
 			BCP.bindEvents();
+			BCP.index();
 			
 		},
 
@@ -3140,6 +3178,15 @@ var Boutique = Boutique || {};
 			/* Reset hidden id field manually since reset doesn't clear hidden fields */
 			$(BCP.prefix + '_id').val('');
 				
+			if (BCP.action === 'view') {
+				BCP.dialog.find('.form-control').alterClass('form-control', 'form-control-plaintext').prop('readonly', true);
+				BCP.dialog.find('[data-bs-dismiss="modal"]').addClass('btn-last');
+			}
+			else {
+				BCP.formWrite.find('.form-control-plaintext').alterClass('form-control-plaintext', 'form-control').prop('readonly', false);
+				BCP.dialog.find('[data-bs-dismiss="modal"]').removeClass('btn-last');
+			}
+
 		},
 		
 		// saves/updates an item back to the database
@@ -3151,7 +3198,7 @@ var Boutique = Boutique || {};
 			const BS = Boutique.Settings;
 			const BV = Boutique.Validator;
 	
-			let id = (BCP.itemId) ? '/' + BCP.itemId : '';
+			let id = (BCP.itemId && BCP.action === 'edit') ? '/' + BCP.itemId : '';
 			
 			BCP.bv = BV.build(BCP.formWrite);
 			
@@ -3162,8 +3209,8 @@ var Boutique = Boutique || {};
 			BV.clearErrors(BCP.formWrite);
 	
 			$.ajax({
-				type: 'post',
-				url: '/products' + id,
+				type: (BCP.action === 'edit') ? 'put' : 'post',
+				url: API_PATH + '/products' + id,
 				data: BCP.formWrite.cerealize(),
 				beforeSend: function() {
 					BM.progress(BS.t('messageSaving'), BCP.block);
@@ -3190,29 +3237,45 @@ var Boutique = Boutique || {};
 		show: function(e) { 
 		
 			const BCP = Boutique.Controllers.Product;
-			const show = (e && e.target && e.target.dataset['bsShow']);
 			
-			if (show) {
+			BCP.action = (e && e.target && e.target.dataset['action']);
+
+			let add = $(BCP.prefix + '_add');
+			let upd = $(BCP.prefix + '_upd');
+			let del = $(BCP.prefix + '_del');
+			
+			if (BCP.action) {
+
+				BCP.reset();
 
 				BCP.block = BCP.dialog.find('.modal-content');
 				BCP.itemId = (e.target.dataset['id']) ? e.target.dataset['id'] : false;
 				
+				$(add).add(upd).add(del).hide();
+
+				// Edit/Copy/View existing item
 				if (BCP.itemId) {
-					$(BCP.prefix + '_add').hide();	
-					$(BCP.prefix + '_del, ' + BCP.prefix + '_upd').show();	
+					if (BCP.action === 'edit') {
+						upd.show();
+						del.show();
+					}
+					else if (BCP.action === 'copy') {
+						add.show();
+					}
 				}
+				// Add new item
 				else {
-					$(BCP.prefix + '_add').show();	
-					$(BCP.prefix + '_del, ' + BCP.prefix + '_upd').hide();	
-					BCP.reset();	
+					add.show();
 				}
 
 				BCP.dialog.modal('show');
 				BCP.dialog.off('shown.bs.modal').on('shown.bs.modal', function() {
 					
-					// Load item record if valid id is passed
-					if (BCP.itemId) {
+					if (BCP.action.match(/(edit|view)/i)) {
 						BCP.edit();
+					}
+					else if (BCP.action === 'copy') {
+						BCP.edit(BCP.duplicate);
 					}
 					
 				});		

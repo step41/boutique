@@ -147,11 +147,11 @@
 			frm = $(loc).find('form');
 			
 			// Check for non-200 errors 
-			if (status == 'error' && data.getResponseHeader('Boutique-Messages')) {
+			if (status == 'error' && data.getResponseHeader && data.getResponseHeader('Boutique-Messages')) {
 				data = data.getResponseHeader('Boutique-Messages');
 			}
 			// Check against async responses first
-			else if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
+			else if (xhr && xhr.getResponseHeader && xhr.getResponseHeader('Boutique-Messages')) {
 				data = xhr.getResponseHeader('Boutique-Messages');
 			}
 			// Check for sync responses next 
