@@ -47,15 +47,15 @@
 		 */
 		_auto: function(ov) {
 			ov = ov || this;
-			var flds, cnt;
+			let flds, cnt;
 			if (this._form) {
 				cnt = 0;
 				flds = this._form.find('[data-validate]');
 				flds.each(function() {
-					var label, rules;
-					var fld = $(this);
-					var name = fld.attr('name');
-					var rules, r, args;
+					let label, rules;
+					let fld = $(this);
+					let name = fld.attr('name');
+					let r, args;
 					/* Check for inline field data-label attr first, then default to form-group label */
 					if (fld.data('label')) {
 						label = fld.data('label');
@@ -72,14 +72,14 @@
 								ov[r].apply(ov, args);
 							}
 							else {
-								$.clog(ov._objectName + ' encountered an invalid rule declaration: [' + r + ']', 'danger'); 	
+								console.warn(ov._objectName + ' encountered an invalid rule declaration: [' + r + ']'); 	
 							}
 						}
 						ov.validate(name, label);
 						cnt++;
 					}
 				});
-				$.clog(this._objectName + ' set up rules for [' + cnt + '] items successfully.');
+				console.log(this._objectName + ' set up rules for [' + cnt + '] items successfully.');
 				this.displayErrors();
 			}
 			return this;
@@ -137,10 +137,11 @@
 		 * @since 	5.0
 		 */
 		_getDefaultMessage: function(rule, args) {
-			args = args || null;
+
+			const BS = Boutique.Settings;
+			let message = '';
 			
-			var OS = Boutique.Settings;
-			var message = '';
+			args = args || null;
 			
 			switch(rule) {
 				
@@ -213,8 +214,8 @@
 		 * @since 	5.0
 		 */
 		_getTranslation: function(rule) {
-			var OS = Boutique.Settings;
-			return OS.t('validate' + ucfirst(rule));
+			const BS = Boutique.Settings;
+			return BS.t('validate' + ucfirst(rule));
 		},
 		
 		/**
@@ -328,7 +329,7 @@
 		 */
 		_validate: function(key, val, recursive) {
 			recursive = recursive || false;
-			var v, r, fnc, args, valid;
+			let v, r, fnc, args, valid;
 			if (recursive && ($.isPlainObject(val) || Array.isArray(val))) {
 				// run validations on each element of the array
 				for (v in val) {
@@ -385,8 +386,8 @@
 		build: function(frm, auto) {
 			frm = $(frm).closest('form');
 			auto = $.isset(auto) || true;
-			var data;
-			var msg = this._objectName + ' object created ';
+			let data;
+			let msg = this._objectName + ' object created ';
 			if (frm.length) {
 				this._form = frm;
 				data = this._form.cerealizeArray();
@@ -396,7 +397,6 @@
 					msg += 'and auto-validated ';
 				}
 			}
-			//$.clog(msg + 'successfully!', 'success');
 			return this;
 		},
 
@@ -413,10 +413,13 @@
 		 * @since 	5.0
 		 */
 		callback: function(callback, message, params) {
+
+			const BU = Boutique.Utilities;
+
+			let name;
+			
 			message = message || '';
 			params = params || [];
-			
-			var OU = Boutique.Utilities;
 			
 			if (typeof (callback || undefined) === 'function') {
 				// needs a unique name to avoid collisions in the rules array
@@ -434,7 +437,7 @@
 
 			}
 			else {
-				$.clog(callback + ' is not callable!', 'danger');
+				console.warn(callback + ' is not callable!');
 			}
 
 			return this;
@@ -451,7 +454,7 @@
 			message = message || null;
 			this.setRule('ccNum', function(key, val) {
 				
-				var length, sum, weight, i, digit, mod;
+				let length, sum, weight, i, digit, mod;
 				
 				val = val.toString();
 				val = val.replace(/\s+/g, '');
@@ -488,7 +491,7 @@
 			frm = frm || this._form;
 			frm = $(frm).closest('form');
 			if (frm.length) {
-				frm.find('.segmented-control button[data-navigate]').removeClass('has-error-ocms');
+				frm.find('.segmented-control button[data-navigate]').removeClass('has-error-boutique');
 				frm.find('.form-control-feedback-block').remove();
 			}
 			this._reset();
@@ -505,8 +508,8 @@
 		date: function(message) { 
 			message = message || null;
 			this.setRule('date', function(key, val) {
-				var OV = Boutique.Validator;
-				return OV.isDate(val);
+				const BV = Boutique.Validator;
+				return BV.isDate(val);
 			}, message);
 			return this;
 		},
@@ -523,7 +526,7 @@
 			format = format || this._getDefaultDateFormat();
 			message = message || null;
 			this.setRule('dateFormat', function(key, val) {
-				var df = new DateFormatter();
+				let df = new DateFormatter();
 				return df.formatDate(val, format);
 			}, message, [format]);
 			return this;
@@ -543,12 +546,12 @@
 			format = format || this._getDefaultDateFormat();
 			message = message || null;
 			date = new Date(date);
-			var df = new DateFormatter();
+			let df = new DateFormatter();
 			date = df.formatDate(date, format);
 			this.setRule('dateMax', function(key, val, args) {
-				var maxDate, currDate;
-				var OV = Boutique.Validator;
-				if (OV.isDate(val)) {
+				const BV = Boutique.Validator;
+				let maxDate, currDate;
+				if (BV.isDate(val)) {
 					currDate = new Date(val);
 					maxDate = new Date(args[0]);
 					return (maxDate >= currDate);
@@ -568,16 +571,16 @@
 		 * @since 	5.0
 		 */
 		dateMin: function(date, format, message) { 
+			let df = new DateFormatter();
 			date = date || null;
 			format = format || this._getDefaultDateFormat();
 			message = message || null;
 			date = new Date(date);
-			var df = new DateFormatter();
 			date = df.formatDate(date, format);
 			this.setRule('dateMin', function(key, val, args) {
-				var minDate, currDate;
-				var OV = Boutique.Validator;
-				if (OV.isDate(val)) {
+				const BV = Boutique.Validator;
+				let minDate, currDate;
+				if (BV.isDate(val)) {
 					currDate = new Date(val);
 					minDate = new Date(args[0]);
 					return (minDate <= currDate);
@@ -618,25 +621,25 @@
 			errors = errors || this.getAllErrors();
 			frm = frm || this._form;
 			frm = $(frm).closest('form');
-			var err, e, errors, fld, frmgrp, msg, s, seg, segId, segBtn;
-			var errsegs = [];
-			var errorsLen = this.getObjectSize(errors);
+			let e, fld, frmgrp, msg, s, seg, segId;
+			let errsegs = [];
+			let errorsLen = this.getObjectSize(errors);
 			if (frm.length) {
-				frm.find('.segmented-control button[data-navigate]').removeClass('has-error-ocms');
+				frm.find('.segmented-control button[data-navigate]').removeClass('has-error-boutique');
 				frm.find('.form-control-feedback-block').remove();
 				if (errorsLen) {
-					$.clog('Validation encountered errors with the following fields:', 'warning');
+					console.warn('Validation encountered errors with the following fields:');
 					for (e in errors) {
 						fld = frm.find('[name="' + e + '"]');
 						if (fld.length === 0) {
 							fld = frm.find('[data-name="' + e + '"]');
 						}
 						if (fld.length) {
-							$.clog('    * ' + e, 'warning');
+							console.warn('    * ' + e);
 							seg = fld.parents('.segment');
 							frmgrp = fld.closest('.form-group, .form-group-inline');
 							msg = '';
-							msg += '<div class="form-control-feedback-block status ocms-message-danger">';
+							msg += '<div class="form-control-feedback-block status boutique-message-danger">';
 							msg += '<a data-focus="' + e + '">' + errors[e] + '</a>';
 							msg += '</div>';
 							frmgrp.children('div[class*="col-"]').append(msg);
@@ -655,7 +658,7 @@
 					});
 					/* Check for segment presence and switch to first segment with error */
 					for (s in errsegs) {
-						frm.find('.segmented-control button[data-navigate="' + errsegs[s] + '"]').addClass('has-error-ocms');
+						frm.find('.segmented-control button[data-navigate="' + errsegs[s] + '"]').addClass('has-error-boutique');
 					}
 					frm.find('.segmented-control button[data-navigate="' + errsegs[0] + '"]').trigger('click');
 					frm.find('.form-control-feedback-block').animate({height:'show', opacity:1});
@@ -671,7 +674,7 @@
 		 * @since 	5.0
 		 */
 		displayFeedback: function() { 
-			var err, errors;
+			let err, errors;
 			if (this._form) {
 				this._form.find('.form-control-feedback, .form-control-feedback-block').remove();
 				this._form.find('.has-error').removeClass('has-error has-feedback');
@@ -699,7 +702,7 @@
 		email: function(message) { 
 			message = message || null;
 			this.setRule('email', function(key, val) {
-				var isValid, atIndex, domain, local, localLen, domainLen;
+				let isValid, atIndex, domain, local, localLen, domainLen;
 				val = trim(val);
 				if (val.length == 0) {
 					return true;
@@ -870,8 +873,8 @@
 		float: function(message) { 
 			message = message || null;
 			this.setRule('float', function(key, val) {
-				var OV = Boutique.Validator;
-				return OV.isFloat(val);
+				const BV = Boutique.Validator;
+				return BV.isFloat(val);
 			}, message);
 			return this;
 		},
@@ -907,7 +910,7 @@
 		 * @since 	5.0
 		 */
 		getObjectSize: function(obj) {
-			var size = 0, key;
+			let size = 0, key;
 			for (key in obj) {
 				if (obj.hasOwnProperty(key)) {
 					size++;
@@ -974,8 +977,8 @@
 		integer: function(message) { 
 			message = message || null;
 			this.setRule('integer', function(key, val) {
-				var OV = Boutique.Validator;
-				return OV.isInteger(val);
+				const BV = Boutique.Validator;
+				return BV.isInteger(val);
 			}, message);
 			return this;
 		},
@@ -1015,8 +1018,8 @@
 		 * @since 	5.0
 		 */
 		isDate: function(val) {
-			var msgInvalid = 'Value passed to ' + this._objectName + '.isDate() is not a valid date format';
-			var dt, results;
+			let msgInvalid = 'Value passed to ' + this._objectName + '.isDate() is not a valid date format';
+			let dt, results;
 			if (trim(val).length === 0) {
 				return true;
 			}
@@ -1025,7 +1028,7 @@
 				return dt instanceof Date && !isNaN(dt.valueOf());
 			} 
 			catch(e) {
-				$.clog(msgInvalid, 'danger');
+				console.warn(msgInvalid);
 				return false;
 			}
 		},
@@ -1038,8 +1041,8 @@
 		 * @since 	5.0
 		 */
 		isFloat: function(val) {
-			var valString = trim(val);
-			var valFloat = parseFloat(val);
+			let valString = trim(val);
+			let valFloat = parseFloat(val);
 			return (valString === valFloat.toString() && valFloat === +valFloat && valFloat !== (valFloat|0));	
 		},
 
@@ -1051,8 +1054,8 @@
 		 * @since 	5.0
 		 */
 		isInteger: function(val) {
-			var valString = trim(val);
-			var valInt = parseInt(val);
+			let valString = trim(val);
+			let valInt = parseInt(val);
 			return (valString === valInt.toString() && valInt === +valInt && valInt === (valInt|0));	
 		},
 
@@ -1171,8 +1174,8 @@
 			label = label || '';
 			message = message || null;
 			this.setRule('matchesRegExp', function(key, val, args) {
-				var globs = 'g';
-				var regex = args[0].toString();
+				let globs = 'g';
+				let regex = args[0].toString();
 				// Format in JS is a bit different so let's make it compatible...
 				if (regex.match(new RegExp("i$"))) {
 					globs += 'i';
@@ -1218,7 +1221,7 @@
 			include = $.isset(include) || true; 
 			message = message || null;
 			this.setRule('numMax', function(key, val, args) {
-				var inc;
+				let inc;
 				if (val.length === 0) {
 					return true;
 				}
@@ -1243,7 +1246,7 @@
 			include = $.isset(include) || true; 
 			message = message || null;
 			this.setRule('numMin', function(key, val, args) {
-				var inc;
+				let inc;
 				if (val.length === 0) {
 					return true;
 				}
@@ -1305,7 +1308,7 @@
 				this._rules[rule] = true;
 				if (!$.isset(this._functions[rule])) {
 					if (!typeof (fnc || undefined) === 'function') {
-						$.clog('Invalid function for rule: ' + rule, 'danger');
+						console.warn('Invalid function for rule: ' + rule);
 					}
 					this._functions[rule] = fnc;
 				}
@@ -1382,8 +1385,8 @@
 		validate: function(key, label, recursive) {
 			label = label || '';
 			recursive = recursive || false;
-			var validate = true;
-			var f, flds, val;
+			let validate = true;
+			let f, flds, val;
 			if (this._ifSet !== false) {
 				validate = false;
 				flds = (Array.isArray(this._ifSet)) ? this._ifSet : [key];

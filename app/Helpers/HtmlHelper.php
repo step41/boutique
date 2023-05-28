@@ -718,12 +718,13 @@ class HtmlHelper {
 				$this->div(array('class' => 'modal-content'))->inject(
 					$this->div(array('class' => 'modal-header'))->inject(
 						$this->h1(array('class' => 'modal-title fs-4', 'text' => '%s')).
-						$this->button(['class' => 'btn-close', 'data-bs-dismiss' => 'modal', 'aria-label' => 'Close'])
+						//$this->button(['class' => 'btn-close', 'data-bs-dismiss' => 'modal', 'aria-label' => 'Close']).
+						''
 					).
 					$this->div(array('class' => 'modal-body', 'text' => '%s')).
 					$this->div(array('class' => 'modal-footer'))->inject(
 						$this->div(array('class' => 'btn-group'))->inject(
-							$this->btn(array('id' => 'dialog_close_'.$uuid, 'prefix' => $prefix, 'action' => 'close', 'text' => T::_('Close'), 'data-dismiss' => 'modal')).
+							$this->btn(array('id' => 'dialog_close_'.$uuid, 'prefix' => $prefix, 'action' => 'close', 'text' => T::_('Close'), 'data-bs-dismiss' => 'modal')).
 							$this->btn(array('id' => 'dialog_help_'.$uuid, 'prefix' => $prefix, 'action' => 'help', 'text' => T::_('Help'), 'class' => 'btn-help')).
 							'%s'
 						)
@@ -831,7 +832,7 @@ class HtmlHelper {
 			$this->blade('layouts.head').
 			$this->container(
 				$this->div(['class' => 'row justify-content-center'])->inject(
-					$this->div(['class' => 'col-md-8'])->inject(
+					$this->div(['class' => 'col-md-12'])->inject(
 						$this->div(['class' => 'card'])->inject(
 							$this->div(['class' => 'card-header', 'text' => $this->strong($attribs['title'])]).
 							$this->div(['class' => 'card-body', 'text' => $attribs['text']])
@@ -2418,7 +2419,7 @@ class HtmlHelper {
 			if (!empty($attribs['help-visible'])):
 				$helpblockvisible = $this->span(array('class' => 'help-block-visible', 'text' => $attribs['help-visible']));
 			endif;
-			$groupClass = 'form-group'.((isset($attribs['inline']) && $attribs['inline']) ? '-inline' : '').' '.$attribs['wrapclass'];
+			$groupClass = 'form-group row'.((isset($attribs['inline']) && $attribs['inline']) ? '-inline' : '').' '.$attribs['wrapclass'];
 			$grpWrapAttribs = array('class' => $groupClass);
 			$inpWrapAttribs = array('class' => 'col-'.$attribs['size'].'-'.$attribs['cols']);
 			$labellft = ($swaplabel) ? '' : $label;

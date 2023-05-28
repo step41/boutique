@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Product;
+use App\Models\Product;
 
 /**
  * Product Repository
@@ -30,7 +30,7 @@ class ProductRepository
     /**
      * Get all active products
      *
-     * @return \App\Product Collection;
+     * @return \App\Models\Product Collection;
      */
     public function getAllActiveProducts()
     {

@@ -13,9 +13,48 @@
 // Packages
 @import 'packages';
 
+html,
+body,
+textarea {
+	@include scrollbars();
+}
+
+/* Bootstrap overrides */
 body {
     background-color: darken($body-tertiary-bg-dark, 7);
+    min-width: 360px;
 }
+input:not([type=checkbox]),
+select,
+textarea {
+    &.form-control,
+    &.form-control:focus {
+        background-color: darken($body-tertiary-bg-dark, 7);
+        border-color: $body-tertiary-bg-dark;
+    }       
+}
+textarea {
+    height: 8rem;
+	resize: vertical;
+}
+.form-group.row {
+    margin-bottom: .3rem;
+}
+
+/* Modals */
+.modal {
+    .modal-header,
+    .modal-footer {
+        background-color: darken($body-tertiary-bg-dark, 7);
+    }
+    .modal-header {
+        border-bottom: transparent;
+    }
+    .modal-footer {
+        border-top: transparent;
+    }
+}
+
 .list {
     padding-left: 0;
     li {
@@ -40,3 +79,172 @@ body {
         background-color: darken($body-tertiary-bg-dark, 6);
     }
 }
+
+
+/* BlockUI styles (runs during ajax calls like blind.js used to */
+.blockUI {
+	@include br4;
+	background-color: rgba(85, 85, 85, .2);
+}
+.blockUI.blockOverlay,
+.blockUI.blockMsg
+{
+	font-family: $font-family-sanserif;
+}
+.blockUI.blockOverlay
+{
+	position: fixed !important;
+}
+.required > label:first-child:after {
+	content: ' * ';
+}
+/*
+.required > label:first-child:before {
+	color: $brand-warning-darker;
+	content: '\f06a ';
+	font-family: $font-family-icons;
+	font-size: 80%;
+	margin-right: 4px;
+}
+.required.alert-danger > label:first-child:before {
+	color: $brand-danger-darker;
+}
+*/
+.block-status, 
+.inline-status, 
+.block-status .icon,
+.inline-status .icon 
+{
+	color: #fff;
+}
+.block-status {
+	@include br4;
+	@include box-shadow(4px 4px 1px rgba(0,0,0,.2));
+	background-color: $brand-default;
+	border: 1px $brand-default-darker solid;
+	max-width: 360px;
+	min-height: 40px;
+	padding: 10px;
+	text-align: left;
+}
+/* Single message to display */
+.block-status p {
+	margin: 0;
+	padding: 0;	
+}
+/* Multiple messages to display */
+.block-status ul {
+	margin: 10px 20px;
+	padding: 0;	
+}
+.block-status ul li
+{
+	list-style: disc;
+	margin-left: 25px;
+}
+.inline-status {
+	padding: 0 0 0 20px;
+}
+.status.boutique-message-info {
+	background-color: $brand-info;
+	border: 1px $brand-info-darker solid;
+}
+.status.boutique-message-validation,
+.status.boutique-message-danger 
+{
+	background-color: $brand-danger;
+	border: 1px $brand-danger-darker solid;
+}
+.status.boutique-message-warning {
+	background-color: $brand-warning;
+	border: 1px $brand-warning-darker solid;
+}
+.status.boutique-message-success {
+	background-color: $brand-success;
+	border: 1px $brand-success-darker solid;
+}
+.boutique-spinner {
+	animation: boutique-spinner 1s linear infinite;
+	border: 6px solid #fff;
+	border-radius: 50%;
+	border-top: 6px solid $body-secondary-bg-dark;
+    display: inline-block;
+	height: 30px;
+	margin: 0 auto -9px auto;
+	width: 30px;
+}
+
+
+/* FIELD VALIDATION AND FEEDBACK BLOCKS */
+.has-error .form-control,
+.has-error .form-control:focus 
+{
+	border-color: $brand-danger-darker !important;
+}
+.has-error .input-group-addon {
+	border-color: $brand-danger-darker !important;
+	color: $brand-danger-darker !important;
+}
+.has-error .form-control-feedback,
+.has-error .form-control-feedback-block
+{
+	color: $brand-danger-darker !important;
+}
+.has-error .form-control-feedback-block a {
+	border-bottom: 1px $brand-danger-darker dotted;
+}
+.has-error .form-control-feedback-block a:after {
+	color: $brand-danger-darker !important;
+}
+.segmented-control .btn.has-error-boutique {
+	background-color: $brand-danger !important;
+	border: 1px $brand-danger-darker solid !important;
+}
+.segmented-control .btn.active.has-error-boutique {
+	background-color: $brand-danger-lighter !important;
+}
+.segmented-control .btn.has-error-boutique .icon {
+	display: inline-block !important;
+}
+.segmented-control .btn.has-error-boutique .icon:before {
+	content: '\f064' !important;
+}
+
+.form-control-feedback-block {
+	@include br4;
+	@include clear;
+	color: #fff !important; /* disallows overrides from other styles applied within the editor */
+	border-width: 1px;
+	border-style: solid;
+	display: none;
+	/* Added float and width to support validation messages under form-group-inline multi-fields */	
+	float: left; 
+	font-size: 90%;
+	margin: 4px 0 8px 0;
+	padding: 0 10px;
+	text-align: left;
+	width: 100%;
+}
+.form-control-feedback-block a {
+	color: #fff !important; /* disallows overrides from other styles applied within the editor */
+	cursor: pointer;
+	text-decoration: none;
+}
+.form-control-feedback-block a:before {
+	@include icon;
+	content: '\f064';
+}
+
+
+/* 
+
+.br4 {
+	@include br4;
+}
+.br4lft {
+	@include br4lft;
+}
+.br4rgt {
+	@include br4rgt;
+}
+ */

@@ -55,11 +55,7 @@
                 H::stylesheet('/css/boutique_packages.css').
                 
                 H::comment('Scripts').
-                H::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js').
-                //H::script(['src' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js', 'integrity' => 'sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8', 'crossorigin' => 'anonymous']).
-                //H::script('https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js').
-                //H::script('https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/i18n/defaults-*.min.js').
-                  
+                H::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js').          
                 H::script('/js/app.js').
                 H::script('/js/boutique_packages.js').
                 H::script('/js/boutique_libraries.js').

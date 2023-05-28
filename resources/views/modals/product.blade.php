@@ -5,41 +5,56 @@
     $prefix = 'product';
 	$template = H::boutiqueDialog($prefix, 'modal-lg');
     $title = T::_('Product Properties');
-    $ables = array(
-        T::_('Disabled'), 
-        T::_('Enabled')
-    );
-    $capabilityTypes = array(
-        'view' => T::_('Viewing'),
-        'add' => T::_('Adding'),
-        'modify' => T::_('Modifying'),
-        'delete' => T::_('Deleting'),
-        'manage' => T::_('Managing'),
-    );
 
     $content = 
         H::form(array('id' => $prefix.'_form_write'))->inject(
-            H::hidden(array('id' => $prefix.'_id')).
+            H::hidden(array('id' => 'id')).
             H::text(array(
-                'id' => $prefix.'_name', 
-                'label' => T::_('Capability Name'), 
-                'placeholder' => T::_('Add a capability name'), 
-                'maxlength' => '35',
+                'id' => $prefix.'_type', 
+                'label' => T::_('Product Type'), 
                 'validate' => array(
                     'required' => TRUE,
-                    'lengthMax' => 35
+                    'lengthMax' => 100
                 ), 
             )).
             H::text(array(
-                'id' => $prefix.'_slug', 
-                'label' => T::_('Capability Slug'), 
-                'placeholder' => T::_('Generated automatically based on your name'), 
-                'readonly' => TRUE,
+                'id' => $prefix.'_name', 
+                'label' => T::_('Product Name'), 
+                'maxlength' => '100',
+                'validate' => array(
+                    'required' => TRUE,
+                    'lengthMax' => 100
+                ), 
             )).
             H::textarea(array(
-                'id' => $prefix.'_description', 
-                'label' => T::_('Capability Description'), 
-                'placeholder' => T::_('Add a capability description'), 
+                'id' => 'description', 
+                'label' => T::_('Product Description'), 
+                'required' => TRUE,
+            )).
+            H::text(array(
+                'id' => 'style', 
+                'label' => T::_('Product Style'), 
+                'required' => TRUE,
+            )).
+            H::text(array(
+                'id' => 'brand', 
+                'label' => T::_('Product Brand'), 
+                'required' => TRUE,
+            )).
+            H::text(array(
+                'id' => 'url', 
+                'label' => T::_('Product URL'), 
+                'validate' => array(
+                    'lengthMax' => 100
+                ), 
+            )).
+            H::text(array(
+                'id' => 'shipping_price', 
+                'label' => T::_('Product Shipping Price'), 
+            )).
+            H::textarea(array(
+                'id' => 'note', 
+                'label' => T::_('Product Note'), 
             )).
             ''
         )

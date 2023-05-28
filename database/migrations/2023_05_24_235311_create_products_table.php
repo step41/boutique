@@ -21,9 +21,9 @@ return new class extends Migration
                 $table->text('description');
                 $table->text('style');
                 $table->text('brand');
-                $table->string('url');
+                $table->string('url')->nullable();
                 $table->integer('shipping_price')->nullable();
-                $table->text('note');
+                $table->text('note')->nullable();
                 $table->timestamps();
                 $table->softDeletes();
 

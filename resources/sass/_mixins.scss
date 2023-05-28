@@ -628,7 +628,12 @@ box-ordinal-group($group)		// mixin which takes an int argument for ordinal grou
 	hyphens: auto;
 }
 
+
 /* Animations */
+@keyframes boutique-spinner {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
 @-webkit-keyframes glowing-default {
 	0% { background-color: $brand-default; -webkit-box-shadow: 0 0 3px $brand-default; border-color: $brand-default;}
 	50% { background-color: $brand-default-lighter; -webkit-box-shadow: 0 0 10px $brand-default-lighter; border-color: $brand-default-lighter; }

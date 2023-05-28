@@ -21,3 +21,6 @@ Auth::routes();
 
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('product.index');
+Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
+Route::post('/products', [App\Http\Controllers\ProductController::class, 'create'])->name('product.create');
+Route::post('/products/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('product.update');

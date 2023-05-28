@@ -7,7 +7,7 @@
         foreach ($products as $product):
             $items .= 
                 H::li(
-                    H::a(['href' => '#', 'data-id' => $product->id, 'text' => ucwords($product->product_name)])
+                    H::a(['href' => '#', 'data-bs-show' => 'modal', 'data-id' => $product->id, 'text' => ucwords($product->product_name)])
                 )
             ;
         endforeach;

@@ -14,7 +14,7 @@
          */
         _dec: function(os, key) {
 
-            var obj, item;
+            let obj, item;
 
             if (os && (os === this.Local || os === this.Session)) {
                 obj = os.get(key);
@@ -44,7 +44,7 @@
          */
         _del: function(os, key) {
 
-            var pairs, pair, i, k;
+            let pairs, pair, i, k;
 
             if (os && (os == this.Local || os == this.Session)) {
 
@@ -95,8 +95,8 @@
          */
         _get: function(os, key) {
 
-            var items = [];
-            var item, pairs, pair, i, j, k;
+            let items = [];
+            let item, pairs, pair, i, j, k;
 
             if (os && (os === this.Local || os === this.Session)) {
                 // Get all items
@@ -151,8 +151,8 @@
          */
         _getData: function(os, key) {
 
-            var BU = Boutique.Utilities;
-            var exp, obj, val = '';
+            const BU = Boutique.Utilities;
+            let exp, obj, val = '';
 
             if (os && (os === this.Local || os === this.Session)) {
                 if (key && key != '') {
@@ -191,7 +191,7 @@
          */
         _inc: function(os, key) {
 
-            var obj, item;
+            let obj, item;
 
             if (os && (os === this.Local || os === this.Session)) {
                 obj = os.get(key);
@@ -283,7 +283,7 @@
          */
         _rtn: function(os, val) {
 
-            var valOrig = val;
+            let valOrig = val;
 
             if (os && (os === this.Local || os === this.Session)) {
                 try {
@@ -386,7 +386,7 @@
          */
          _setExpire: function(os, ttl) {
 
-            var expires = new Date();
+            let expires = new Date();
 
             if (os && (os === this.Local || os === this.Session)) {
                 
@@ -413,7 +413,7 @@
          * @since   1.0
          */
         _supported: function(os) {
-            var x, type, storage;
+            let x, type, storage;
             if (os) {
                 type = (os === this.Local) ? 'localStorage' : ((os === this.Session) ? 'sessionStorage' : null);
                 try {
