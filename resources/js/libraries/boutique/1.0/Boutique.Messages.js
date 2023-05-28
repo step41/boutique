@@ -59,7 +59,7 @@
 					msg += '</ul>';
 				}
 				else {
-					msg += '<p><span class="boutique-spinner"></span>&nbsp; ' + text[0] + '</p>';				
+					msg += '<p>' + ((type === 'progress') ? '<span class="boutique-spinner"></span>' : '') + '&nbsp; ' + text[0] + ' &nbsp;</p>';				
 				}
 			msg += '</div>';
 
@@ -135,19 +135,23 @@
 		response: function(data, status, xhr, loc, success, failure) {
 
 			const BM = Boutique.Messages;
-			let OV = Boutique.Validator;
+			let BV = Boutique.Validator;
 			
 			let code = 200;
 			let delay = 2000;
 			let type = 'success';
 			let messages = '';
-			let json, frm, m, msg, text, validate, e, errors;
+			let json, frm, m, msg, text, validate;
 			
 			loc = (loc) ? loc : BM.loc;
 			frm = $(loc).find('form');
 			
+			// Check for non-200 errors 
+			if (status == 'error' && data.getResponseHeader('Boutique-Messages')) {
+				data = data.getResponseHeader('Boutique-Messages');
+			}
 			// Check against async responses first
-			if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
+			else if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
 				data = xhr.getResponseHeader('Boutique-Messages');
 			}
 			// Check for sync responses next 
@@ -164,14 +168,17 @@
 						validate = (type === 'validation' && frm.length);
 						if (validate) {
 							$(loc).unblock();
-							OV.clearErrors(frm);
-							OV.displayErrors(messages['validation'][0], frm);
+							BV.clearErrors(frm);
+							BV.displayErrors(messages['validation'][0], frm);
 							return type;
 						}
 						else {
 							for (m in messages[type]) {
 								msg = messages[type][m]['text'];
 								code = Math.max(code, parseInt(messages[type][m]['code']));
+								if (status == 'error') {
+									msg = '<strong>Error ' + code + ':</strong> ' + msg;
+								}
 								text.push(msg);
 							}
 							// Check for csrf expiration status
@@ -185,6 +192,7 @@
 							BM.show(text, type, loc);
 						}
 						if (type === 'danger' || type === 'warning') {
+							BM.danger(text, loc);
 							delay = 5000;
 							success = null;
 						}

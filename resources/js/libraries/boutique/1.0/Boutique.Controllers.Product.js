@@ -5,6 +5,7 @@
 	Boutique.Controllers.Product = {
 		
 		block: null,
+		lastId: null,
 		prefix: '#product',
 		
 		bindEvents: function() {
@@ -39,6 +40,29 @@
 		
 		delete: function(id) {
 
+			const BCP = Boutique.Controllers.Product;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			
+			if (id) {
+			
+				$.ajax({
+					type: 'delete',
+					url: '/products/' + id,
+					data: BCP.formWrite.cerealize(),
+					beforeSend: function() {
+						BM.progress(BS.t('messageDeleting'), BCP.block);
+					},
+					success: function(data, status, xhr) {
+						BCP.set(data, status, xhr);
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCP.block);
+					}
+				});
+				return false;
+			}
+
 		},
 		
 		edit: function(callback) {
@@ -47,7 +71,10 @@
 			const BM = Boutique.Messages;
 			const BS = Boutique.Settings;
 
+
 			if (BCP.itemId) {
+
+				BCP.reset();
 
 				$.ajax({
 					type: 'get',
@@ -73,10 +100,10 @@
 		
 		hide: function() {
 			
-		},
-
-		index: function() {
+			const BCP = Boutique.Controllers.Product;
 			
+			BCP.dialog.modal('hide');
+
 		},
 
 		init: function() {
@@ -86,12 +113,34 @@
 			BCP.dialog = $(BCP.prefix + '_dialog');
 			BCP.formWrite = $(BCP.prefix + '_form_write');
 			
+			BCP.hide();
 			BCP.bindEvents();
 			
 		},
 
 		remove: function(o) {
 
+			const BCP = Boutique.Controllers.Product;
+			const BS = Boutique.Settings;
+			
+			let id = (BCP.itemId) ? BCP.itemId : $(o).closest('[data-id]').data('id');
+			
+			if (id) {
+			
+				BCP.block = ($(BCP.prefix + '_dialog:visible').length) ? BCP.dialog.find('.modal-content') : $('body');
+				
+				bootbox.confirm({
+					title: 'Confirm',
+					message: '<p class="center">' + BS.t('messageConfirmDelete') + '</p>',
+					callback: function(ok) {
+						if (ok) {
+							BCP.delete(id);
+						}
+					}
+				});
+				return false;
+			}
+			
 		},
 
 		reset: function() {
@@ -120,6 +169,7 @@
 			const BV = Boutique.Validator;
 	
 			let id = (BCP.itemId) ? '/' + BCP.itemId : '';
+			
 			BCP.bv = BV.build(BCP.formWrite);
 			
 			if (BCP.bv.hasErrors()) {
@@ -127,7 +177,6 @@
 			}
 		
 			BV.clearErrors(BCP.formWrite);
-			console.log(id);
 	
 			$.ajax({
 				type: 'post',
@@ -138,6 +187,9 @@
 				},
 				success: function(data, status, xhr) {
 					BCP.set(data, status, xhr);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCP.block);
 				}
 			});
 	
@@ -148,7 +200,6 @@
 			const BCP = Boutique.Controllers.Product;
 			const BM = Boutique.Messages;
 	
-			//BM.response(data, status, xhr, BCP.block, BCP.hide);
 			BM.response(data, status, xhr, BCP.block, BCP.init);
 				
 		},
@@ -157,7 +208,6 @@
 		
 			const BCP = Boutique.Controllers.Product;
 			const show = (e && e.target && e.target.dataset['bsShow']);
-			console.log(e, e.target, e.target.dataset);
 			
 			if (show) {
 

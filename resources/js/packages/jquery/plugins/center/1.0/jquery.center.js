@@ -2,7 +2,6 @@
 (function($){  
     $.fn.center = function () {
 		this.css({
-			'position': 'fixed',
 			'left': '50%',
 			'top': '50%'
 		});

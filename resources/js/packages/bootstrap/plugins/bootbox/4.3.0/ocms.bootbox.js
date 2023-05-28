@@ -42,9 +42,9 @@
       "</div>",
     footer:
       "<div class='modal-footer'><div class='btn-group'></div></div>",
-    closeButton:
-      /* "<button type='button' class='bootbox-close-button close' data-dismiss='modal' aria-hidden='true'>&times;</button>", */ /* Replacing default button with OCMS styled button */
-      '<i class="icon icon-ocms-close btn-modal-close ttb bootbox-close-button " data-dismiss="modal" title="" data-original-title="Close this dialog"></i>',
+    closeButton: ''
+      /* "<button type='button' class='bootbox-close-button close' data-dismiss='modal' aria-hidden='true'>&times;</button>", */ /* Replacing default button with OCMS styled button
+      '<i class="icon icon-ocms-close btn-modal-close ttb bootbox-close-button " data-dismiss="modal" title="" data-original-title="Close this dialog"></i>'*/, 
 
     form:
       "<form class='bootbox-form'></form>",

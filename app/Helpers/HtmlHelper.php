@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\ViewErrorBag;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config 		as CFG;
 use App\Facades\ArrayHelper 				as ARR;
 use App\Facades\CommonHelper 				as COM;
@@ -10,10 +11,12 @@ use App\Facades\HtmlHelper 					as H;
 use App\Facades\InflectionHelper 			as INF;
 use App\Facades\JudyHelper 					as J;
 use App\Facades\NumericHelper 				as NUM;
-use App\Facades\MessageHelper 				as MSG;
+use App\Facades\Message 					as MSG;
 use App\Facades\StringHelper 				as STR;
 use App\Facades\TranslationHelper 			as T;
 use App\Facades\UTFHelper 					as UTF;
+use Auth;
+use Session;
 use Log;
 
 /**
@@ -79,7 +82,7 @@ class HtmlHelper {
 	 * @access 	protected
 	 * @since	1.0
 	 */
-	protected $_booleanAttribs = 'autofocus|checked|defer|required';
+	protected $_booleanAttribs = 'async|autofocus|checked|defer|required';
 
 	/**
 	 * Array holding self-closing void element types
@@ -373,17 +376,15 @@ class HtmlHelper {
 			$attribs['data-validate'] = array('required' => TRUE);
 		endif;
 		if (isset($label, $name, $attribs['data-validate'])):
+			$ttl = config('session.lifetime'); 
+			$newcache = array();
+			$newcache[$name] = array('label' => $label, 'data-validate' => $attribs['data-validate']); 
 			$attribs['data-validate'] = json_encode($attribs['data-validate']);
-			// 20200316 - Commenting out for now until we can build in full validation for Boutique
-			// Retrieve current CSRF token id for current form
-			//$ttl = CFG::get('options', 'csrfExpiration'); 
-			//$newcache = array();
-			//$newcache[$name] = array('label' => $label, 'data-validate' => $attribs['data-validate']); 
-			//$cacheId = MC::validationId();
-			//if ($oldcache = MC::cache($cacheId)):
-			//	$newcache = array_merge($oldcache, $newcache);
-			//endif;
-			//MC::cache($cacheId, $newcache, $ttl);
+			$cacheId = ((Auth::user()) ? Auth::user()->email : 'public').'_validationcache_'.csrf_token(); 
+			if ($oldcache = Cache::get($cacheId)):
+				$newcache = array_merge($oldcache, $newcache);
+			endif;
+			Cache::put($cacheId, $newcache, $ttl);
 		endif;
 		unset(
 			$attribs['required'],

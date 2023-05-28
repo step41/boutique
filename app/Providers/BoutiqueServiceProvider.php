@@ -10,11 +10,12 @@ use App\Helpers\DirFileHelper;
 use App\Helpers\HtmlHelper;
 use App\Helpers\InflectionHelper;
 use App\Helpers\JudyHelper;
-use App\Helpers\MessageHelper;
 use App\Helpers\NumericHelper;
 use App\Helpers\StringHelper;
 use App\Helpers\TranslationHelper;
 use App\Helpers\UTFHelper;
+use App\Classes\Message;
+use App\Classes\Validator;
 
 class BoutiqueServiceProvider extends ServiceProvider {
 
@@ -45,8 +46,8 @@ class BoutiqueServiceProvider extends ServiceProvider {
             'JudyHelper' => function() { 
                 return new JudyHelper(); 
             },
-            'MessageHelper' => function() { 
-                return new MessageHelper(); 
+            'Message' => function() { 
+                return new Message(); 
             },
             'NumericHelper' => function() { 
                 return new NumericHelper(); 
@@ -59,6 +60,9 @@ class BoutiqueServiceProvider extends ServiceProvider {
             },
             'UTFHelper' => function() { 
                 return new UTFHelper(); 
+            },
+            'Validator' => function() { 
+                return new Validator(); 
             },
 
         );

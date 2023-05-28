@@ -1,18 +1,18 @@
 		
-const Boutique = {};
+var Boutique = Boutique || {};
 
 ; (function() {
 
 	'use strict';
 			
 	// instantiate core objects
-	Boutique.Inflection = {};
-	Boutique.Settings = {};
-	Boutique.Messages = {};
-	Boutique.Storage = {};
-	Boutique.Utilities = {};
-	Boutique.Validator = {};
-	Boutique.Controllers = {};
+	Boutique.Inflection 		= Boutique.Inflection 		|| {};
+	Boutique.Settings 	 		= Boutique.Settings 		|| {};
+	Boutique.Messages			= Boutique.Messages	 		|| {};
+	Boutique.Storage 			= Boutique.Storage 			|| {};
+	Boutique.Utilities 			= Boutique.Utilities 		|| {};
+	Boutique.Validator 			= Boutique.Validator 		|| {};
+	Boutique.Controllers 		= Boutique.Controllers 		|| {};
 
 	// set basic options
 	Boutique.debug = false;
@@ -322,85 +322,21 @@ const Boutique = {};
 			
 	// Add client side translation as required or pull down from server side to avoid redundancy
     Boutique.Settings.Translations = {
-		messageAlertCompareMax: 'Only two revisions can be compared at a time',
-		messageAlertNameRequired: 'A name is required for this item. Please enter a name and try again.',
-		messageAlertMinTableRowsCols: 'All tables require at least one column and one row.',
-		messageAlertTableHeaderRequired: 'The header row on tables cannot be removed.',		
-		messageAlertContentFormatTitle: 'Invalid Content Format',
-		messageAlertContentFormatText: 'The requested content failed to import successfully. The current formatting of the content is not supported in this editor. A textual representation of the original content can be found below',
-		messageAutoSaving: 'Draft content was saved successfully',
-		messageBuilding: 'Building now...',
-		messageConfirmCancel: 'Canceling will permanently remove this draft record. Are you sure?',
-		messageConfirmCompare: 'Would you like to compare these revisions now?',
+		// Application translation strings
 		messageConfirmDelete: 'Are you sure you want to permanently delete this item?',
-		messageConfirmDiscard: 'Discarded items can only be viewed by the owner but can always be restored. Are you sure?',
-		messageConfirmElementDelete: 'Are you sure you want to delete this item and all its contents?',
-		messageConfirmMetaDelete: 'Deleting will permanently remove this item and all references within content. Are you sure?',
-		messageConfirmNestableDelete: 'Deleting this item will permanently remove it along with any child items. Are you sure?',
-		messageConfirmRestore: 'Restoring will overwrite the most current published version of this item. Are you sure?',
-		messageConfirmTableDataDelete: 'This will delete existing cell data in the active row or column. Are you sure?',
-		messageContentHasChanged: 'Your content has changed since your last save.',
-		messageImagesEnterCaption: 'Enter caption',
 		messageLocalStorageNotSupported: 'Local Storage not supported by this browser.',
-		messageTwitterInvalidCode: 'No valid twitter link was found. Check your embed code and try again.',
-		messageTwitterPaste: 'Add a title or paste your Twitter&reg; widget embed code here to auto-populate',
-		messageMvcInvalidArgs: 'Invalid JSON format for arguments. Check your argument string and try again.',
-		messageActivating: 'Activating...',
-		messageDeactivating: 'Deactivating...',
 		messageCanceling: 'Canceling...',
 		messageDiscarding: 'Discarding...',
 		messageDeleting: 'Deleting...',
-		messageImporting: 'Importing...',
-		messageIncompleteUpload: 'Your files have not finished uploading.',
 		messageLoading: 'Loading...',
-		messageReloadRequired: 'Your session has expired. Reloading now',
 		messageRestoring: 'Restoring...',
 		messageSaving: 'Saving...',
-		messageSavingCollection: 'Saving collection...',
 		messageSending: 'Sending...',
 		messageSubmitting: 'Submitting...',
 		messagePublishing: 'Publishing...',
 		messageUpdating: 'Updating...',
-		messageUpdatingPermissions: 'Updating Permissions',
 		messageWorking: 'Working...',
-		promptPermalink: 'Copy the URL below to link to this item:',
-		promptRevisions: 'Content Revisions',
-		termAddressBilling: 'Billing Address',
-		termAddressCopy: 'Copy values from',
-		termAddressMailing: 'Mailing Address',
-		termAddressPhysical: 'Physical Address',
-		textMediaPreview: 'Media Preview',
-		textNoGroupPermissionAssigned: 'No group permission assigned. Access will be restricted to owner only.',
-		textNoEmbedVideoSupport: 'Sorry, your browser does not support embedded videos.',
 		textPleaseWait: 'Please wait...',
-		textUntitled: 'Untitled',
-		titleAddAccount: 'Add an account',
-		titleAddAddress: 'Add an address',
-		titleAddAddressfield: 'Add an address field',
-		titleAddAddressmetum: 'Add address meta',
-		titleAddAddresstype: 'Add an address type',
-		titleAddCapability: 'Add a capability',
-		titleAddComment: 'Add a comment',
-		titleAddCategory: 'Add a category',
-		titleAddContact: 'Add a contact',
-		titleAddContent: 'Add a new content item',
-		titleAddContenttype: 'Add a content type',
-		titleAddController: 'Add a controller',
-		titleAddGroup: 'Add a group',
-		titleAddInstall: 'Add an install',
-		titleAddInstalltype: 'Add an install type',
-		titleAddModule: 'Add a new module',
-		titleAddMenu: 'Add a menu',
-		titleAddMenuitem: 'Add a menu item',
-		titleAddMenutype: 'Add a menutype',
-		titleAddMilestone: 'Add a milestone',
-		titleAddRole: 'Add a role',
-		titleAddSearch: 'Add a search',
-		titleAddSetting: 'Add a setting',
-		titleMediaSelectedActions: 'Drag to reorder. Click [X] to remove from selection.',
-		titleModifyDraft: 'Modify draft properties',
-		titleShowPermissionDroplists: 'Display permission group droplists to modify permissions',
-		titleHidePermissionDroplists: 'Hide permission group droplists and return to minimized permissions',
 
 		// Validation translation strings
 		validateAlphaNum: '%s must only contain letters and numbers',
@@ -437,8 +373,6 @@ const Boutique = {};
 		validateStartsNotWith: '%s must not start with: %s',
 		validateUrl: '%s is an invalid url',
 		validateWithoutLimits: '(without limits)',
-
-
     };
 	
     Boutique.Settings.t = function(text) {
@@ -515,7 +449,7 @@ const Boutique = {};
 			UPDATE#2: Apparently there are still some circumstances where default multi-modal behavior is broken (nested modals). So I'm re-implementing the following function.
 			*/
 
-			let indexBase = 1040;
+			let indexBase = 1060;
 			let marginBase = 30;
 
 			// Allow for multiple simultaneous modals
@@ -526,31 +460,27 @@ const Boutique = {};
 				let index = indexBase + (10 * count);
 				let margin = ((count + 1) * marginBase) + 'px';
 
-				//console.log('Showing modal #' + self.attr('id') + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 
 				// Ensure there is at least one visible modal present and that it is not nested within another modal (eg; Search modal within Media modal)
-				if (count > 0 && self.parents('.modal').length === 0) {
-					self.add(self.children('.modal-dialog')).css({ 'zIndex': index });
-					self.children('.modal-dialog').css({ 'marginTop': margin });
-					setTimeout(function() {
-						self.children('.modal-backdrop').not('.modal-stack').css('zIndex', index - 1).addClass('modal-stack');
-					}, 0);
-				}
+				//if (count > 0 && self.parents('.modal').length === 0) {
+					self.css('z-index', index);
+					self.css('margin-top', margin);
+					$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
+				//}
 
+				console.log('Showing modal #' + count + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 			});	
 
 			// Multi-modal scrolling fix - Re-establishes scrolling on underlying modal when closing top-most modal 
 			$(document).on('hidden.bs.modal', '.modal', function() {
 
 				let self = $(this);
-				//console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
-				self.add(self.children('.modal-dialog')).css({ 'zIndex': indexBase });
-				self.children('.modal-dialog').css({ 'marginTop': marginBase + 'px' });
-				setTimeout(function() {
-					self.children('.modal-backdrop.modal-stack').css('zIndex', indexBase - 1).removeClass('modal-stack');
-				}, 0);
+				console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
+				self.css('z-index', indexBase);
+				self.css('margin-top', marginBase + 'px');
+				$('.modal-backdrop.modal-stack').css('z-index', (indexBase - 1)).removeClass('modal-stack');
 				
-				if ($('.modal.in').length) {
+				if ($('.modal.show').length) {
 					$('body').addClass('modal-open');
 				}
 				else {
@@ -751,7 +681,7 @@ const Boutique = {};
 
 		setModalScroll: function() {
 
-			if ($('.modal.in').length) {
+			if ($('.modal.show').length) {
 				$('body').addClass('modal-open');
 			}
 			else {
@@ -774,6 +704,8 @@ const Boutique = {};
 		},
 
 	};
+
+	Boutique.Utilities.initMultiModal();
 
 })();
 
@@ -839,7 +771,7 @@ const Boutique = {};
 					msg += '</ul>';
 				}
 				else {
-					msg += '<p><span class="boutique-spinner"></span>&nbsp; ' + text[0] + '</p>';				
+					msg += '<p>' + ((type === 'progress') ? '<span class="boutique-spinner"></span>' : '') + '&nbsp; ' + text[0] + ' &nbsp;</p>';				
 				}
 			msg += '</div>';
 
@@ -915,19 +847,23 @@ const Boutique = {};
 		response: function(data, status, xhr, loc, success, failure) {
 
 			const BM = Boutique.Messages;
-			let OV = Boutique.Validator;
+			let BV = Boutique.Validator;
 			
 			let code = 200;
 			let delay = 2000;
 			let type = 'success';
 			let messages = '';
-			let json, frm, m, msg, text, validate, e, errors;
+			let json, frm, m, msg, text, validate;
 			
 			loc = (loc) ? loc : BM.loc;
 			frm = $(loc).find('form');
 			
+			// Check for non-200 errors 
+			if (status == 'error' && data.getResponseHeader('Boutique-Messages')) {
+				data = data.getResponseHeader('Boutique-Messages');
+			}
 			// Check against async responses first
-			if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
+			else if (xhr && xhr.getResponseHeader('Boutique-Messages')) {
 				data = xhr.getResponseHeader('Boutique-Messages');
 			}
 			// Check for sync responses next 
@@ -944,14 +880,17 @@ const Boutique = {};
 						validate = (type === 'validation' && frm.length);
 						if (validate) {
 							$(loc).unblock();
-							OV.clearErrors(frm);
-							OV.displayErrors(messages['validation'][0], frm);
+							BV.clearErrors(frm);
+							BV.displayErrors(messages['validation'][0], frm);
 							return type;
 						}
 						else {
 							for (m in messages[type]) {
 								msg = messages[type][m]['text'];
 								code = Math.max(code, parseInt(messages[type][m]['code']));
+								if (status == 'error') {
+									msg = '<strong>Error ' + code + ':</strong> ' + msg;
+								}
 								text.push(msg);
 							}
 							// Check for csrf expiration status
@@ -965,6 +904,7 @@ const Boutique = {};
 							BM.show(text, type, loc);
 						}
 						if (type === 'danger' || type === 'warning') {
+							BM.danger(text, loc);
 							delay = 5000;
 							success = null;
 						}
@@ -3048,6 +2988,7 @@ const Boutique = {};
 	Boutique.Controllers.Product = {
 		
 		block: null,
+		lastId: null,
 		prefix: '#product',
 		
 		bindEvents: function() {
@@ -3082,6 +3023,29 @@ const Boutique = {};
 		
 		delete: function(id) {
 
+			const BCP = Boutique.Controllers.Product;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			
+			if (id) {
+			
+				$.ajax({
+					type: 'delete',
+					url: '/products/' + id,
+					data: BCP.formWrite.cerealize(),
+					beforeSend: function() {
+						BM.progress(BS.t('messageDeleting'), BCP.block);
+					},
+					success: function(data, status, xhr) {
+						BCP.set(data, status, xhr);
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCP.block);
+					}
+				});
+				return false;
+			}
+
 		},
 		
 		edit: function(callback) {
@@ -3090,7 +3054,10 @@ const Boutique = {};
 			const BM = Boutique.Messages;
 			const BS = Boutique.Settings;
 
+
 			if (BCP.itemId) {
+
+				BCP.reset();
 
 				$.ajax({
 					type: 'get',
@@ -3116,10 +3083,10 @@ const Boutique = {};
 		
 		hide: function() {
 			
-		},
-
-		index: function() {
+			const BCP = Boutique.Controllers.Product;
 			
+			BCP.dialog.modal('hide');
+
 		},
 
 		init: function() {
@@ -3129,12 +3096,34 @@ const Boutique = {};
 			BCP.dialog = $(BCP.prefix + '_dialog');
 			BCP.formWrite = $(BCP.prefix + '_form_write');
 			
+			BCP.hide();
 			BCP.bindEvents();
 			
 		},
 
 		remove: function(o) {
 
+			const BCP = Boutique.Controllers.Product;
+			const BS = Boutique.Settings;
+			
+			let id = (BCP.itemId) ? BCP.itemId : $(o).closest('[data-id]').data('id');
+			
+			if (id) {
+			
+				BCP.block = ($(BCP.prefix + '_dialog:visible').length) ? BCP.dialog.find('.modal-content') : $('body');
+				
+				bootbox.confirm({
+					title: 'Confirm',
+					message: '<p class="center">' + BS.t('messageConfirmDelete') + '</p>',
+					callback: function(ok) {
+						if (ok) {
+							BCP.delete(id);
+						}
+					}
+				});
+				return false;
+			}
+			
 		},
 
 		reset: function() {
@@ -3163,6 +3152,7 @@ const Boutique = {};
 			const BV = Boutique.Validator;
 	
 			let id = (BCP.itemId) ? '/' + BCP.itemId : '';
+			
 			BCP.bv = BV.build(BCP.formWrite);
 			
 			if (BCP.bv.hasErrors()) {
@@ -3170,7 +3160,6 @@ const Boutique = {};
 			}
 		
 			BV.clearErrors(BCP.formWrite);
-			console.log(id);
 	
 			$.ajax({
 				type: 'post',
@@ -3181,6 +3170,9 @@ const Boutique = {};
 				},
 				success: function(data, status, xhr) {
 					BCP.set(data, status, xhr);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCP.block);
 				}
 			});
 	
@@ -3191,7 +3183,6 @@ const Boutique = {};
 			const BCP = Boutique.Controllers.Product;
 			const BM = Boutique.Messages;
 	
-			//BM.response(data, status, xhr, BCP.block, BCP.hide);
 			BM.response(data, status, xhr, BCP.block, BCP.init);
 				
 		},
@@ -3200,7 +3191,6 @@ const Boutique = {};
 		
 			const BCP = Boutique.Controllers.Product;
 			const show = (e && e.target && e.target.dataset['bsShow']);
-			console.log(e, e.target, e.target.dataset);
 			
 			if (show) {
 

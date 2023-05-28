@@ -12625,6 +12625,10 @@ textarea {
 .modal .modal-footer {
   border-top: transparent;
 }
+.modal.bootbox .modal-body,
+.modal.bootbox .modal-footer {
+  background-color: var(--bs-modal-bg);
+}
 
 .list {
   padding-left: 0;

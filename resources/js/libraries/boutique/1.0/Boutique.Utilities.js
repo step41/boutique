@@ -64,7 +64,7 @@
 			UPDATE#2: Apparently there are still some circumstances where default multi-modal behavior is broken (nested modals). So I'm re-implementing the following function.
 			*/
 
-			let indexBase = 1040;
+			let indexBase = 1060;
 			let marginBase = 30;
 
 			// Allow for multiple simultaneous modals
@@ -75,31 +75,27 @@
 				let index = indexBase + (10 * count);
 				let margin = ((count + 1) * marginBase) + 'px';
 
-				//console.log('Showing modal #' + self.attr('id') + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 
 				// Ensure there is at least one visible modal present and that it is not nested within another modal (eg; Search modal within Media modal)
-				if (count > 0 && self.parents('.modal').length === 0) {
-					self.add(self.children('.modal-dialog')).css({ 'zIndex': index });
-					self.children('.modal-dialog').css({ 'marginTop': margin });
-					setTimeout(function() {
-						self.children('.modal-backdrop').not('.modal-stack').css('zIndex', index - 1).addClass('modal-stack');
-					}, 0);
-				}
+				//if (count > 0 && self.parents('.modal').length === 0) {
+					self.css('z-index', index);
+					self.css('margin-top', margin);
+					$($('.modal-backdrop.show').not('.modal-stack')[count - 1]).css('z-index', (index - 1)).addClass('modal-stack');
+				//}
 
+				console.log('Showing modal #' + count + ' CSS { zIndex:' + index + ', marginTop:' + margin + ' }');
 			});	
 
 			// Multi-modal scrolling fix - Re-establishes scrolling on underlying modal when closing top-most modal 
 			$(document).on('hidden.bs.modal', '.modal', function() {
 
 				let self = $(this);
-				//console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
-				self.add(self.children('.modal-dialog')).css({ 'zIndex': indexBase });
-				self.children('.modal-dialog').css({ 'marginTop': marginBase + 'px' });
-				setTimeout(function() {
-					self.children('.modal-backdrop.modal-stack').css('zIndex', indexBase - 1).removeClass('modal-stack');
-				}, 0);
+				console.log('Hiding modal #' + self.attr('id') + ' CSS { zIndex:' + indexBase + ', marginTop:' + marginBase + ' }');
+				self.css('z-index', indexBase);
+				self.css('margin-top', marginBase + 'px');
+				$('.modal-backdrop.modal-stack').css('z-index', (indexBase - 1)).removeClass('modal-stack');
 				
-				if ($('.modal.in').length) {
+				if ($('.modal.show').length) {
 					$('body').addClass('modal-open');
 				}
 				else {
@@ -300,7 +296,7 @@
 
 		setModalScroll: function() {
 
-			if ($('.modal.in').length) {
+			if ($('.modal.show').length) {
 				$('body').addClass('modal-open');
 			}
 			else {
@@ -323,6 +319,8 @@
 		},
 
 	};
+
+	Boutique.Utilities.initMultiModal();
 
 })();
 

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Repositories\ProductRepository;
-use App\Facades\MessageHelper as MSG;
+use App\Facades\Message as MSG;
 use Illuminate\Http\Request;
+use App\Traits\ValidateFromCache;
 use Auth;
 use Session;
 
@@ -18,6 +19,7 @@ use Session;
  */
 class ProductController extends Controller
 {
+    use ValidateFromCache;
 
     /**
      * Create a new controller instance.
@@ -276,20 +278,17 @@ class ProductController extends Controller
             abort('401', '401');
         }
 
-        $this->validate($request, [
-            'product_type' => 'required|max:100',
-            'product_name' => 'required|max:100',
-            'description' => 'required',
-            'style' => 'required',
-            'brand' => 'required',
-        ]);
-
-        $product = $this->model->findOrFail($id);
         $input = $request->all();
 
-        $product->fill($input)->save();
+        if ($this->validateFromCache($input)):
 
-        return MSG::success('Product updated successfully');
+            $product = $this->model->findOrFail($id);
+
+            $product->fill($input)->save();
+
+            return MSG::success('Product updated successfully');
+
+        endif;
     }
 
     /**
@@ -301,23 +300,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasPermissionTo('Delete Product')) {
+        if (!Auth::user()->hasPermissionTo('delete products')) {
+            MSG::danger('You are not authorized for this action!', 401);
             abort('401', '401');
         }
 
         $product = $this->model->findOrFail($id);
         $product->delete();
 
-        $response = array(
-            'status' => FALSE,
-            'data' => array(),
-            'message' => array(),
-        );
+        return MSG::success('Product deleted successfully');
 
-        $response['message'][] = 'Product successfully deleted.';
-        $response['data']['id'] = $id;
-        $response['status'] = TRUE;
-
-        return json_encode($response);
     }
 }

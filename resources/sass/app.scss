@@ -53,7 +53,15 @@ textarea {
     .modal-footer {
         border-top: transparent;
     }
+	&.bootbox {
+		.modal-body,
+		.modal-footer {
+			background-color: var(--bs-modal-bg);
+		}
+	}
 }
+
+
 
 .list {
     padding-left: 0;

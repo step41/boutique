@@ -14,20 +14,20 @@ const mix = require('laravel-mix');
  */
 mix.js('resources/js/app.js', 'public/js')
     .combine([
-		'resources/js/packages/phpjs/1.0/phpjs.custom.packed.js',
+		'resources/js/packages/phpjs/1.0/phpjs.custom.js',
         'resources/js/packages/jquery/plugins/isset/1.0/jquery.isset.js',
         'resources/js/packages/jquery/plugins/center/1.0/jquery.center.js',
-		'resources/js/packages/bootstrap/plugins/bootbox/4.3.0/ocms.bootbox.packed.js',
-		'resources/js/packages/jquery/plugins/cookie/1.4.1/jquery.cookie.packed.js',
-		'resources/js/packages/jquery/plugins/mousewheel/3.1.3/jquery.mousewheel.packed.js',
-		'resources/js/packages/jquery/plugins/blockui/2.7.0/ocms.jquery.blockui.packed.js',
-		'resources/js/packages/jquery/plugins/alterclass/1.0/jquery.alterclass.packed.js',
-		'resources/js/packages/jquery/plugins/hasanyclass/1.0/jquery.hasanyclass.packed.js',
-		'resources/js/packages/jquery/plugins/hasallclasses/1.0/jquery.hasallclasses.packed.js',
-		'resources/js/packages/jquery/plugins/addbackif/1.0/jquery.addbackif.packed.js',
-		'resources/js/packages/jquery/plugins/cerealize/1.0/jquery.cerealize.packed.js',
-		'resources/js/packages/jquery/plugins/cerealizearray/1.0/jquery.cerealizearray.packed.js',
-		'resources/js/packages/jquery/plugins/decerealize/1.0/jquery.decerealize.packed.js',
+		'resources/js/packages/bootstrap/plugins/bootbox/6.0.0/bootbox.all.js',
+		'resources/js/packages/jquery/plugins/cookie/1.4.1/jquery.cookie.js',
+		'resources/js/packages/jquery/plugins/mousewheel/3.1.3/jquery.mousewheel.js',
+		'resources/js/packages/jquery/plugins/blockui/2.7.0/ocms.jquery.blockui.js',
+		'resources/js/packages/jquery/plugins/alterclass/1.0/jquery.alterclass.js',
+		'resources/js/packages/jquery/plugins/hasanyclass/1.0/jquery.hasanyclass.js',
+		'resources/js/packages/jquery/plugins/hasallclasses/1.0/jquery.hasallclasses.js',
+		'resources/js/packages/jquery/plugins/addbackif/1.0/jquery.addbackif.js',
+		'resources/js/packages/jquery/plugins/cerealize/1.0/jquery.cerealize.js',
+		'resources/js/packages/jquery/plugins/cerealizearray/1.0/jquery.cerealizearray.js',
+		'resources/js/packages/jquery/plugins/decerealize/1.0/jquery.decerealize.js',
     ], 'public/js/boutique_packages.js').minify('public/js/boutique_packages.js')
     .combine([
         'resources/js/libraries/boutique/1.0/Boutique.js',

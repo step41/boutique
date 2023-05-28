@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Helpers;
+namespace App\Classes;
 
 use Illuminate\Support\Facades\Config 		as CFG;
 use App\Facades\ArrayHelper 				as ARR;
@@ -9,7 +9,6 @@ use App\Facades\HtmlHelper 					as H;
 use App\Facades\InflectionHelper 			as INF;
 use App\Facades\JudyHelper 					as J;
 use App\Facades\NumericHelper 				as NUM;
-use App\Facades\MessageHelper 				as MSG;
 use App\Facades\StringHelper 				as STR;
 use App\Facades\TranslationHelper 			as T;
 use App\Facades\UTFHelper 					as UTF;
@@ -27,7 +26,7 @@ use Log;
  * @author		Jeff Todnem
  * @since 		1.0  
  */
-class MessageHelper { 
+class Message { 
 
 	/**
 	 * Holds one or more messages
@@ -59,14 +58,18 @@ class MessageHelper {
 	 *
 	 * @param	string			$type		Message type. Options:(danger|info|success|validation|warning)
 	 * @param	string|array	$value		Message value to assign. 
+	 * @param	int				$code		HTTP status code. 
 	 * @return	void
 	 * @access	public
 	 * @since	5.0
 	 */
-	public function add($type = 'info', $value = NULL) {
+	public function add($type = 'info', $value = NULL, $code = NULL) {
 		if (isset($value)):
 			if (is_string($value)):
 				$value = array('text' => $value);
+			endif;
+			if (!empty($code)):
+				$value['code'] = $code;
 			endif;
 			self::$_messages[$type][] = $value;
 			$messages = array('messages' => self::$_messages);

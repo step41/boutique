@@ -9,7 +9,7 @@ use App\Facades\HtmlHelper 					as H;
 use App\Facades\InflectionHelper 			as INF;
 use App\Facades\JudyHelper 					as J;
 use App\Facades\NumericHelper 				as NUM;
-use App\Facades\MessageHelper 				as MSG;
+use App\Facades\Message 					as MSG;
 use App\Facades\StringHelper 				as STR;
 use App\Facades\TranslationHelper 			as T;
 use App\Facades\UTFHelper 					as UTF;
