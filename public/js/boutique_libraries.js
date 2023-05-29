@@ -504,7 +504,7 @@ var Boutique = Boutique || {};
 				});
 
 				// Bind search field actions
-				f.find('input[name="search"]').keyup(e => {
+				f.find('input[name="search"]').off('keyup').on('keyup', e => {
 					if (e.which === 13) {
 						e.preventDefault();
 						f.trigger('submit');

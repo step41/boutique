@@ -960,7 +960,7 @@ class HtmlHelper {
 						'label' => 'Search',
 						'nowrap' => TRUE,
 					]).
-					H::button([
+					H::submit([
 						'class' => 'btn-primary',
 						'text' => H::i(['class' => 'bi-search'])
 					])

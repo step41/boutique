@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,16 @@ class AppServiceProvider extends ServiceProvider
         Builder::macro('whereLike', function(string $column, string $search) {
             return $this->orWhere($column, 'LIKE', '%'.$search.'%');
         });
+
+        DB::listen(function($query) {
+            Log::info(
+                $query->sql,
+                [
+                    'bindings' => $query->bindings,
+                    'time' => $query->time
+                ]
+            );
+        });        
 
     }
 

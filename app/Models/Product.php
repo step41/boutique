@@ -32,6 +32,20 @@ class Product extends Model
         'note',
     ];
 
+    public function scopeSearch($query, $keywords)
+    {
+        return $query->when(
+            $keywords,
+            function ($query, $keywords) {
+                $query->selectRaw('*, MATCH(product_name, style, brand, description) AGAINST (? IN BOOLEAN MODE) as score', [$keywords])
+                ->whereRaw('MATCH(product_name, style, brand, description) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
+            },
+            function ($query) {
+                $query->latest();
+            }
+        );
+    }
+
     /**
      * Get the orders for a product.
      */

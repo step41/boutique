@@ -111,7 +111,7 @@ class ProductController extends Controller {
 
                 $searchKey = (!empty($input['searchkey'])) ? $input['searchkey'] : 'product_name';
             
-                $products = $products->whereLike($searchKey, $input['search']);
+                $products = $products->search($input['search']);
             
             endif;
 
