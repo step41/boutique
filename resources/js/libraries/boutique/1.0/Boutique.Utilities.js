@@ -117,7 +117,7 @@
 				});
 
 				// Bind search field actions
-				f.find('input[name="search"]').off('keyup').on('keyup', e => {
+				f.find('input[name="search"]').off('keyup').on('keyup', function(e) {
 					if (e.which === 13) {
 						e.preventDefault();
 						f.trigger('submit');
@@ -125,8 +125,7 @@
 				});
 
 				// Set up sorting functionality on list headers
-				f.find('[data-orderby]').off('click').on('click', () => {
-					
+				f.find('[data-orderby]').off('click').on('click', function() {
 					let orderbyField = f.find('input[name="orderby"]');
 					let orderbyOld = orderbyField.val();
 					let orderbyNew = $(this).attr('data-orderby');
@@ -145,7 +144,7 @@
 
 				// Replace static links with async calls on paging buttons
 				f.find('.pagination .page-link').attr('href', '#').off('click');
-				f.find('.pagination').off('click').on('click', e => {
+				f.find('.pagination').off('click').on('click', function(e) {
 					f.find('.pagination').find('li').removeAttr('aria-current').removeAttr('aria-disabled').alterClass('active disabled', '');
 					if (e && e.target && e.target.className === 'page-link') {
 						let link = $(e.target);
@@ -178,6 +177,7 @@
 			let seg, controls, segments;
 			
 			dialog = $(dialog);
+
 			if (dialog.length) {
 
 				controls = dialog.find('.segmented-control button');
@@ -188,7 +188,6 @@
 					seg = '#' + $(this).attr('data-navigate');
 					controls.add(segments).removeClass('active');
 					$(self).add($(seg)).addClass('active');
-					BU.initPscroll(seg);
 					if (typeof (callback || undefined) === 'function') {
 						callback.call(null, self);
 					}

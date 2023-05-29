@@ -64,18 +64,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the role for a given user.
-     */
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-    /**
      * Get the products for a user.
      */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+    
+    /**
+     * Get the role for a given user.
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
 }

@@ -12590,6 +12590,13 @@ textarea {
   scrollbar-track-color: #cccccc;
 }
 
+.content a, .content a:hover, .content a:visited,
+.table a,
+.table a:hover,
+.table a:visited {
+  text-decoration: none;
+}
+
 .card .card-header {
   padding-top: 1rem;
 }
@@ -12598,10 +12605,6 @@ textarea {
 }
 .card .card-header .card-actions {
   margin-top: 0.1rem;
-}
-
-.table a, .table a:hover, .table a:visited {
-  text-decoration: none;
 }
 
 /* Bootstrap overrides */
@@ -12649,10 +12652,13 @@ textarea[readonly] {
   background-color: var(--bs-modal-bg);
 }
 
-.list {
+/* List styles */
+.list,
+.list-dashboard {
   padding-left: 0;
 }
-.list li {
+.list li,
+.list-dashboard li {
   list-style: none;
   margin: 0;
 }
@@ -12860,9 +12866,36 @@ textarea[readonly] {
   content: "\f064";
 }
 
+/* Segment controls */
+.segmented-control {
+  margin-bottom: 15px;
+}
+
+.segmented-control a.active {
+  background-color: #999;
+}
+
+.segment {
+  display: none;
+}
+
+.segment.active {
+  display: block;
+}
+
 /* Break point styling */
+@media (max-width: 992px) {
+  [data-bp="992"] {
+    display: none;
+  }
+}
 @media (max-width: 1200px) {
   [data-bp="1200"] {
+    display: none;
+  }
+}
+@media (max-width: 1440px) {
+  [data-bp="1440"] {
     display: none;
   }
 }

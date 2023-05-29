@@ -1,5 +1,6 @@
 const LOCALE = 'en-us';
 const API_PATH = '';
+const PAGE = location.pathname.split('/')[1];
 
 var Boutique = Boutique || {};
 
@@ -504,7 +505,7 @@ var Boutique = Boutique || {};
 				});
 
 				// Bind search field actions
-				f.find('input[name="search"]').off('keyup').on('keyup', e => {
+				f.find('input[name="search"]').off('keyup').on('keyup', function(e) {
 					if (e.which === 13) {
 						e.preventDefault();
 						f.trigger('submit');
@@ -512,8 +513,7 @@ var Boutique = Boutique || {};
 				});
 
 				// Set up sorting functionality on list headers
-				f.find('[data-orderby]').off('click').on('click', () => {
-					
+				f.find('[data-orderby]').off('click').on('click', function() {
 					let orderbyField = f.find('input[name="orderby"]');
 					let orderbyOld = orderbyField.val();
 					let orderbyNew = $(this).attr('data-orderby');
@@ -532,7 +532,7 @@ var Boutique = Boutique || {};
 
 				// Replace static links with async calls on paging buttons
 				f.find('.pagination .page-link').attr('href', '#').off('click');
-				f.find('.pagination').off('click').on('click', e => {
+				f.find('.pagination').off('click').on('click', function(e) {
 					f.find('.pagination').find('li').removeAttr('aria-current').removeAttr('aria-disabled').alterClass('active disabled', '');
 					if (e && e.target && e.target.className === 'page-link') {
 						let link = $(e.target);
@@ -565,6 +565,7 @@ var Boutique = Boutique || {};
 			let seg, controls, segments;
 			
 			dialog = $(dialog);
+
 			if (dialog.length) {
 
 				controls = dialog.find('.segmented-control button');
@@ -575,7 +576,6 @@ var Boutique = Boutique || {};
 					seg = '#' + $(this).attr('data-navigate');
 					controls.add(segments).removeClass('active');
 					$(self).add($(seg)).addClass('active');
-					BU.initPscroll(seg);
 					if (typeof (callback || undefined) === 'function') {
 						callback.call(null, self);
 					}
@@ -3088,6 +3088,325 @@ var Boutique = Boutique || {};
 
     'use strict';
 	
+	Boutique.Controllers.Order = {
+		
+		action: null,
+		block: null,
+		lastId: null,
+		prefix: '#order',
+		
+		bindEvents: function() {
+
+			const BCO = Boutique.Controllers.Order;
+			const BU = Boutique.Utilities;
+
+			BU.initSearchForm(BCO.formList, BCO.index);
+			
+			$(BCO.prefix + '_table, ' + BCO.prefix + '_show').off('click').on('click', function(e) {
+
+				BCO.show(e);
+
+			});
+			
+			$(BCO.prefix + '_add').off('click').on('click', function() {
+				
+				BCO.save(this);
+				
+			});
+
+			$(BCO.prefix + '_upd').off('click').on('click', function() {
+				
+				BCO.save(this);
+				
+			});
+
+			$(BCO.prefix + '_del').off('click').on('click', function() {
+				
+				BCO.remove(this);
+				
+			});
+
+		},
+		
+		delete: function(id) {
+
+			const BCO = Boutique.Controllers.Order;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			
+			if (id) {
+			
+				$.ajax({
+					type: 'delete',
+					url: API_PATH + '/orders/' + id,
+					data: BCO.formWrite.cerealize(),
+					beforeSend: function() {
+						BM.progress(BS.t('messageDeleting'), BCO.block);
+					},
+					success: function(data, status, xhr) {
+						BCO.set(data, status, xhr);
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCO.block);
+					}
+				});
+				return false;
+			}
+
+		},
+		
+		duplicate: function() {
+			
+			const BCO = Boutique.Controllers.Order;
+						
+			BCO.itemId = null;
+			$(BCO.formWrite).find('#id').val('');
+			
+		},
+		
+		edit: function(callback) {
+			
+			const BCO = Boutique.Controllers.Order;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+
+
+			if (BCO.itemId) {
+
+				$.ajax({
+					type: 'get',
+					url: API_PATH + '/orders/' + BCO.itemId,
+					beforeSend: function() {
+						BM.progress(BS.t('messageLoading'), BCO.block);
+					},
+					success: function(data, status, xhr) {
+						BCO.formWrite.decerealize(data);
+						BM.hide(BCO.block);
+						
+						BCO.lastId = BCO.itemId;
+						
+						if (typeof (callback || undefined) === 'function') {
+							callback.call();
+						}
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCO.block);
+					}
+				});
+			}
+			
+		},
+		
+		hide: function() {
+			
+			const BCO = Boutique.Controllers.Order;
+			
+			BCO.dialog.modal('hide');
+
+		},
+
+		index: function() {
+			
+			const BCO = Boutique.Controllers.Order;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+
+			BCO.block = $('body');
+
+			$.ajax({
+				type: 'get',
+				url: API_PATH + '/orders',
+				data: BCO.formList.cerealize(),
+				beforeSend: function() {
+					BM.progress(BS.t('messageLoading'), BCO.block);
+				},
+				success: function(data, status, xhr) {
+					BCO.formList.find('[data-async]').html(data);		
+					BCO.bindEvents();
+					BM.hide(BCO.block);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCO.block);
+				}
+			});
+			
+		},
+
+		init: function() {
+
+			const BCO = Boutique.Controllers.Order;
+			
+			BCO.dialog = $(BCO.prefix + '_dialog');
+			BCO.formList = $(BCO.prefix + '_form_list');
+			BCO.formWrite = $(BCO.prefix + '_form_write');
+			
+			BCO.action = null;
+			BCO.hide();
+			BCO.bindEvents();
+
+			if (PAGE === 'orders') {
+				BCO.index();
+			}
+			
+		},
+
+		remove: function(o) {
+
+			const BCO = Boutique.Controllers.Order;
+			const BS = Boutique.Settings;
+			
+			let id = (BCO.itemId) ? BCO.itemId : $(o).closest('[data-id]').data('id');
+			
+			if (id) {
+			
+				BCO.block = ($(BCO.prefix + '_dialog:visible').length) ? BCO.dialog.find('.modal-content') : $('body');
+				
+				bootbox.confirm({
+					title: 'Confirm',
+					message: '<p class="center">' + BS.t('messageConfirmDelete') + '</p>',
+					callback: function(ok) {
+						if (ok) {
+							BCO.delete(id);
+						}
+					}
+				});
+				return false;
+			}
+			
+		},
+
+		reset: function() {
+
+			const BCO = Boutique.Controllers.Order;
+			const BV = Boutique.Validator;
+			
+			/* Reset all visible fields */
+			if (BCO.formWrite.length) {
+				BCO.formWrite.get(0).reset();
+				BV.clearErrors(BCO.formWrite);
+			}
+			
+			/* Reset hidden id field manually since reset doesn't clear hidden fields */
+			$(BCO.prefix + '_id').val('');
+				
+			if (BCO.action === 'view') {
+				BCO.dialog.find('.form-control').alterClass('form-control', 'form-control-plaintext').prop('readonly', true);
+				BCO.dialog.find('[data-bs-dismiss="modal"]').addClass('btn-last');
+			}
+			else {
+				BCO.formWrite.find('.form-control-plaintext').alterClass('form-control-plaintext', 'form-control').prop('readonly', false);
+				BCO.dialog.find('[data-bs-dismiss="modal"]').removeClass('btn-last');
+			}
+
+		},
+		
+		// saves/updates an item back to the database
+		save: function() {
+			
+			const BCO = Boutique.Controllers.Order;
+			const OU = Boutique.Utilities;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			const BV = Boutique.Validator;
+	
+			let id = (BCO.itemId && BCO.action === 'edit') ? '/' + BCO.itemId : '';
+			
+			BCO.bv = BV.build(BCO.formWrite);
+			
+			if (BCO.bv.hasErrors()) {
+				return false;
+			}
+		
+			BV.clearErrors(BCO.formWrite);
+	
+			$.ajax({
+				type: (BCO.action === 'edit') ? 'put' : 'post',
+				url: API_PATH + '/orders' + id,
+				data: BCO.formWrite.cerealize(),
+				beforeSend: function() {
+					BM.progress(BS.t('messageSaving'), BCO.block);
+				},
+				success: function(data, status, xhr) {
+					BCO.set(data, status, xhr);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCO.block);
+				}
+			});
+	
+		},
+		
+		set: function(data, status, xhr) {
+			
+			const BCO = Boutique.Controllers.Order;
+			const BM = Boutique.Messages;
+	
+			BM.response(data, status, xhr, BCO.block, BCO.init);
+				
+		},
+				
+		show: function(e) { 
+		
+			const BCO = Boutique.Controllers.Order;
+			
+			BCO.action = (e && e.target && e.target.dataset['action']);
+
+			let add = $(BCO.prefix + '_add');
+			let upd = $(BCO.prefix + '_upd');
+			let del = $(BCO.prefix + '_del');
+			
+			if (BCO.action) {
+
+				BCO.reset();
+
+				BCO.block = BCO.dialog.find('.modal-content');
+				BCO.itemId = (e.target.dataset['id']) ? e.target.dataset['id'] : false;
+				
+				$(add).add(upd).add(del).hide();
+
+				// Edit/Copy/View existing item
+				if (BCO.itemId) {
+					if (BCO.action === 'edit') {
+						upd.show();
+						del.show();
+					}
+					else if (BCO.action === 'copy') {
+						add.show();
+					}
+				}
+				// Add new item
+				else {
+					add.show();
+				}
+
+				BCO.dialog.modal('show');
+				BCO.dialog.off('shown.bs.modal').on('shown.bs.modal', function() {
+					
+					if (BCO.action.match(/(edit|view)/i)) {
+						BCO.edit();
+					}
+					else if (BCO.action === 'copy') {
+						BCO.edit(BCO.duplicate);
+					}
+					
+				});		
+
+			}
+		},
+
+	};
+
+	$(function() {
+		Boutique.Controllers.Order.init();
+	});       
+
+})();
+
+
+; (function() {
+
+    'use strict';
+	
 	Boutique.Controllers.Product = {
 		
 		action: null,
@@ -3100,6 +3419,7 @@ var Boutique = Boutique || {};
 			const BCP = Boutique.Controllers.Product;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCP.dialog);
 			BU.initSearchForm(BCP.formList, BCP.index);
 			
 			$(BCP.prefix + '_table, ' + BCP.prefix + '_show').off('click').on('click', function(e) {
@@ -3243,7 +3563,10 @@ var Boutique = Boutique || {};
 			BCP.action = null;
 			BCP.hide();
 			BCP.bindEvents();
-			BCP.index();
+
+			if (PAGE === 'products') {
+				BCP.index();
+			}
 			
 		},
 
@@ -3395,6 +3718,325 @@ var Boutique = Boutique || {};
 
 	$(function() {
 		Boutique.Controllers.Product.init();
+	});       
+
+})();
+
+
+; (function() {
+
+    'use strict';
+	
+	Boutique.Controllers.Stock = {
+		
+		action: null,
+		block: null,
+		lastId: null,
+		prefix: '#stock',
+		
+		bindEvents: function() {
+
+			const BCS = Boutique.Controllers.Stock;
+			const BU = Boutique.Utilities;
+
+			BU.initSearchForm(BCS.formList, BCS.index);
+			
+			$(BCS.prefix + '_table, ' + BCS.prefix + '_show').off('click').on('click', function(e) {
+
+				BCS.show(e);
+
+			});
+			
+			$(BCS.prefix + '_add').off('click').on('click', function() {
+				
+				BCS.save(this);
+				
+			});
+
+			$(BCS.prefix + '_upd').off('click').on('click', function() {
+				
+				BCS.save(this);
+				
+			});
+
+			$(BCS.prefix + '_del').off('click').on('click', function() {
+				
+				BCS.remove(this);
+				
+			});
+
+		},
+		
+		delete: function(id) {
+
+			const BCS = Boutique.Controllers.Stock;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			
+			if (id) {
+			
+				$.ajax({
+					type: 'delete',
+					url: API_PATH + '/stocks/' + id,
+					data: BCS.formWrite.cerealize(),
+					beforeSend: function() {
+						BM.progress(BS.t('messageDeleting'), BCS.block);
+					},
+					success: function(data, status, xhr) {
+						BCS.set(data, status, xhr);
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCS.block);
+					}
+				});
+				return false;
+			}
+
+		},
+		
+		duplicate: function() {
+			
+			const BCS = Boutique.Controllers.Stock;
+						
+			BCS.itemId = null;
+			$(BCS.formWrite).find('#id').val('');
+			
+		},
+		
+		edit: function(callback) {
+			
+			const BCS = Boutique.Controllers.Stock;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+
+
+			if (BCS.itemId) {
+
+				$.ajax({
+					type: 'get',
+					url: API_PATH + '/stocks/' + BCS.itemId,
+					beforeSend: function() {
+						BM.progress(BS.t('messageLoading'), BCS.block);
+					},
+					success: function(data, status, xhr) {
+						BCS.formWrite.decerealize(data);
+						BM.hide(BCS.block);
+						
+						BCS.lastId = BCS.itemId;
+						
+						if (typeof (callback || undefined) === 'function') {
+							callback.call();
+						}
+					},
+					error: function(data, status, xhr) {
+						BM.response(data, status, xhr, BCS.block);
+					}
+				});
+			}
+			
+		},
+		
+		hide: function() {
+			
+			const BCS = Boutique.Controllers.Stock;
+			
+			BCS.dialog.modal('hide');
+
+		},
+
+		index: function() {
+			
+			const BCS = Boutique.Controllers.Stock;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+
+			BCS.block = $('body');
+
+			$.ajax({
+				type: 'get',
+				url: API_PATH + '/stocks',
+				data: BCS.formList.cerealize(),
+				beforeSend: function() {
+					BM.progress(BS.t('messageLoading'), BCS.block);
+				},
+				success: function(data, status, xhr) {
+					BCS.formList.find('[data-async]').html(data);		
+					BCS.bindEvents();
+					BM.hide(BCS.block);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCS.block);
+				}
+			});
+			
+		},
+
+		init: function() {
+
+			const BCS = Boutique.Controllers.Stock;
+			
+			BCS.dialog = $(BCS.prefix + '_dialog');
+			BCS.formList = $(BCS.prefix + '_form_list');
+			BCS.formWrite = $(BCS.prefix + '_form_write');
+			
+			BCS.action = null;
+			BCS.hide();
+			BCS.bindEvents();
+
+			if (PAGE === 'stocks') {
+				BCS.index();
+			}
+			
+		},
+
+		remove: function(o) {
+
+			const BCS = Boutique.Controllers.Stock;
+			const BS = Boutique.Settings;
+			
+			let id = (BCS.itemId) ? BCS.itemId : $(o).closest('[data-id]').data('id');
+			
+			if (id) {
+			
+				BCS.block = ($(BCS.prefix + '_dialog:visible').length) ? BCS.dialog.find('.modal-content') : $('body');
+				
+				bootbox.confirm({
+					title: 'Confirm',
+					message: '<p class="center">' + BS.t('messageConfirmDelete') + '</p>',
+					callback: function(ok) {
+						if (ok) {
+							BCS.delete(id);
+						}
+					}
+				});
+				return false;
+			}
+			
+		},
+
+		reset: function() {
+
+			const BCS = Boutique.Controllers.Stock;
+			const BV = Boutique.Validator;
+			
+			/* Reset all visible fields */
+			if (BCS.formWrite.length) {
+				BCS.formWrite.get(0).reset();
+				BV.clearErrors(BCS.formWrite);
+			}
+			
+			/* Reset hidden id field manually since reset doesn't clear hidden fields */
+			$(BCS.prefix + '_id').val('');
+				
+			if (BCS.action === 'view') {
+				BCS.dialog.find('.form-control').alterClass('form-control', 'form-control-plaintext').prop('readonly', true);
+				BCS.dialog.find('[data-bs-dismiss="modal"]').addClass('btn-last');
+			}
+			else {
+				BCS.formWrite.find('.form-control-plaintext').alterClass('form-control-plaintext', 'form-control').prop('readonly', false);
+				BCS.dialog.find('[data-bs-dismiss="modal"]').removeClass('btn-last');
+			}
+
+		},
+		
+		// saves/updates an item back to the database
+		save: function() {
+			
+			const BCS = Boutique.Controllers.Stock;
+			const OU = Boutique.Utilities;
+			const BM = Boutique.Messages;
+			const BS = Boutique.Settings;
+			const BV = Boutique.Validator;
+	
+			let id = (BCS.itemId && BCS.action === 'edit') ? '/' + BCS.itemId : '';
+			
+			BCS.bv = BV.build(BCS.formWrite);
+			
+			if (BCS.bv.hasErrors()) {
+				return false;
+			}
+		
+			BV.clearErrors(BCS.formWrite);
+	
+			$.ajax({
+				type: (BCS.action === 'edit') ? 'put' : 'post',
+				url: API_PATH + '/stocks' + id,
+				data: BCS.formWrite.cerealize(),
+				beforeSend: function() {
+					BM.progress(BS.t('messageSaving'), BCS.block);
+				},
+				success: function(data, status, xhr) {
+					BCS.set(data, status, xhr);
+				},
+				error: function(data, status, xhr) {
+					BM.response(data, status, xhr, BCS.block);
+				}
+			});
+	
+		},
+		
+		set: function(data, status, xhr) {
+			
+			const BCS = Boutique.Controllers.Stock;
+			const BM = Boutique.Messages;
+	
+			BM.response(data, status, xhr, BCS.block, BCS.init);
+				
+		},
+				
+		show: function(e) { 
+		
+			const BCS = Boutique.Controllers.Stock;
+			
+			BCS.action = (e && e.target && e.target.dataset['action']);
+
+			let add = $(BCS.prefix + '_add');
+			let upd = $(BCS.prefix + '_upd');
+			let del = $(BCS.prefix + '_del');
+			
+			if (BCS.action) {
+
+				BCS.reset();
+
+				BCS.block = BCS.dialog.find('.modal-content');
+				BCS.itemId = (e.target.dataset['id']) ? e.target.dataset['id'] : false;
+				
+				$(add).add(upd).add(del).hide();
+
+				// Edit/Copy/View existing item
+				if (BCS.itemId) {
+					if (BCS.action === 'edit') {
+						upd.show();
+						del.show();
+					}
+					else if (BCS.action === 'copy') {
+						add.show();
+					}
+				}
+				// Add new item
+				else {
+					add.show();
+				}
+
+				BCS.dialog.modal('show');
+				BCS.dialog.off('shown.bs.modal').on('shown.bs.modal', function() {
+					
+					if (BCS.action.match(/(edit|view)/i)) {
+						BCS.edit();
+					}
+					else if (BCS.action === 'copy') {
+						BCS.edit(BCS.duplicate);
+					}
+					
+				});		
+
+			}
+		},
+
+	};
+
+	$(function() {
+		Boutique.Controllers.Stock.init();
 	});       
 
 })();

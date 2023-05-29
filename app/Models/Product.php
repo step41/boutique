@@ -14,6 +14,7 @@ class Product extends Model
     use SoftDeletes;
 
     protected $table = 'products';
+    protected $casts = ['created_at'=>'datetime', 'updated_at'=>'datetime', 'deleted_at'=>'datetime'];
 
     /**
      * The attributes that are mass assignable.
@@ -32,26 +33,28 @@ class Product extends Model
         'note',
     ];
 
-    public function scopeSearch($query, $keywords)
-    {
-        return $query->when(
-            $keywords,
-            function ($query, $keywords) {
-                $query->selectRaw('*, MATCH(product_name, style, brand, description) AGAINST (? IN BOOLEAN MODE) as score', [$keywords])
-                ->whereRaw('MATCH(product_name, style, brand, description) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
-            },
-            function ($query) {
-                $query->latest();
-            }
-        );
-    }
-
     /**
      * Get the orders for a product.
      */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Implement full text search option
+     */
+    public function scopeSearch($query, $keywords)
+    {
+        return $query->when(
+            $keywords,
+            function ($query, $keywords) {
+                $query->whereRaw('MATCH(product_name, style, brand, description) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
+            },
+            function ($query) {
+                $query->latest();
+            }
+        );
     }
 
     /**

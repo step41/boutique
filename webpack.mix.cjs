@@ -38,7 +38,9 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/libraries/boutique/1.0/Boutique.Messages.js',
         'resources/js/libraries/boutique/1.0/Boutique.Storage.js',
         'resources/js/libraries/boutique/1.0/Boutique.Validator.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Controllers.Order.js',
         'resources/js/libraries/boutique/1.0/Boutique.Controllers.Product.js',
+        'resources/js/libraries/boutique/1.0/Boutique.Controllers.Stock.js',
     ], 'public/js/boutique_libraries.js').minify('public/js/boutique_libraries.js')
     .combine([
     ], 'public/css/boutique_packages.css').minify('public/css/boutique_packages.css')

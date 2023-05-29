@@ -112,5 +112,39 @@ trait RolePermissions
 
 	}
 
+	/**
+	 * Checks for a logged in user and verifies role based access controls to ensure account 
+	 * is authenticated and authorized to access a particular function or system area.
+	 *
+	 * @uses	Auth::user()
+	 * @uses	MSG::danger()
+	 *
+	 * @param 	Model		$model						Model collection with potential ownership (ref:user_id)
+	 * @return 	bool									Returns true or false depending on results of check
+	 * @since 	1.0
+	 */
+	public function userHasOverride($model = NULL) {
+
+		if (!empty($model) && $model->user_id):
+
+			$owner = (Auth::user() && Auth::user()->id === $model->user_id);
+
+			if ($owner || $this->userHasAny($this->_overrideRoles)):
+
+				return TRUE;
+
+			else:
+
+				MSG::danger('You are not authorized', 401);
+				abort('401', '401');		
+
+			endif;	
+
+		endif;
+
+		return TRUE;
+
+	}
+
 
 }

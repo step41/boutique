@@ -14,6 +14,7 @@ class Order extends Model
     use SoftDeletes;
 
     protected $table = 'orders';
+    protected $casts = ['created_at'=>'datetime', 'updated_at'=>'datetime', 'deleted_at'=>'datetime'];
 
     /**
      * The attributes that are mass assignable.

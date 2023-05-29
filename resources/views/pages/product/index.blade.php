@@ -11,9 +11,10 @@
                 H::tr(
                     H::td(H::div(['text' => ucwords($product->product_name)])).
                     H::td(H::div(['data-bp' => '1200', 'text' => ucwords($product->product_type)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => ucwords($product->style)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => ucwords($product->brand)])).
+                    H::td(H::div(['data-bp' => '1440', 'text' => ucwords($product->style)])).
+                    H::td(H::div(['data-bp' => '1440', 'text' => ucwords($product->brand)])).
                     H::td(H::div(['data-bp' => '1200', 'text' => '$'.number_format(($product->shipping_price/100), 2)])).
+                    H::td(H::div(['data-bp' => '992', 'text' => date('F d, Y', strtotime($product->created_at))])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $product->id, 'text' => __('Copy')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $product->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $product->id, 'text' => __('View')])])).
@@ -27,9 +28,10 @@
                     H::tr(
                         H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Name')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'product_type', 'text' => __('Type')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'style', 'text' => __('Style')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'brand', 'text' => __('Brand')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'shipping_price', 'text' => __('Price')])])).
+                        H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'style', 'text' => __('Style')])])).
+                        H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'brand', 'text' => __('Brand')])])).
+                        H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'shipping_price', 'text' => __('Price')])])).
+                        H::th(H::div(['data-bp' => '992', 'text' => H::a(['href' => '#', 'data-orderby' => 'created_at', 'text' => __('Created')])])).
                         H::th(H::div()).
                         H::th(H::div()).
                         H::th(H::div()).

@@ -49,7 +49,7 @@
                 H::comment('Fonts').
                 H::prefetch('//fonts.bunny.net').
                 H::stylesheet('https://fonts.bunny.net/css?family=Nunito').
-                H::stylesheet('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css').
+                H::stylesheet('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css').
                 
                 H::comment('Styles').
                 H::stylesheet('/css/app.css').
@@ -69,7 +69,7 @@
                 H::div(['id' => 'app', 'close' => FALSE]).
                     H::nav(['class' => 'navbar navbar-expand-md navbar-dark shadow-lg'])->inject(
                         H::container(
-                            H::a(['class' => 'navbar-brand', 'href' => url('/'), 'text' => config('app.name')]).
+                            H::a(['class' => 'navbar-brand', 'href' => url('/'), 'text' => H::i(['class' => 'bi-shop']).' &nbsp;'.config('app.name')]).
                             H::button([
                                 'class' => 'navbar-toggler', 
                                 'data-bs-toggle' => 'collapse', 

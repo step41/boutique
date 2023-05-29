@@ -45,5 +45,23 @@ class Stock extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * Implement full text search option
+     */
+    public function scopeSearch($query, $keywords)
+    {
+        return $query->when(
+            $keywords,
+            function ($query, $keywords) {
+                $query->whereRaw('MATCH(color, size, sku) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
+            },
+            function ($query) {
+                $query->latest();
+            }
+        );
+    }
+
+    
 }
 

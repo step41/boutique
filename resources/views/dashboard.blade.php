@@ -9,14 +9,30 @@
 
     $content .= 
         H::form()->inject(
-            H::ul('', ['class' => ''])->inject(
-                H::li(['class' => ''])->inject(
-                    H::a([
-                        'class' => 'btn btn-link', 
-                        'href' => route('product.index'), 
-                        'text' => __('Products')
-                    ])
-                )                              
+            H::div(['class' => 'content'])->inject(
+                H::ul('', ['class' => 'list-dashboard'])->inject(
+                    H::li(['class' => ''])->inject(
+                        H::a([
+                            'class' => 'btn btn-link', 
+                            'href' => route('product.index'), 
+                            'text' => H::i(['class' => 'bi-bag']).' &nbsp; '.__('View Products')
+                        ])
+                    ).
+                    H::li(['class' => ''])->inject(
+                        H::a([
+                            'class' => 'btn btn-link', 
+                            'href' => route('order.index'), 
+                            'text' => H::i(['class' => 'bi-cart']).' &nbsp; '.__('View Orders')
+                        ])
+                    ).
+                    H::li(['class' => ''])->inject(
+                        H::a([
+                            'class' => 'btn btn-link', 
+                            'href' => route('stock.index'), 
+                            'text' => H::i(['class' => 'bi-building']).' &nbsp; '.__('View Stocks')
+                        ])
+                    )
+                )
             )
         )
     ;

@@ -4,28 +4,27 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Order;
-use App\Models\Product;
 use Auth;
 
 /**
- * Product Repository
+ * Order Repository
  *
  * @package		Repositories
  * @author		Jeff Todnem
  * @since 		1.0  
  */
-class ProductRepository
+class OrderRepository
 {
     /**
      * Get single instance
      *
      * @param  $id
      *
-     * @return App/Models/Product;
+     * @return App/Models/Order;
      */
     public function get($id)
     {
-        $item = Product::findOrFail($id);
+        $item = Order::findOrFail($id);
         return $item;
     }
 
@@ -36,12 +35,12 @@ class ProductRepository
      *
      * @return App/Models/Order;
      */
-    public function getWithStocksAndOrdersByUser()
+    public function getWithProductsAndStocksByUser()
     {
-        $items = DB::table('products')
-            ->select('stocks.quantity', 'stocks.sku', 'products.*')
-            ->join('stocks', 'products.id', '=', 'stocks.product_id')
-            ->join('orders', 'products.id', '=', 'orders.product_id')
+        $items = DB::table('orders')
+            ->select('products.product_name', 'orders.*')
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->join('stocks', 'orders.stock_id', '=', 'stocks.id')
             ->join('users', 'products.user_id', '=', 'users.id')
             ->where('user_id', Auth::user()->id)
         ;

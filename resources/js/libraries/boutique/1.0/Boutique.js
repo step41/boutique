@@ -1,5 +1,6 @@
 const LOCALE = 'en-us';
 const API_PATH = '';
+const PAGE = location.pathname.split('/')[1];
 
 var Boutique = Boutique || {};
 

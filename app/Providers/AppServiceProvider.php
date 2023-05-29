@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
                     'time' => $query->time
                 ]
             );
+            Log::info('---------------------------');
         });        
 
     }

@@ -14,6 +14,7 @@
 			const BCP = Boutique.Controllers.Product;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCP.dialog);
 			BU.initSearchForm(BCP.formList, BCP.index);
 			
 			$(BCP.prefix + '_table, ' + BCP.prefix + '_show').off('click').on('click', function(e) {
@@ -157,7 +158,10 @@
 			BCP.action = null;
 			BCP.hide();
 			BCP.bindEvents();
-			BCP.index();
+
+			if (PAGE === 'products') {
+				BCP.index();
+			}
 			
 		},
 

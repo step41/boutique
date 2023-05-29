@@ -54,9 +54,7 @@ class ProductController extends Controller {
             if ($product->count()):
 
                 // Additional check for ownership or override access
-                $owner = $product->user_id === Auth::user()->id;
-
-                if ($owner || $this->userHasAny($this->_overrideRoles)):
+                if ($this->userHasOverride($product)):
                 
                     $product->delete();
 
@@ -85,7 +83,8 @@ class ProductController extends Controller {
 
         if ($this->userCan('update products')):
 
-            $product = $this->repository->get($id);
+            //$product = $this->repository->get($id);
+            $product = $this->model->with('orders')->with('stock')->where('user_id', Auth::user()->id)->findOrFail($id);
 
             return json_encode($product);
 
@@ -105,7 +104,7 @@ class ProductController extends Controller {
 
             $input = $request->all();
 
-            $products = $this->model->with('orders')->with('stock')->where('user_id', Auth::user()->id);
+            $products = $this->model->where('user_id', Auth::user()->id);
             
             if (!empty($input['search'])):
 
@@ -173,9 +172,7 @@ class ProductController extends Controller {
                 if ($product->count()):
 
                     // Additional check for ownership or override access
-                    $owner = $product->user_id === Auth::user()->id;
-    
-                    if ($owner || $this->userHasAny($this->_overrideRoles)):
+                    if ($this->userHasOverride($product)):
                     
                         $product->fill($input)->save();
 
