@@ -766,6 +766,42 @@ class HtmlHelper {
 	 * Returns an object of type Element so additional methods can be run 
 	 * against the object when required.
 	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueHiddenFields() {
+		// Set initial values
+		$output = '';
+		$srow = intval(request()->input('srow'));
+		$erow = intval(request()->input('erow'));
+		$perpage = intval(request()->input('perpage'));
+		$page = intval(request()->input('page'));
+		$sort = strtolower(request()->input('sort'));
+		$orderby = request()->input('orderby');
+		
+		// Verify values
+		$page = ($page >= 1) ? $page : 1;
+		$sort = ($sort === 'desc') ? $sort : 'asc';
+		$orderby = (preg_match('/[a-z_]+/', $orderby)) ? $orderby : '';
+
+		$output .= $this->hidden(['id' => 'srow', 'value' => $srow]);
+		$output .= $this->hidden(['id' => 'erow', 'value' => $erow]);
+		$output .= $this->hidden(['id' => 'perpage', 'value' => $perpage]);
+		$output .= $this->text(['id' => 'page', 'value' => $page]);
+		$output .= $this->text(['id' => 'sort', 'value' => $sort]);
+		$output .= $this->text(['id' => 'orderby', 'value' => $orderby]);
+
+		return $output;
+	}
+
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
 	 * @param	string			$type		Type of input element to create
 	 * @param	array			$attribs	Element key-value attributes array
 	 * @param	object			$errors		Validation errors (if present)
@@ -902,6 +938,38 @@ class HtmlHelper {
 		return $this->boutiqueInput('password', $attribs, $errors);
 	}
 	
+	/**
+	 * Create the HTML element specified by the method name and save it as 
+	 * an Element object. Add one or more key=value attributes to the object. 
+	 * Returns an object of type Element so additional methods can be run 
+	 * against the object when required.
+	 *
+	 * @param	array			$attribs	Element key-value attributes array
+	 * @return	object						Returns an object of type Element		
+	 * @access 	public
+	 * @since	1.0
+	 */
+	public function boutiqueSearchFields() {
+		$output = '';
+		$output .= 
+			H::div(['class' => 'card-search float-end'])->inject(
+				H::div(['class' => 'input-group'])->inject(
+					H::text([
+						'id' => 'search',
+						'value' => request()->input('search'),
+						'label' => 'Search',
+						'nowrap' => TRUE,
+					]).
+					H::button([
+						'class' => 'btn-primary',
+						'text' => H::i(['class' => 'bi-search'])
+					])
+				)
+			)
+		;
+		return $output;
+	}
+
 	/**
 	 * Create the HTML element specified by the method name and save it as 
 	 * an Element object. Add one or more key=value attributes to the object. 

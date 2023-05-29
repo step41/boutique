@@ -2,7 +2,7 @@ $.fn.cerealize = function (filter) {
 	filter = filter || ''; // ':not([data-recurly])'; - Disabling this option since recurly.js v4 CC fields are now hosted via secure iframes.
 	var $form = $(this).closest('form');
 	var strKeyVals = '';	
-	var arrKeyVals = [];
+	var arrKeyVals = {};
 	var checkable, checked, key;
     var selector = (filter) ? $(':input').filter(filter) : $(':input');
 	$(this).find(selector).each(
@@ -12,7 +12,7 @@ $.fn.cerealize = function (filter) {
 				n = $(this).attr('name');
 				mv = (n.match(/\[\]$/)); // check for multi-value support
 				if (arrKeyVals[n] && !mv) {
-					$.clog('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.', 'warning');
+					console.warn('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.');
 					return;
 				}
 				v = encodeURIComponent($(this).val());

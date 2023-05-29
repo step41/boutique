@@ -12,6 +12,9 @@
 		bindEvents: function() {
 
 			const BCP = Boutique.Controllers.Product;
+			const BU = Boutique.Utilities;
+
+			BU.initSearchForm(BCP.formList, BCP.index);
 			
 			$(BCP.prefix + '_table, ' + BCP.prefix + '_show').off('click').on('click', function(e) {
 
@@ -132,7 +135,8 @@
 					BM.progress(BS.t('messageLoading'), BCP.block);
 				},
 				success: function(data, status, xhr) {
-					BCP.formList.find('tbody').html(data);		
+					BCP.formList.find('[data-async]').html(data);		
+					BCP.bindEvents();
 					BM.hide(BCP.block);
 				},
 				error: function(data, status, xhr) {

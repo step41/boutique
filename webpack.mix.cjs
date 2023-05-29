@@ -25,6 +25,7 @@ mix.js('resources/js/app.js', 'public/js')
 		'resources/js/packages/jquery/plugins/hasanyclass/1.0/jquery.hasanyclass.js',
 		'resources/js/packages/jquery/plugins/hasallclasses/1.0/jquery.hasallclasses.js',
 		'resources/js/packages/jquery/plugins/addbackif/1.0/jquery.addbackif.js',
+        'resources/js/packages/jquery/plugins/outerhtml/1.0/jquery.outerhtml.js',
 		'resources/js/packages/jquery/plugins/cerealize/1.0/jquery.cerealize.js',
 		'resources/js/packages/jquery/plugins/cerealizearray/1.0/jquery.cerealizearray.js',
 		'resources/js/packages/jquery/plugins/decerealize/1.0/jquery.decerealize.js',

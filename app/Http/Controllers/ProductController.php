@@ -114,8 +114,12 @@ class ProductController extends Controller {
                 $products = $products->whereLike($searchKey, $input['search']);
             
             endif;
+
+            $orderBy = (!empty($input['orderby'])) ? $input['orderby'] : 'product_name';
+
+            $sort = (!empty($input['sort']) && strtolower($input['sort']) === 'desc') ? 'desc' : 'asc';
             
-            $products = $products->orderBy('product_name')->paginate(10)->onEachSide(0);
+            $products = $products->orderBy($orderBy, $sort)->paginate(10)->onEachSide(0);
 
             return view('pages.product.index', compact('products'));
 

@@ -4027,11 +4027,37 @@ $.fn.addBackIf = function ( selector, condition ) {
  
 })( jQuery );
 
+(function($){
+	
+	var div;
+
+	$.fn.outerHTML = function(v) {
+		
+		var elm = this[0];
+		var tmp;
+
+		if (!elm) {
+			return null;
+		}
+		else {
+			// Value passed so we're setting instead of getting
+			if (v) {
+				$(elm).replaceWith(v);
+			}
+			// Get outer html of element
+			else {
+				return typeof (tmp = elm.outerHTML) === 'string' ? tmp : (div = div || $('<div/>')).html(this.eq(0).clone()).html();
+			}
+		}
+	};
+  
+})(jQuery);
+
 $.fn.cerealize = function (filter) {
 	filter = filter || ''; // ':not([data-recurly])'; - Disabling this option since recurly.js v4 CC fields are now hosted via secure iframes.
 	var $form = $(this).closest('form');
 	var strKeyVals = '';	
-	var arrKeyVals = [];
+	var arrKeyVals = {};
 	var checkable, checked, key;
     var selector = (filter) ? $(':input').filter(filter) : $(':input');
 	$(this).find(selector).each(
@@ -4041,7 +4067,7 @@ $.fn.cerealize = function (filter) {
 				n = $(this).attr('name');
 				mv = (n.match(/\[\]$/)); // check for multi-value support
 				if (arrKeyVals[n] && !mv) {
-					$.clog('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.', 'warning');
+					console.warn('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.');
 					return;
 				}
 				v = encodeURIComponent($(this).val());
@@ -4112,7 +4138,7 @@ $.fn.cerealizeArray = function (filter) {
 				n = $(this).attr('name');
 				mv = (n.match(/\[\]$/)); // check for multi-value support
 				if (arrKeyVals[n] && !mv) {
-					$.clog('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.', 'warning');
+					console.warn('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.');
 					return;
 				}
 				v = $(this).val();

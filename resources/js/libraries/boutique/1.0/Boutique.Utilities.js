@@ -101,6 +101,77 @@
 
 		},
 
+		initSearchForm: function(frm, callback, args) {
+
+			let f = $(frm);
+			if (f.length) {
+				
+				// Unbind default actions for current form
+				f.off('submit').on('submit', function(e) {
+					e.preventDefault();
+					e.stopImmediatePropagation();			
+					if (typeof (callback || undefined) === 'function') {
+						callback.call(null, args);	
+					}
+					return false;
+				});
+
+				// Bind search field actions
+				f.find('input[name="search"]').keyup(e => {
+					if (e.which === 13) {
+						e.preventDefault();
+						f.trigger('submit');
+					}
+				});
+
+				// Set up sorting functionality on list headers
+				f.find('[data-orderby]').off('click').on('click', () => {
+					
+					let orderbyField = f.find('input[name="orderby"]');
+					let orderbyOld = orderbyField.val();
+					let orderbyNew = $(this).attr('data-orderby');
+					let sortField = f.find('input[name="sort"]');
+					let sortOld = sortField.val();
+					let sortNew = (orderbyNew === orderbyOld) ? ((sortOld.match(/asc/i)) ? 'desc' : 'asc') : 'asc';
+
+					orderbyField.val(orderbyNew);
+					sortField.val(sortNew);
+
+					if (typeof (callback || undefined) === 'function') {
+						callback.call(null, args);
+					}
+
+				});
+
+				// Replace static links with async calls on paging buttons
+				f.find('.pagination .page-link').attr('href', '#').off('click');
+				f.find('.pagination').off('click').on('click', e => {
+					f.find('.pagination').find('li').removeAttr('aria-current').removeAttr('aria-disabled').alterClass('active disabled', '');
+					if (e && e.target && e.target.className === 'page-link') {
+						let link = $(e.target);
+						let prev = link.attr('rel') === 'prev';
+						let next = link.attr('rel') === 'next';
+						let page = $(':input[name="page"]');
+						let max = parseInt(f.find('.pagination li:nth-of-type(8)').text());
+						let curr = page.val();
+						if (prev) {
+							curr = Math.max(...[parseInt(curr)-1, 1]);
+						}
+						else if (next) {
+							curr = Math.min(...[parseInt(curr)+1, max]);
+						}
+						else {
+							curr = parseInt(link.text());
+						}
+						page.val(curr);
+						f.trigger('submit');
+						window.history.replaceState(null, '', window.location.href.replace(/(page=)[0-9]+/, '$1' + curr)); 
+					}
+				});
+
+			}
+		},
+
 		initSegmentSelect: function(dialog, callback) {
 			
 			const BU = Boutique.Utilities;
@@ -268,6 +339,39 @@
 
 			return newObj;
 
+		},
+
+		pageset: function(v, o) {
+			let f = $(o).closest('form');
+			let srow = f.find(':input[name="srow"]');
+			let erow = f.find(':input[name="erow"]');
+			let page = f.find(':input[name="page"]');
+			let perpage = f.find(':input[name="perpage"]');
+			if (v == '') {
+				page.val(1);
+				page = false;
+			}
+			else if (v == '‹') {
+				page.val(Math.max(...[parseInt(page.val()-1),1]));
+				page = true;
+			}
+			else if (v == '›') {
+				page.val(Math.max(...[parseInt(page.val()+1),1]));
+				page = true;
+			}
+			else {
+				page.val(v);
+				page = true;
+			}
+			if (page.val() == 1) {
+				$srow.val(1);
+				$erow.val(parseInt(perpage.val()));
+			}
+			else {
+				$srow.val(((parseInt(page.val()) - 1) * parseInt(perpage.val())) + 1);
+				$erow.val(parseInt($srow.val()) + parseInt(perpage.val()) - 1);
+			}
+			return page;
 		},
 
 		setDialogTitle: function(dialog, id) {

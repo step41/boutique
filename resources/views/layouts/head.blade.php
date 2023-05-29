@@ -49,6 +49,7 @@
                 H::comment('Fonts').
                 H::prefetch('//fonts.bunny.net').
                 H::stylesheet('https://fonts.bunny.net/css?family=Nunito').
+                H::stylesheet('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css').
                 
                 H::comment('Styles').
                 H::stylesheet('/css/app.css').

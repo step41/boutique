@@ -2,10 +2,8 @@
 
     $type = 'product';
     $types = INF::pluralize($type);
-    $output = $content = $button = $rows = '';
+    $static = $dynamic = $rows = '';
     $title = 'My '.ucfirst($types);
-
-    $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
 
     if (!empty($products)):
         foreach ($products as $product):
@@ -23,10 +21,9 @@
                 )
             ;
         endforeach;
-        $content .= H::form(['id' => $type.'_form_list', 'close' => FALSE]);
-            $content .= H::hidden(['id' => 'page', 'value' => request()->input('page')]);
-            $content .= H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover', 'close' => FALSE]);
-                $content .= H::thead(
+        $dynamic .= 
+            H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover'])->inject(
+                H::thead(
                     H::tr(
                         H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Name')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'product_type', 'text' => __('Type')])])).
@@ -37,17 +34,32 @@
                         H::th(H::div()).
                         H::th(H::div()).
                         ''
-                    )
-                );
-                $content .= H::tbody();
-            $content .= H::close('table');
-            $content .= H::div(['class' => 'd-flex justify-content-center', 'text' => $products->links()]);
-        $content .= H::close('form');
-        $content .= H::blade('modals.'.$type);
+                    ).
+                    ''
+                ).
+                H::tbody($rows)
+            ).
+            H::div(['class' => 'd-flex justify-content-center', 'text' => $products->links()])
+        ;
     else:
-        $content .= H::h4('No '.$types.' found');
+        $dynamic .= H::h4('No '.$types.' found');
     endif;
 
-    $output = (COM::isAjaxRequest()) ? $rows : H::boutiqueLayout(['title' => $title, 'button' => $button, 'text' => $content]);
+    $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
+    $static .= 
+        H::boutiqueLayout([
+            'title' => $title, 
+            'button' => $button,
+            'text' => H::form(['id' => $type.'_form_list'])->inject(
+                H::boutiqueHiddenFields().
+                H::boutiqueSearchFields().
+                H::div(['data-async' => TRUE])
+                // table content will be dynamically loaded here...
+            ).
+            H::blade('modals.'.$type)
+        ])
+    ;
+
+    $output = (COM::isAjaxRequest()) ? $dynamic : $static;
 
     echo $output;

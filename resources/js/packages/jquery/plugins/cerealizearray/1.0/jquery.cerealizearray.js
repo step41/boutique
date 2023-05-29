@@ -11,7 +11,7 @@ $.fn.cerealizeArray = function (filter) {
 				n = $(this).attr('name');
 				mv = (n.match(/\[\]$/)); // check for multi-value support
 				if (arrKeyVals[n] && !mv) {
-					$.clog('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.', 'warning');
+					console.warn('CEREALIZE WARNING!!! The field [' + n + '] exists more than once in form [' + $(this).closest('form').attr('id') + ']. Skipping further assignments for this field.');
 					return;
 				}
 				v = $(this).val();
