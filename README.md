@@ -49,6 +49,7 @@
 - For demonstration purposes only, I utilized the RBAC to prevent deletion of most records. To meet the requirements of full CRUD capability, an existing user account can be changed to a higher-level access, giving them instant access to delete or other admin-level functionality.
 - Soft deletes have been implemented on most tables in the database. This was not a requirement, but simply something I thought might be nice for a demo app.
 - The database still contains the password_hash and password_plain columns for demo purposes only. These would obviously need to be removed in a production environment.
+- The site design is responsive and auto-hides some less critical data for optimal display purposes. To view all data, your viewing screen must be 1440px or larger.
 - Any other questions? Please reach out and I'll do my best to answer.
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, stock,
@@ -67,7 +68,7 @@ There are a number of features outlined below—the goal of this exercise is to
 demonstrate your capabilities with web development. Please do not feel obligated
 to implement all features listed.
 
-## Features:
+## Requested Features:
 *Please Note:* You should plan to implement some version of B along with one
 of D or E as a minimum feature set.
 
