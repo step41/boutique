@@ -14,6 +14,13 @@
                     H::li(['class' => ''])->inject(
                         H::a([
                             'class' => 'btn btn-link', 
+                            'href' => route('page.overview'), 
+                            'text' => H::i(['class' => 'bi-clipboard-data']).' &nbsp; '.__('View Statistics')
+                        ])
+                    ).
+                    H::li(['class' => ''])->inject(
+                        H::a([
+                            'class' => 'btn btn-link', 
                             'href' => route('product.index'), 
                             'text' => H::i(['class' => 'bi-bag']).' &nbsp; '.__('View Products')
                         ])

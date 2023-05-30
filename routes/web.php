@@ -17,6 +17,8 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
+Route::get('/overview', [App\Http\Controllers\PageController::class, 'overview'])->name('page.overview');
+
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('product.index');
 Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
 Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('product.store');

@@ -43,6 +43,16 @@ textarea {
 	padding: 2rem;
 	text-align: center;
 }
+#product_orders, 
+#product_stocks {
+	@include scrollbars;
+	overflow-x: hidden;
+	overflow-y: auto;
+	max-height: 400px;
+}
+
+
+
 
 /* Bootstrap overrides */
 body {

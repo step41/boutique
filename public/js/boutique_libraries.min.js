@@ -3481,16 +3481,12 @@ var Boutique = Boutique || {};
 			let row, cell, r, c, v;
 			let json = {};
 
-			// reset previous views
-			orders.html('');
-			stocks.html('');
-
 			try {
 				json = JSON.parse(data);
 			}
 			catch(e) {}
 
-			console.log(json);
+			//console.log(json);
 
 			if (json.orders && json.orders.length) {
 				for (r in json.orders) {
@@ -3578,7 +3574,9 @@ var Boutique = Boutique || {};
 						BM.progress(BS.t('messageLoading'), BCP.block);
 					},
 					success: function(data, status, xhr) {
-						BCP.buildDetails(data);
+						if (BCP.action !== 'copy') {
+							BCP.buildDetails(data);
+						}
 						BCP.formWrite.decerealize(data);
 						BM.hide(BCP.block);
 						
@@ -3679,6 +3677,13 @@ var Boutique = Boutique || {};
 			const BCP = Boutique.Controllers.Product;
 			const BV = Boutique.Validator;
 			
+			let orders = $(BCP.prefix + '_orders_table tbody');
+			let stocks = $(BCP.prefix + '_stocks_table tbody');
+
+			/* Reset previous stock and order views */
+			orders.html('');
+			stocks.html('');
+
 			/* Reset all visible fields */
 			if (BCP.formWrite.length) {
 				BCP.formWrite.get(0).reset();
