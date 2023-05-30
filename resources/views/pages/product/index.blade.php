@@ -9,7 +9,7 @@
         foreach ($products as $product):
             $rows .= 
                 H::tr(
-                    H::td(H::div(['text' => $product->id])).
+                    H::td(H::div(['data-bp' => '1200', 'text' => $product->id])).
                     H::td(H::div(['text' => ucwords($product->product_name)])).
                     H::td(H::div(['data-bp' => '1200', 'text' => ucwords($product->product_type)])).
                     H::td(H::div(['data-bp' => '1440', 'text' => ucwords($product->style)])).
@@ -27,7 +27,7 @@
             H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover'])->inject(
                 H::thead(
                     H::tr(
-                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'id', 'text' => __('ID')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'id', 'text' => __('ID')])])).
                         H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Name')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'product_type', 'text' => __('Type')])])).
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'style', 'text' => __('Style')])])).

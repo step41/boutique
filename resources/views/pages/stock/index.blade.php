@@ -18,7 +18,7 @@
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->length])).
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->width])).
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->height])).
-                    H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $stock->id, 'text' => __('Edit')])])).
+                    //H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $stock->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $stock->id, 'text' => __('View')])])).
                     ''
                 )
@@ -37,7 +37,7 @@
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'length', 'text' => __('Length')])])).
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'width', 'text' => __('Width')])])).
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'height', 'text' => __('Height')])])).
-                        H::th(H::div()).
+                        //H::th(H::div()).
                         H::th(H::div()).
                         ''
                     ).
