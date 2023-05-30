@@ -3447,6 +3447,70 @@ var Boutique = Boutique || {};
 			});
 
 		},
+
+		buildDetails: function(data) {
+
+			const BCP = Boutique.Controllers.Product;
+			const BU = Boutique.Utilities;
+
+			let columns = {
+				orders: [
+					'name',
+					'street_address',
+					'city',
+					'state',
+					'zip',
+					'country_code',
+					'order_status',
+					'created_at',
+				],
+				stocks: [
+					'id',
+					'color',
+					'quantity',
+					'size',
+					'sku',
+				]
+			}
+			let stocks = $(BCP.prefix + '_stocks_table tbody');
+			let orders = $(BCP.prefix + '_orders_table tbody');
+			let row, cell, r, c, v;
+			let json = {};
+
+			try {
+				json = JSON.parse(data);
+			}
+			catch(e) {}
+
+			console.log(json);
+
+			if (json.orders) {
+				for (r in json.orders) {
+					row = $('<tr></tr>');
+					for (c in columns.orders) {
+						v = json.orders[r][columns.orders[c]];
+						if (columns.orders[c] === 'created_at') {
+							v = new Date(v).toLocaleDateString();
+						}
+						cell = $('<td><div>' + v + '</div></td>');
+						row.append(cell)
+					}
+					orders.append(row);
+				}
+			}
+			if (json.stocks) {
+				for (r in json.stocks) {
+					row = $('<tr></tr>');
+					for (c in columns.stocks) {
+						v = json.stocks[r][columns.stocks[c]];
+						cell = $('<td><div>' + v + '</div></td>');
+						row.append(cell)
+					}
+					stocks.append(row);
+				}
+			}
+
+		},
 		
 		delete: function(id) {
 
@@ -3500,6 +3564,7 @@ var Boutique = Boutique || {};
 						BM.progress(BS.t('messageLoading'), BCP.block);
 					},
 					success: function(data, status, xhr) {
+						BCP.buildDetails(data);
 						BCP.formWrite.decerealize(data);
 						BM.hide(BCP.block);
 						

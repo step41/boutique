@@ -60,9 +60,9 @@ class Product extends Model
     /**
      * Get the stock for a product.
      */
-    public function stock(): HasOne
+    public function stocks(): HasMany
     {
-        return $this->hasOne(Stock::class);
+        return $this->hasMany(Stock::class);
     }
 
     /**

@@ -99,13 +99,13 @@ class OrderController extends Controller {
      */
     public function index(Request $request) {
 
-        dd($this->repository->getWithProductsAndStocksByUser());
-
         if ($this->userCan('view orders')):
 
             $input = $request->all();
 
-            $orders = $this->model->with('product')->with('stock')->with('user')->where('user_id', Auth::user()->id);
+            $orders = $this->repository->getWithProductsAndStocksByUser();
+            dd($orders->get());
+            //$orders = $this->model->with('product')->with('stock')->with('user')->where('user_id', Auth::user()->id);
             
             if (!empty($input['search'])):
 
@@ -119,7 +119,11 @@ class OrderController extends Controller {
 
             $sort = (!empty($input['sort']) && strtolower($input['sort']) === 'desc') ? 'desc' : 'asc';
             
-            $orders = $orders->orderBy($orderBy, $sort)->paginate(10)->onEachSide(0);
+            //$orders = $orders->orderBy($orderBy, $sort);
+            
+            $orders = $orders->paginate(10)->onEachSide(0);
+
+            //$orders = $orders->groupBy('product_name');
 
             return view('pages.order.index', compact('orders'));
 

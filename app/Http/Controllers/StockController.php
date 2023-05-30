@@ -104,6 +104,7 @@ class StockController extends Controller {
             $input = $request->all();
 
             $stocks = $this->repository->getWithProductByUser();
+            $stocks = $this->model->where('user_id', Auth::user()->id);
             
             if (!empty($input['search'])):
 

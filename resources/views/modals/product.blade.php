@@ -3,7 +3,7 @@
 
     $class = '';
     $prefix = 'product';
-	$template = H::boutiqueDialog($prefix, 'modal-lg');
+	$template = H::boutiqueDialog($prefix, 'modal-xl');
     $title = T::_('Product Properties');
 
     $content = 
@@ -18,11 +18,11 @@
                     'text' => T::_('General')
                 )).
                 H::btn(array(
-                    'id' => 'btn_'.$prefix.'_stock', 
+                    'id' => 'btn_'.$prefix.'_stocks', 
                     'prefix' => $prefix, 
-                    'action' => 'stock', 
-                    'data-navigate' => $prefix.'_stock', 
-                    'text' => T::_('Stock')
+                    'action' => 'stocks', 
+                    'data-navigate' => $prefix.'_stocks', 
+                    'text' => T::_('Stocks')
                 )).
                 H::btn(array(
                     'id' => 'btn_'.$prefix.'_orders', 
@@ -87,11 +87,40 @@
                 )).
                 ''
             ).
-            H::div(array('id' => $prefix.'_stock', 'class' => 'segment'))->inject(
-
+            H::div(array('id' => $prefix.'_stocks', 'class' => 'segment'))->inject(
+                H::table(['id' => $prefix.'_stocks_table', 'class' => 'table table-striped table-hover'])->inject(
+                    H::thead(
+                        H::tr(
+                            H::th(H::div(__('Id'))).
+                            H::th(H::div(__('Quantity'))).
+                            H::th(H::div(__('Color'))).
+                            H::th(H::div(__('Size'))).
+                            H::th(H::div(__('SKU'))).
+                            ''
+                        ).
+                        ''
+                    ).
+                    H::tbody()
+                )
             ).
             H::div(array('id' => $prefix.'_orders', 'class' => 'segment'))->inject(
-
+                H::table(['id' => $prefix.'_orders_table', 'class' => 'table table-striped table-hover'])->inject(
+                    H::thead(
+                        H::tr(
+                            H::th(H::div(__('Name'))).
+                            H::th(H::div(__('Street'))).
+                            H::th(H::div(__('City'))).
+                            H::th(H::div(__('State'))).
+                            H::th(H::div(__('Zip'))).
+                            H::th(H::div(__('Country'))).
+                            H::th(H::div(__('Status'))).
+                            H::th(H::div(__('Created'))).
+                            ''
+                        ).
+                        ''
+                    ).
+                    H::tbody()
+                )
             )
         )
     ;

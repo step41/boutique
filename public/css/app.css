@@ -12652,6 +12652,11 @@ textarea[readonly] {
   background-color: var(--bs-modal-bg);
 }
 
+/* Table styles */
+[data-hidden] {
+  display: none;
+}
+
 /* List styles */
 .list,
 .list-dashboard {

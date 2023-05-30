@@ -86,6 +86,11 @@ textarea {
 }
 
 
+/* Table styles */
+[data-hidden] {
+	display: none;
+}
+
 /* List styles */
 .list,
 .list-dashboard {

@@ -9,11 +9,16 @@
         foreach ($orders as $order):
             $rows .= 
                 H::tr(
-                    H::td(H::div(['text' => ucwords($order->order_name)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => ucwords($order->order_type)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => ucwords($order->style)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => ucwords($order->brand)])).
-                    H::td(H::div(['data-bp' => '1200', 'text' => '$'.number_format(($order->shipping_price/100), 2)])).
+                    H::td(H::div(['text' => $order->user_id])).
+                    H::td(H::div(['text' => ucwords($order->product_name)])).
+                    H::td(H::div(['text' => $order->name])).
+                    H::td(H::div(['data-truncate' => '50', 'data-bp' => '1200', 'text' => $order->street_address])).
+                    H::td(H::div(['data-bp' => '1200', 'text' => $order->city])).
+                    H::td(H::div(['data-bp' => '1200', 'text' => $order->state])).
+                    H::td(H::div(['data-bp' => '1200', 'text' => $order->zip])).
+                    H::td(H::div(['data-bp' => '1200', 'text' => $order->country_code])).
+                    H::td(H::div(['text' => $order->order_status])).
+                    H::td(H::div(['text' => date('F d, Y', strtotime($order->created_at))])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $order->id, 'text' => __('Copy')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $order->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $order->id, 'text' => __('View')])])).
@@ -25,11 +30,16 @@
             H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover'])->inject(
                 H::thead(
                     H::tr(
-                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'order_name', 'text' => __('Name')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'order_type', 'text' => __('Type')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'style', 'text' => __('Style')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'brand', 'text' => __('Brand')])])).
-                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'shipping_price', 'text' => __('Price')])])).
+                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('UserID')])])).
+                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Product')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'name', 'text' => __('Customer')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => __('Street')])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'city', 'text' => __('City')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'state', 'text' => __('State')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'zip', 'text' => __('Zip')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'country_code', 'text' => __('Country')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'order_status', 'text' => __('Status')])])).
+                        H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'created_at', 'text' => __('Created')])])).
                         H::th(H::div()).
                         H::th(H::div()).
                         H::th(H::div()).
@@ -65,6 +75,16 @@
     echo $output;
 
 /*
+
+					'name',
+					'street_address',
+					'city',
+					'state',
+					'zip',
+					'country_code',
+					'order_status',
+					'created_at',
+
     'product_id',
     'stock_id',
     'street_address',

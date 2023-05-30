@@ -4172,6 +4172,11 @@ $.fn.decerealize = function (vals) {
 			var json = vals;
 			json = JSON.parse(json);
 			if (json) {
+				for (j in json) {
+					if (typeof json[j] !== 'string' && typeof json[j] !== 'number') {
+						json[j] = null;
+					}
+				}
 				vals = $.param(json);
 			}
 		}

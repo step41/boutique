@@ -84,7 +84,7 @@ class ProductController extends Controller {
         if ($this->userCan('update products')):
 
             //$product = $this->repository->get($id);
-            $product = $this->model->with('orders')->with('stock')->where('user_id', Auth::user()->id)->findOrFail($id);
+            $product = $this->model->with('orders')->with('stocks')->where('user_id', Auth::user()->id)->findOrFail($id);
 
             return json_encode($product);
 
