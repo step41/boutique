@@ -15,12 +15,14 @@
 - Full text search indexing for better key term matching and speed
 - Generated migrations and seeders for proper schema and data changes
 - Latest software versions of:
+- - Ubuntu 22.10+
 - - Apache v2.4+
 - - MySQL v8.0+
 - - PHP v8.1+
 - - Laravel v10+
 - - Bootstrap v5.3+
 ## Setup:
+- Note: These instructions assume you are running a current version of Ubuntu. The below details may vary if your OS is different.
 - Download and install Docker desktop app (if not already installed). I used v3.7 but newer versions may work as well.
 - Download this git repo and extract to directory of your choice
 - Open a terminal window and navigate to your extracted directory
@@ -39,17 +41,15 @@
 - Run `npm install && npm run prod` to populate node modules and push files to public
 - Visit [My Boutique](https://myboutique.loc) to login to the app
 ## Notes:
-- There are no bugs that I'm aware of, but the project was build in just a few days. If you have any problems getting this project up and running, please don't hesitate to reach out to me and I can push a bug fix to the repo.
+- There are no bugs that I'm aware of, but the project was built in just a few days. If you have any problems getting this project up and running, please don't hesitate to reach out to me and I can push a bug fix to the repo.
 - I tried to make the setup instructions as clear as possible, but it's quite possible I missed something. If so, please let me know and I'll add the missing steps.
-- For ease of use, a final export SQL file is included in /database/data
+- The .env file is not included in this repo for security reasons. Please contact me if you did not receive a copy of this file.
+- Migrations and seeders have been included for demo purposes. However, for ease of use, a final export SQL file is also included in /database/data. 
 - I implemented every feature request in the requirements along with a whole lot of extra features. This was done purely for *wow* factor. Under real-world conditions, we obviously don't just add features without going through proper channels. :) 
 - For demonstration purposes only, I utilized the RBAC to prevent deletion of most records. To meet the requirements of full CRUD capability, an existing user account can be changed to a higher-level access, giving them instant access to delete or other admin-level functionality.
 - Soft deletes have been implemented on most tables in the database. This was not a requirement, but simply something I thought might be nice for a demo app.
 - The database still contains the password_hash and password_plain columns for demo purposes only. These would obviously need to be removed in a production environment.
 - Any other questions? Please reach out and I'll do my best to answer.
-
-## ----------------------------------------------------------------------------
-
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, stock,
 products and orders (data format will be detailed below) from a hypothetical
