@@ -1,7 +1,7 @@
 <?php 
 
     $output = $content = $status = '';
-    $title = __('Dashboard');
+    $title = H::h4(H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard');
 
     if (session('status')):
         $status .= H::div(['class' => 'alert alert-success', 'role' => 'alert', 'text' => session('status')]);

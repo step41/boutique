@@ -14,6 +14,7 @@
 			const BCO = Boutique.Controllers.Order;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCO.dialog);
 			BU.initSearchForm(BCO.formList, BCO.index);
 			
 			$(BCO.prefix + '_table, ' + BCO.prefix + '_show').off('click').on('click', function(e) {

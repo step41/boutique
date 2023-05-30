@@ -19,7 +19,8 @@ textarea {
 	@include scrollbars();
 }
 .content,
-.table {
+.table,
+.card-header {
 	a, a:hover, a:visited {
 		text-decoration: none;
 	}
@@ -34,6 +35,13 @@ textarea {
 			margin-top: .1rem;
 		}
 	}
+	.card-search {
+		margin-bottom: 1rem;
+	}
+}
+.msg-no-records {
+	padding: 2rem;
+	text-align: center;
 }
 
 /* Bootstrap overrides */

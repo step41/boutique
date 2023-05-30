@@ -104,13 +104,16 @@ class StockController extends Controller {
             $input = $request->all();
 
             $stocks = $this->repository->getWithProductByUser();
-            $stocks = $this->model->where('user_id', Auth::user()->id);
             
             if (!empty($input['search'])):
 
-                $searchKey = (!empty($input['searchkey'])) ? $input['searchkey'] : 'sku';
+                // Full text search does not support AI fields so we'll get a bit creative here to 
+                // meet the requirements. We'll use the logic that if keywords are a mix, we will compare
+                // against FULL TEXT index, but if it's an integer value then we'll assume the user wants
+                // to match a record ID. 
+                $matchId = (preg_replace('/[0-9]+/', '', $input['search']) === '');
             
-                $stocks = $stocks->search($input['search']);
+                $stocks = ($matchId) ? $stocks->where('id', $input['search']) : $stocks->search($input['search']);
             
             endif;
 

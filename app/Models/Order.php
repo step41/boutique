@@ -57,6 +57,22 @@ class Order extends Model
     }
 
     /**
+     * Implement full text search option
+     */
+    public function scopeSearch($query, $keywords)
+    {
+        return $query->when(
+            $keywords,
+            function ($query, $keywords) {
+                $query->whereRaw('MATCH(name, street_address, city, state, order_status) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
+            },
+            function ($query) {
+                $query->latest();
+            }
+        );
+    }
+
+    /**
      * Get the stock for a given order.
      */
     public function stock(): BelongsTo

@@ -3,18 +3,19 @@
     $type = 'product';
     $types = INF::pluralize($type);
     $static = $dynamic = $rows = '';
-    $title = 'My '.ucfirst($types);
+    $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
     if (!empty($products)):
         foreach ($products as $product):
             $rows .= 
                 H::tr(
+                    H::td(H::div(['text' => $product->id])).
                     H::td(H::div(['text' => ucwords($product->product_name)])).
                     H::td(H::div(['data-bp' => '1200', 'text' => ucwords($product->product_type)])).
                     H::td(H::div(['data-bp' => '1440', 'text' => ucwords($product->style)])).
                     H::td(H::div(['data-bp' => '1440', 'text' => ucwords($product->brand)])).
                     H::td(H::div(['data-bp' => '1200', 'text' => '$'.number_format(($product->shipping_price/100), 2)])).
-                    H::td(H::div(['data-bp' => '992', 'text' => date('F d, Y', strtotime($product->created_at))])).
+                    H::td(H::div(['data-bp' => '992', 'text' => date('m/d/Y', strtotime($product->created_at))])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $product->id, 'text' => __('Copy')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $product->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $product->id, 'text' => __('View')])])).
@@ -26,6 +27,7 @@
             H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover'])->inject(
                 H::thead(
                     H::tr(
+                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'id', 'text' => __('ID')])])).
                         H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Name')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'product_type', 'text' => __('Type')])])).
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'style', 'text' => __('Style')])])).

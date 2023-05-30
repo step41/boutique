@@ -3,7 +3,7 @@
     $type = 'stock';
     $types = INF::pluralize($type);
     $static = $dynamic = $rows = '';
-    $title = 'My '.ucfirst($types);
+    $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
     if (!empty($stocks)):
         foreach ($stocks as $stock):
@@ -18,7 +18,6 @@
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->length])).
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->width])).
                     H::td(H::div(['data-bp' => '1440', 'text' => $stock->height])).
-                    H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $stock->id, 'text' => __('Copy')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $stock->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $stock->id, 'text' => __('View')])])).
                     ''
@@ -40,7 +39,6 @@
                         H::th(H::div(['data-bp' => '1440', 'text' => H::a(['href' => '#', 'data-orderby' => 'height', 'text' => __('Height')])])).
                         H::th(H::div()).
                         H::th(H::div()).
-                        H::th(H::div()).
                         ''
                     ).
                     ''
@@ -53,6 +51,7 @@
         $dynamic .= H::h4('No '.$types.' found');
     endif;
 
+    // Not sure how stock is currently handled so I'm disabling the creation button for now. But this can easily be re-enabled if required.
     $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
     $static .= 
         H::boutiqueLayout([

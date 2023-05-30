@@ -10,50 +10,48 @@
         H::form(array('id' => $prefix.'_form_write'))->inject(
             H::hidden(array('id' => 'id')).
             H::text(array(
-                'id' => $prefix.'_type', 
-                'label' => T::_('Stock Type'), 
-                'validate' => array(
-                    'required' => TRUE,
-                    'lengthMax' => 100,
-                ), 
+                'id' => 'quantity', 
+                'label' => T::_('Quantity'), 
             )).
             H::text(array(
-                'id' => $prefix.'_name', 
-                'label' => T::_('Stock Name'), 
-                'maxlength' => '100',
-                'validate' => array(
-                    'required' => TRUE,
-                    'lengthMax' => 100,
-                ), 
+                'id' => 'color', 
+                'label' => T::_('Color'), 
             )).
             H::textarea(array(
-                'id' => 'description', 
-                'label' => T::_('Stock Description'), 
-                'required' => TRUE,
+                'id' => 'size', 
+                'label' => T::_('Size'), 
             )).
             H::text(array(
-                'id' => 'style', 
-                'label' => T::_('Stock Style'), 
-                'required' => TRUE,
+                'id' => 'weight', 
+                'label' => T::_('Weight'), 
             )).
             H::text(array(
-                'id' => 'brand', 
-                'label' => T::_('Stock Brand'), 
-                'required' => TRUE,
+                'id' => 'length', 
+                'label' => T::_('Length'), 
             )).
             H::text(array(
-                'id' => 'url', 
-                'label' => T::_('Stock URL'), 
-                'validate' => array(
-                    'lengthMax' => 100,
-                ), 
+                'id' => 'width', 
+                'label' => T::_('Width'), 
             )).
             H::text(array(
-                'id' => 'shipping_price', 
-                'label' => T::_('Stock Shipping Price'), 
-                'validate' => array(
-                    'integer' => TRUE,
-                ), 
+                'id' => 'height', 
+                'label' => T::_('Height'), 
+            )).
+            H::text(array(
+                'id' => 'cost_cents', 
+                'label' => T::_('Cost (cents)'), 
+            )).
+            H::text(array(
+                'id' => 'price_cents', 
+                'label' => T::_('Price (cents)'), 
+            )).
+            H::text(array(
+                'id' => 'sale_price_cents', 
+                'label' => T::_('Sale Price (cents)'), 
+            )).
+            H::text(array(
+                'id' => 'sku', 
+                'label' => T::_('SKU'), 
             )).
             H::textarea(array(
                 'id' => 'note', 
@@ -64,9 +62,10 @@
     ;
     
     $buttons = 
-        H::btn(array('prefix' => $prefix, 'action' => 'add', 'class' => 'btn-last', 'text' => T::_('Create'))).
-        H::btn(array('prefix' => $prefix, 'action' => 'del', 'text' => T::_('Delete'))).
-        H::btn(array('prefix' => $prefix, 'action' => 'upd', 'class' => 'btn-last', 'text' => T::_('Update')))
+        //H::btn(array('prefix' => $prefix, 'action' => 'add', 'class' => 'btn-last', 'text' => T::_('Create'))).
+        //H::btn(array('prefix' => $prefix, 'action' => 'del', 'text' => T::_('Delete'))).
+       // H::btn(array('prefix' => $prefix, 'action' => 'upd', 'class' => 'btn-last', 'text' => T::_('Update'))).
+       ''
     ;
     
     echo sprintf($template, $class, $prefix, $title, $content, $buttons);

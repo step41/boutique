@@ -104,26 +104,26 @@ class OrderController extends Controller {
             $input = $request->all();
 
             $orders = $this->repository->getWithProductsAndStocksByUser();
-            dd($orders->get());
-            //$orders = $this->model->with('product')->with('stock')->with('user')->where('user_id', Auth::user()->id);
             
             if (!empty($input['search'])):
 
-                $searchKey = (!empty($input['searchkey'])) ? $input['searchkey'] : 'order_name';
+                // Full text search does not support AI fields so we'll get a bit creative here to 
+                // meet the requirements. We'll use the logic that if keywords are a mix, we will compare
+                // against FULL TEXT index, but if it's an integer value then we'll assume the user wants
+                // to match a record ID. 
+                $matchId = (preg_replace('/[0-9]+/', '', $input['search']) === '');
             
-                $orders = $orders->search($input['search']);
+                $orders = ($matchId) ? $orders->where('id', $input['search']) : $orders->search($input['search']);
             
             endif;
 
-            $orderBy = (!empty($input['orderby'])) ? $input['orderby'] : 'order_name';
+            $orderBy = (!empty($input['orderby'])) ? $input['orderby'] : 'product_name';
 
             $sort = (!empty($input['sort']) && strtolower($input['sort']) === 'desc') ? 'desc' : 'asc';
             
-            //$orders = $orders->orderBy($orderBy, $sort);
+            $orders = $orders->orderBy($orderBy, $sort);
             
             $orders = $orders->paginate(10)->onEachSide(0);
-
-            //$orders = $orders->groupBy('product_name');
 
             return view('pages.order.index', compact('orders'));
 

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Stock;
 use Auth;
 
@@ -33,15 +32,15 @@ class StockRepository
      *
      * @param  $id
      *
-     * @return App/Models/Order;
+     * @return App/Models/Stock;
      */
     public function getWithProductByUser()
     {
-        $items = DB::table('stocks')
-            ->select('products.product_name', 'users.id', 'stocks.*')
-            ->join('products', 'stocks.product_id', '=', 'products.id')
-            ->join('users', 'products.user_id', '=', 'users.id')
-            ->where('user_id', Auth::user()->id)
+        $items = Stock::select('p.*', 'stocks.*')
+            ->join('products AS p', 'stocks.product_id', '=', 'p.id')
+            ->whereExists(function ($query) {
+                $query->select('*')->from('users as u')->whereColumn('u.id', 'p.user_id')->where('user_id', Auth::user()->id);
+            })
         ;
 
         return $items;

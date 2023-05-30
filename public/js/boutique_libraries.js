@@ -3100,6 +3100,7 @@ var Boutique = Boutique || {};
 			const BCO = Boutique.Controllers.Order;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCO.dialog);
 			BU.initSearchForm(BCO.formList, BCO.index);
 			
 			$(BCO.prefix + '_table, ' + BCO.prefix + '_show').off('click').on('click', function(e) {
@@ -3453,6 +3454,7 @@ var Boutique = Boutique || {};
 			const BCP = Boutique.Controllers.Product;
 			const BU = Boutique.Utilities;
 
+			let nf = '<tr><td colspan="8"><h5 class="msg-no-records">No %s available for this product</h5></tr>';
 			let columns = {
 				orders: [
 					'name',
@@ -3465,17 +3467,23 @@ var Boutique = Boutique || {};
 					'created_at',
 				],
 				stocks: [
-					'id',
 					'color',
 					'quantity',
 					'size',
 					'sku',
+					'cost_cents',
+					'price_cents',
+					'sale_price_cents',
 				]
 			}
-			let stocks = $(BCP.prefix + '_stocks_table tbody');
 			let orders = $(BCP.prefix + '_orders_table tbody');
+			let stocks = $(BCP.prefix + '_stocks_table tbody');
 			let row, cell, r, c, v;
 			let json = {};
+
+			// reset previous views
+			orders.html('');
+			stocks.html('');
 
 			try {
 				json = JSON.parse(data);
@@ -3484,7 +3492,7 @@ var Boutique = Boutique || {};
 
 			console.log(json);
 
-			if (json.orders) {
+			if (json.orders && json.orders.length) {
 				for (r in json.orders) {
 					row = $('<tr></tr>');
 					for (c in columns.orders) {
@@ -3498,7 +3506,10 @@ var Boutique = Boutique || {};
 					orders.append(row);
 				}
 			}
-			if (json.stocks) {
+			else {
+				orders.html(sprintf(nf, 'orders'));
+			}
+			if (json.stocks && json.stocks.length) {
 				for (r in json.stocks) {
 					row = $('<tr></tr>');
 					for (c in columns.stocks) {
@@ -3508,6 +3519,9 @@ var Boutique = Boutique || {};
 					}
 					stocks.append(row);
 				}
+			}
+			else {
+				stocks.html(sprintf(nf, 'stocks'));
 			}
 
 		},
@@ -3804,6 +3818,7 @@ var Boutique = Boutique || {};
 			const BCS = Boutique.Controllers.Stock;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCS.dialog);
 			BU.initSearchForm(BCS.formList, BCS.index);
 			
 			$(BCS.prefix + '_table, ' + BCS.prefix + '_show').off('click').on('click', function(e) {

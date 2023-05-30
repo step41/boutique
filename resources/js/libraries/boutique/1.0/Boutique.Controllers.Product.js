@@ -48,6 +48,7 @@
 			const BCP = Boutique.Controllers.Product;
 			const BU = Boutique.Utilities;
 
+			let nf = '<tr><td colspan="8"><h5 class="msg-no-records">No %s available for this product</h5></tr>';
 			let columns = {
 				orders: [
 					'name',
@@ -60,17 +61,23 @@
 					'created_at',
 				],
 				stocks: [
-					'id',
 					'color',
 					'quantity',
 					'size',
 					'sku',
+					'cost_cents',
+					'price_cents',
+					'sale_price_cents',
 				]
 			}
-			let stocks = $(BCP.prefix + '_stocks_table tbody');
 			let orders = $(BCP.prefix + '_orders_table tbody');
+			let stocks = $(BCP.prefix + '_stocks_table tbody');
 			let row, cell, r, c, v;
 			let json = {};
+
+			// reset previous views
+			orders.html('');
+			stocks.html('');
 
 			try {
 				json = JSON.parse(data);
@@ -79,7 +86,7 @@
 
 			console.log(json);
 
-			if (json.orders) {
+			if (json.orders && json.orders.length) {
 				for (r in json.orders) {
 					row = $('<tr></tr>');
 					for (c in columns.orders) {
@@ -93,7 +100,10 @@
 					orders.append(row);
 				}
 			}
-			if (json.stocks) {
+			else {
+				orders.html(sprintf(nf, 'orders'));
+			}
+			if (json.stocks && json.stocks.length) {
 				for (r in json.stocks) {
 					row = $('<tr></tr>');
 					for (c in columns.stocks) {
@@ -103,6 +113,9 @@
 					}
 					stocks.append(row);
 				}
+			}
+			else {
+				stocks.html(sprintf(nf, 'stocks'));
 			}
 
 		},

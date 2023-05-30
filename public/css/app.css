@@ -12593,7 +12593,10 @@ textarea {
 .content a, .content a:hover, .content a:visited,
 .table a,
 .table a:hover,
-.table a:visited {
+.table a:visited,
+.card-header a,
+.card-header a:hover,
+.card-header a:visited {
   text-decoration: none;
 }
 
@@ -12605,6 +12608,14 @@ textarea {
 }
 .card .card-header .card-actions {
   margin-top: 0.1rem;
+}
+.card .card-search {
+  margin-bottom: 1rem;
+}
+
+.msg-no-records {
+  padding: 2rem;
+  text-align: center;
 }
 
 /* Bootstrap overrides */

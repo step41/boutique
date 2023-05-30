@@ -14,6 +14,7 @@
 			const BCS = Boutique.Controllers.Stock;
 			const BU = Boutique.Utilities;
 
+			BU.initSegmentSelect(BCS.dialog);
 			BU.initSearchForm(BCS.formList, BCS.index);
 			
 			$(BCS.prefix + '_table, ' + BCS.prefix + '_show').off('click').on('click', function(e) {

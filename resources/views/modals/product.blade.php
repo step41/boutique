@@ -91,11 +91,13 @@
                 H::table(['id' => $prefix.'_stocks_table', 'class' => 'table table-striped table-hover'])->inject(
                     H::thead(
                         H::tr(
-                            H::th(H::div(__('Id'))).
-                            H::th(H::div(__('Quantity'))).
                             H::th(H::div(__('Color'))).
+                            H::th(H::div(__('Quantity'))).
                             H::th(H::div(__('Size'))).
                             H::th(H::div(__('SKU'))).
+                            H::th(H::div(__('Cost'))).
+                            H::th(H::div(__('Price'))).
+                            H::th(H::div(__('Sale Price'))).
                             ''
                         ).
                         ''

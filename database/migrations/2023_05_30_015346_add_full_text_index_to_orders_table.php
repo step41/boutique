@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         DB::connection('mysql')->statement('
-            CREATE FULLTEXT INDEX FTT_products_name_style_brand_desc
-                ON `products` (`product_name`, `style`, `brand`, `description`)
+            CREATE FULLTEXT INDEX FT_orders_name_street_city_state_status
+                ON `orders` (`name`, `street_address`, `city`, `state`, `order_status`)
                 WITH parser ngram
         ');
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::connection('mysql')->statement('ALTER TABLE `products` DROP INDEX FTT_products_name_style_brand_desc;');
+        DB::connection('mysql')->statement('ALTER TABLE `orders` DROP INDEX FT_orders_name_street_city_state_status;');
     }
 };

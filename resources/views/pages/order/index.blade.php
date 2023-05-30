@@ -3,13 +3,12 @@
     $type = 'order';
     $types = INF::pluralize($type);
     $static = $dynamic = $rows = '';
-    $title = 'My '.ucfirst($types);
+    $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
     if (!empty($orders)):
         foreach ($orders as $order):
             $rows .= 
                 H::tr(
-                    H::td(H::div(['text' => $order->user_id])).
                     H::td(H::div(['text' => ucwords($order->product_name)])).
                     H::td(H::div(['text' => $order->name])).
                     H::td(H::div(['data-truncate' => '50', 'data-bp' => '1200', 'text' => $order->street_address])).
@@ -19,7 +18,6 @@
                     H::td(H::div(['data-bp' => '1200', 'text' => $order->country_code])).
                     H::td(H::div(['text' => $order->order_status])).
                     H::td(H::div(['text' => date('F d, Y', strtotime($order->created_at))])).
-                    H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $order->id, 'text' => __('Copy')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $order->id, 'text' => __('Edit')])])).
                     H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $order->id, 'text' => __('View')])])).
                     ''
@@ -30,7 +28,6 @@
             H::table(['id' => $type.'_table', 'class' => 'table table-striped table-hover'])->inject(
                 H::thead(
                     H::tr(
-                        H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('UserID')])])).
                         H::th(H::div(['text' => H::a(['href' => '#', 'data-orderby' => 'product_name', 'text' => __('Product')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'name', 'text' => __('Customer')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => __('Street')])).
@@ -40,7 +37,6 @@
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'country_code', 'text' => __('Country')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'order_status', 'text' => __('Status')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'created_at', 'text' => __('Created')])])).
-                        H::th(H::div()).
                         H::th(H::div()).
                         H::th(H::div()).
                         ''
@@ -55,7 +51,8 @@
         $dynamic .= H::h4('No '.$types.' found');
     endif;
 
-    $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
+    // Disabling creation button since it seems more likely that the customers will have their own app for placing an order. But this can easily be re-enabled if required.
+    $button = ''; //H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
     $static .= 
         H::boutiqueLayout([
             'title' => $title, 

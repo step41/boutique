@@ -789,9 +789,9 @@ class HtmlHelper {
 		$output .= $this->hidden(['id' => 'srow', 'value' => $srow]);
 		$output .= $this->hidden(['id' => 'erow', 'value' => $erow]);
 		$output .= $this->hidden(['id' => 'perpage', 'value' => $perpage]);
-		$output .= $this->text(['id' => 'page', 'value' => $page]);
-		$output .= $this->text(['id' => 'sort', 'value' => $sort]);
-		$output .= $this->text(['id' => 'orderby', 'value' => $orderby]);
+		$output .= $this->hidden(['id' => 'page', 'value' => $page]);
+		$output .= $this->hidden(['id' => 'sort', 'value' => $sort]);
+		$output .= $this->hidden(['id' => 'orderby', 'value' => $orderby]);
 
 		return $output;
 	}
@@ -874,7 +874,7 @@ class HtmlHelper {
 							$this->div([
 								'class' => 'card-header', 
 								'text' => 
-									$this->div(['class' => 'card-title float-start', 'text' => $this->h4($attribs['title'])]).
+									$this->div(['class' => 'card-title float-start', 'text' => $attribs['title']]).
 									$this->div(['class' => 'card-actions float-end', 'text' => ((!empty($attribs['button'])) ? $attribs['button'] : '')])
 							]).
 							$this->div([

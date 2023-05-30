@@ -83,7 +83,6 @@ class ProductController extends Controller {
 
         if ($this->userCan('update products')):
 
-            //$product = $this->repository->get($id);
             $product = $this->model->with('orders')->with('stocks')->where('user_id', Auth::user()->id)->findOrFail($id);
 
             return json_encode($product);
@@ -108,9 +107,13 @@ class ProductController extends Controller {
             
             if (!empty($input['search'])):
 
-                $searchKey = (!empty($input['searchkey'])) ? $input['searchkey'] : 'product_name';
+                // Full text search does not support AI fields so we'll get a bit creative here to 
+                // meet the requirements. We'll use the logic that if keywords are a mix, we will compare
+                // against FULL TEXT index, but if it's an integer value then we'll assume the user wants
+                // to match a record ID. 
+                $matchId = (preg_replace('/[0-9]+/', '', $input['search']) === '');
             
-                $products = $products->search($input['search']);
+                $products = ($matchId) ? $products->where('id', $input['search']) : $products->search($input['search']);
             
             endif;
 
