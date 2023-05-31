@@ -40,6 +40,9 @@
 - Run the following command to build and seed the database: `php artisan migrate:fresh --seed` (~20 mins to complete)
 - Run `npm install && npm run prod` to populate node modules and push files to public
 - Visit [My Boutique](https://myboutique.loc) to login to the app
+- For quick access you can use the credentials below. This account has been assigned the "Manager" role within the app. To add "delete ..." functionality to this user, simply upgrade their role to "Administrator" in the database. (Table: model_has_roles, Model ID: 23, Role ID: 5):
+- - User: larhonda.hovis@foo.com
+- - Pass: cghmpbKXXK
 ## Notes:
 - There are no bugs that I'm aware of, but the project was built in just a few days. If you have any problems getting this project up and running, please don't hesitate to reach out to me and I can push a bug fix to the repo.
 - I tried to make the setup instructions as clear as possible, but it's quite possible I missed something. If so, please let me know and I'll add the missing steps.
