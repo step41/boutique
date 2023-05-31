@@ -50,6 +50,8 @@
 - Soft deletes have been implemented on most tables in the database. This was not a requirement, but simply something I thought might be nice for a demo app.
 - The database still contains the password_hash and password_plain columns for demo purposes only. These would obviously need to be removed in a production environment.
 - The site design is responsive and auto-hides some less critical data for optimal display purposes. To view all data, your viewing screen must be 1440px or larger. These media breakpoints are easily adjustable in the code.
+- The docker scripts will automatically create a self-signed certificate to match your test domain and allow access through SSL. If you want the browser warning to go away, simply export the cert and import it into your Certificate Authorities in your current browser. Restart the browser for the changes to take effect.
+- The current repo contains some packages and classes that are not currently in use. These packages were imported in anticipation of use but ultimately were not needed and can be safely ignored. The demo app will only utilize packages that it requires so there's no additional overhead to the application performance. 
 - Any other questions? Please reach out and I'll do my best to answer.
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, stock,
