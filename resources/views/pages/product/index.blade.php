@@ -5,7 +5,7 @@
     $static = $dynamic = $rows = '';
     $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
-    if (!empty($products)):
+    if (!empty($products) && $products->count()):
         foreach ($products as $product):
             $rows .= 
                 H::tr(
@@ -46,7 +46,7 @@
             H::div(['class' => 'd-flex justify-content-center', 'text' => $products->links()])
         ;
     else:
-        $dynamic .= H::h4('No '.$types.' found');
+        $dynamic .= H::h4(['class' => 'msg-no-records', 'text' => 'No '.$types.' found']);
     endif;
 
     $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);

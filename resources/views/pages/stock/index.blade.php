@@ -5,7 +5,7 @@
     $static = $dynamic = $rows = '';
     $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
-    if (!empty($stocks)):
+    if (!empty($stocks) && $stocks->count()):
         foreach ($stocks as $stock):
             $rows .= 
                 H::tr(
@@ -48,7 +48,7 @@
             H::div(['class' => 'd-flex justify-content-center', 'text' => $stocks->links()])
         ;
     else:
-        $dynamic .= H::h4('No '.$types.' found');
+        $dynamic .= H::h4(['class' => 'msg-no-records', 'text' => 'No '.$types.' found']);
     endif;
 
     // Not sure how stock is currently handled so I'm disabling the creation button for now. But this can easily be re-enabled if required.

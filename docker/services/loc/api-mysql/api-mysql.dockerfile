@@ -1,4 +1,4 @@
-FROM ubuntu/mysql:latest
+FROM ubuntu/mysql:8.0-22.04_beta
 
 # metadata
 LABEL org.opencontainers.image.authors="Step41 Services <services@step41.com>"

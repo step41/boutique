@@ -18,7 +18,7 @@
 - - Ubuntu 22.10+
 - - Apache v2.4+
 - - MySQL v8.0+
-- - PHP v8.1+
+- - PHP-FPM v8.1+
 - - Laravel v10+
 - - Bootstrap v5.3+
 ## Setup:
@@ -34,7 +34,7 @@
 - Add the following entries to your hosts file:
 - - 192.168.0.2	api-mysql
 - - 192.168.0.3	api-php
-- - 192.168.0.4  myboutique.loc
+- - 192.168.0.4 myboutique.loc
 - Save the changes and run the following command: `sudo service networking restart` 
 - Run the following command to import 3rd party packages: `composer update -o`
 - Run the following command to build and seed the database: `php artisan migrate:fresh --seed` (~20 mins to complete)
@@ -49,7 +49,7 @@
 - For demonstration purposes only, I utilized the RBAC to prevent deletion of most records. To meet the requirements of full CRUD capability, an existing user account can be changed to a higher-level access, giving them instant access to delete or other admin-level functionality.
 - Soft deletes have been implemented on most tables in the database. This was not a requirement, but simply something I thought might be nice for a demo app.
 - The database still contains the password_hash and password_plain columns for demo purposes only. These would obviously need to be removed in a production environment.
-- The site design is responsive and auto-hides some less critical data for optimal display purposes. To view all data, your viewing screen must be 1440px or larger.
+- The site design is responsive and auto-hides some less critical data for optimal display purposes. To view all data, your viewing screen must be 1440px or larger. These media breakpoints are easily adjustable in the code.
 - Any other questions? Please reach out and I'll do my best to answer.
 ## Requirements:
 You have been given a data dump of fake ecommerce data for users, stock,

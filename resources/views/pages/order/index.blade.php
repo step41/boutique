@@ -5,7 +5,7 @@
     $static = $dynamic = $rows = '';
     $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
-    if (!empty($orders)):
+    if (!empty($orders) && $orders->count()):
         foreach ($orders as $order):
             $rows .= 
                 H::tr(
@@ -48,7 +48,7 @@
             H::div(['class' => 'd-flex justify-content-center', 'text' => $orders->links()])
         ;
     else:
-        $dynamic .= H::h4('No '.$types.' found');
+        $dynamic .= H::h4(['class' => 'msg-no-records', 'text' => 'No '.$types.' found']);
     endif;
 
     // Disabling creation button since it seems more likely that the customers will have their own app for placing an order. But this can easily be re-enabled if required.
