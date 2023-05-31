@@ -8,7 +8,7 @@
             $links .= H::li(['class' => 'nav-item', 'text' => H::a(['class' => 'nav-link', 'href' => route('login'), 'text' => __('Login')])]);
         endif;
         if (Route::has('register')):
-            $links .= H::li(['class' => 'nav-item', 'text' => H::a(['class' => 'nav-link', 'href' => route('register'), 'text' => __('Register')])]);
+            //$links .= H::li(['class' => 'nav-item', 'text' => H::a(['class' => 'nav-link', 'href' => route('register'), 'text' => __('Register')])]);
         endif;
     else:
         $links .= H::li(['class' => 'nav-item dropdown'])->inject(

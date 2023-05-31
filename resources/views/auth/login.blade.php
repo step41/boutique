@@ -21,11 +21,12 @@
             H::div(['class' => 'row mb-0'])->inject(
                 H::div(['class' => 'col-md-8 offset-md-4'])->inject(
                     H::submit(['class' => 'btn-primary', 'text' => $title]).
-                    ((Route::has('password.request')) ? H::a([
-                        'class' => 'btn btn-link', 
-                        'href' => route('password.request'), 
-                        'text' => __('Forgot Your Password?')
-                    ]) : '')
+                    //((Route::has('password.request')) ? H::a([
+                    //    'class' => 'btn btn-link', 
+                    //    'href' => route('password.request'), 
+                    //    'text' => __('Forgot Your Password?')
+                    //]) : '')
+                    ''
                 )                                    
             )
         )
