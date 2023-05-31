@@ -1,3 +1,24 @@
+<?php
+
+    $output = $content = '';
+    $title = __('Reset Password');
+    $content .= 
+        H::form(['action' => route('password.update')])->inject(
+            H::boutiqueEmail([], $errors).
+            H::boutiquePassword(['autocomplete' => 'new-password'], $errors).
+            H::boutiquePasswordConfirm([], $errors).
+            H::div(['class' => 'row mb-0'])->inject(
+                H::div(['class' => 'col-md-8 offset-md-4'])->inject(
+                    H::submit(['class' => 'btn-primary', 'text' => __('Reset Password')])
+                )                                    
+            )
+        )
+    ;
+    $output = H::boutiqueLayout(['title' => $title, 'text' => $content]);
+
+    echo $output;
+
+/*
 @extends('layouts.app')
 
 @section('content')

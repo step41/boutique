@@ -1,3 +1,27 @@
+<?php
+
+    $output = $content = '';
+    $title = __('Reset Password');
+
+    if (session('status')):
+        $status .= H::div(['class' => 'alert alert-success', 'role' => 'alert', 'text' => session('status')]);
+    endif;
+
+    $content .= 
+        H::form(['action' => route('password.email')])->inject(
+            H::boutiqueEmail([], $errors).
+            H::div(['class' => 'row mb-0'])->inject(
+                H::div(['class' => 'col-md-8 offset-md-4'])->inject(
+                    H::submit(['class' => 'btn-primary', 'text' => __('Send Password Reset Link')])
+                )                                    
+            )
+        )
+    ;
+    $output = H::boutiqueLayout(['title' => $title, 'text' => $content]);
+
+    echo $output;
+
+/*
 @extends('layouts.app')
 
 @section('content')
