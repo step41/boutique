@@ -9,6 +9,12 @@ WORKDIR /var/www/html
 # config port
 EXPOSE 9000
 
+# add repository for alt packages
+#RUN apt-get update && apt-get install -y software-properties-common
+#RUN apt-get install -y gnupg
+#RUN apt-get install -y ca-certificates
+#RUN LC_ALL=en_US.UTF-8 add-apt-repository -y -u 'jammy' ppa:ondrej/php
+
 # setup dependencies
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
@@ -33,6 +39,7 @@ RUN apt-get update && apt-get upgrade -y \
     libreadline-dev \
     libxslt1-dev \
     libzip-dev \
+    mlocate \
     memcached \
     wget \
     unzip \
@@ -67,15 +74,17 @@ RUN apt-get update && apt-get upgrade -y \
     && pecl install memcached && docker-php-ext-enable memcached \
     && pecl install mongodb && docker-php-ext-enable mongodb \
     && pecl install redis && docker-php-ext-enable redis \
-    && yes '' | pecl install imagick && docker-php-ext-enable imagick \
-    && docker-php-source delete \
+    && yes '' | pecl install imagick && docker-php-ext-enable imagick
+
+# clean up
+RUN docker-php-source delete \
     && apt-get remove -y g++ wget \
     && apt-get autoremove --purge -y && apt-get autoclean -y && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* /var/tmp/*
 
 # add content and configs
-COPY ./docker/services/loc/api-php/usr/local/etc/php/conf.d/uploads.ini                             /usr/local/etc/php/conf.d/uploads.ini
+COPY ./docker/services/loc/api-php/usr/local/etc/php/conf.d/custom.ini                             /usr/local/etc/php/conf.d/custom.ini
 COPY ./docker/services/loc/api-php/usr/local/etc/php-fpm.d/www.conf                                 /usr/local/etc/php-fpm.d/www.conf
 
 # create logging and run dir

@@ -12,11 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::connection('mysql')->statement('
-            CREATE FULLTEXT INDEX FT_orders_name_street_city_state_status
-                ON `orders` (`name`, `street_address`, `city`, `state`, `order_status`)
-                WITH parser ngram
-        ');
+        if (env('APP_ENV') !== 'testing'):
+            DB::connection('mysql')->statement('
+                CREATE FULLTEXT INDEX FT_orders_name_street_city_state_status
+                    ON `orders` (`name`, `street_address`, `city`, `state`, `order_status`)
+                    WITH parser ngram
+            ');
+        endif;
     }
 
     /**
@@ -24,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::connection('mysql')->statement('ALTER TABLE `orders` DROP INDEX FT_orders_name_street_city_state_status;');
+        if (env('APP_ENV') !== 'testing'):
+            DB::connection('mysql')->statement('ALTER TABLE `orders` DROP INDEX FT_orders_name_street_city_state_status;');
+        endif;
     }
 };

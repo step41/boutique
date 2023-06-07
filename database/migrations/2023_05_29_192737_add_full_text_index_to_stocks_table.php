@@ -12,11 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::connection('mysql')->statement('
-            CREATE FULLTEXT INDEX FT_stocks_color_size_sku
-                ON `stocks` (`color`, `size`, `sku`)
-                WITH parser ngram
-        ');
+        if (env('APP_ENV') !== 'testing'):
+            DB::connection('mysql')->statement('
+                CREATE FULLTEXT INDEX FT_stocks_color_size_sku
+                    ON `stocks` (`color`, `size`, `sku`)
+                    WITH parser ngram
+            ');
+        endif;
     }
 
     /**
@@ -24,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::connection('mysql')->statement('ALTER TABLE `stocks` DROP INDEX FT_stocks_color_size_sku;');
+        if (env('APP_ENV') !== 'testing'):
+            DB::connection('mysql')->statement('ALTER TABLE `stocks` DROP INDEX FT_stocks_color_size_sku;');
+        endif;
     }
 };
