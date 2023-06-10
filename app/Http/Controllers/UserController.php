@@ -150,13 +150,7 @@ class UserController extends Controller {
 
             if ($this->validateFromCache($input)):
 
-                // Capture role for sync
-                $role = $input['role_id'];
-                
-                // Remove role from general input
-                unset($input['role_id']);
-
-                $user = $this->model->create($input)->roles()->sync($role);
+                $user = $this->model->create($input)->roles()->sync($input['role_id']);
 
             endif;
 

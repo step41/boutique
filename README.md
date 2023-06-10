@@ -11,7 +11,7 @@
 - Asynchronous create, read, update and delete functionality
 - Fully responsive design that easily accommodates large data sets
 - Asynchronous searching, sorting and paging features
-- Customer dashboard for viewing statistics, products, orders and stocks
+- Customer dashboard for viewing statistics, products, orders, stocks and users
 - Full text search indexing for better key term matching and speed
 - Generated migrations and seeders for proper schema and data changes
 - Latest software versions of:
