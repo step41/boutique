@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -72,11 +73,20 @@ class User extends Authenticatable
     }
     
     /**
-     * Get the role for a given user.
+     * Implement full text search option
      */
-    public function role(): BelongsTo
+    public function scopeSearch($query, $keywords)
     {
-        return $this->belongsTo(Role::class);
+        return $query->when(
+            $keywords,
+            function ($query, $keywords) {
+                $query->whereRaw('MATCH(users.name, email, shop_name, shop_domain) AGAINST (? IN BOOLEAN MODE)', [$keywords]);
+            },
+            function ($query) {
+                $query->latest();
+            }
+        );
     }
+
 
 }

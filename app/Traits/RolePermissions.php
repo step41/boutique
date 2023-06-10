@@ -2,12 +2,19 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use App\Facades\Message as MSG;
 use Auth;
 use Log;
 
 trait RolePermissions 
 {
+
+	protected $_overrideRoles = [
+		'administrator', 
+		'superadmin',
+	];
+
 	/**
 	 * Checks for a logged in user and verifies role based access controls to ensure account 
 	 * is authenticated and authorized to access a particular function or system area.
@@ -22,6 +29,7 @@ trait RolePermissions
 	public function userCan($permission = NULL) {
 
 		if (!empty($permission)):
+
 			if (Auth::user() && Auth::user()->hasPermissionTo($permission)):
 
 				return TRUE;
@@ -125,24 +133,35 @@ trait RolePermissions
 	 */
 	public function userHasOverride($model = NULL) {
 
-		if (!empty($model) && $model->user_id):
+		$override = FALSE;
 
-			$owner = (Auth::user() && Auth::user()->id === $model->user_id);
+		if (Auth::user() && !empty($model)):
 
-			if ($owner || $this->userHasAny($this->_overrideRoles)):
+			if (isset($model->user_id)):
 
-				return TRUE;
+				$owner = (Auth::user()->id === $model->user_id);
+				$elevated = $this->userHasAny($this->_overrideRoles);
 
-			else:
+				$override = ($owner || $elevated);
 
-				MSG::danger('You are not authorized', 401);
-				abort('401', '401');		
+			elseif ($model instanceof User):
 
-			endif;	
+				$override = (Auth::user()->roles()->first()->id >= $model->roles()->first()->id);
+
+			endif;
 
 		endif;
 
-		return TRUE;
+		if ($override):
+
+			return TRUE;
+		
+		else: 
+
+			MSG::danger('You are not authorized', 401);
+			abort('401', '401');		
+
+		endif;
 
 	}
 

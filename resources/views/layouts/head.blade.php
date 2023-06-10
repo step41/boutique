@@ -21,7 +21,11 @@
                 'aria-haspopup' => 'true',
                 'aria-expanded' => 'false',
                 'v-pre' => TRUE,
-                'text' => Auth::user()->name
+                'data-active-user-id' => Auth::user()->id,
+                'text' => 
+                    H::span(['class' => 'active-user-name', 'text' => Auth::user()->name]).
+                    ' :: '.
+                    H::span(['class' => 'active-user-role', 'text' => ucfirst(Auth::user()->getRoleNames()->first())]),
             ]).
             H::div(['class' => 'dropdown-menu dropdown-menu-end', 'aria-labelledby' => 'navbarDropdown'])->inject(
                 H::a([
@@ -67,25 +71,27 @@
             ).
             H::body(['close' => FALSE]).
                 H::div(['id' => 'app', 'close' => FALSE]).
-                    H::nav(['class' => 'navbar navbar-expand-md navbar-dark shadow-lg'])->inject(
-                        H::container(
-                            H::a(['class' => 'navbar-brand', 'href' => url('/'), 'text' => H::i(['class' => 'bi-shop']).' &nbsp;'.config('app.name')]).
-                            H::button([
-                                'class' => 'navbar-toggler', 
-                                'data-bs-toggle' => 'collapse', 
-                                'data-bs-target' => '#navbarSupportedContent',
-                                'aria-controls' => 'navbarSupportedContent',
-                                'aria-expanded' => 'false',
-                                'aria-label' => __('Toggle navigation'),
-                                'text' => H::span(['class' => 'navbar-toggler-icon'])
-                            ]).
-                            H::div(['id' => 'navbarSupportedContent', 'class' => 'collapse navbar-collapse'])->inject(
-                                H::comment('Left Side Of Navbar').
-                                H::ul('', ['class' => 'navbar-nav me-auto']).
-                                H::comment('Right Side Of Navbar').
-                                H::ul('', ['class' => 'navbar-nav ms-auto'])->inject(
-                                    H::comment('Authentication Links').
-                                    $links
+                    H::header(['id' => 'header'])->inject(
+                        H::nav(['class' => 'navbar navbar-expand-md navbar-dark shadow-lg'])->inject(
+                            H::container(
+                                H::a(['class' => 'navbar-brand', 'href' => url('/'), 'text' => H::i(['class' => 'bi-shop']).' &nbsp;'.config('app.name')]).
+                                H::button([
+                                    'class' => 'navbar-toggler', 
+                                    'data-bs-toggle' => 'collapse', 
+                                    'data-bs-target' => '#navbarSupportedContent',
+                                    'aria-controls' => 'navbarSupportedContent',
+                                    'aria-expanded' => 'false',
+                                    'aria-label' => __('Toggle navigation'),
+                                    'text' => H::span(['class' => 'navbar-toggler-icon'])
+                                ]).
+                                H::div(['id' => 'navbarSupportedContent', 'class' => 'collapse navbar-collapse'])->inject(
+                                    H::comment('Left Side Of Navbar').
+                                    H::ul('', ['class' => 'navbar-nav me-auto']).
+                                    H::comment('Right Side Of Navbar').
+                                    H::ul('', ['class' => 'navbar-nav ms-auto'])->inject(
+                                        H::comment('Authentication Links').
+                                        $links
+                                    )
                                 )
                             )
                         )

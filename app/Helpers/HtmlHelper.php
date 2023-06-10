@@ -459,7 +459,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function addclass($attribs = array(), $class) {
+	public function addclass($attribs = array(), $class = NULL) {
 		if (isset($attribs) && isset($class)):
 			$oldclasses = (isset($attribs['class'])) ? array_filter(explode(' ', $attribs['class'])) : array();
 			$newclasses = (is_array($class)) ? $class : array_filter(explode(' ', $class));
@@ -747,7 +747,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function boutiqueEmail($attribs = [], ViewErrorBag $errors) {
+	public function boutiqueEmail($attribs = [], ViewErrorBag $errors = NULL) {
 		$defaults = [
 			'id' => 'email', 
 			'label' => __('Email Address'),
@@ -809,7 +809,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function boutiqueInput($type = 'text', $attribs = [], ViewErrorBag $errors) {
+	public function boutiqueInput($type = 'text', $attribs = [], ViewErrorBag $errors = NULL) {
 		if (is_string($attribs)):
 			$attribs = ['id' => $attribs];
 		endif;
@@ -860,14 +860,14 @@ class HtmlHelper {
 	 * @since	1.0
 	 */
 	public function boutiqueLayout($attribs = []) {
-		$defaults = ['title' => '', 'text' => ''];
+		$defaults = ['title' => '', 'text' => '', 'modal' => ''];
 		if (is_string($attribs)):
 			$attribs = array('text' => $attribs);
 		endif;
 		$attribs = $this->_merge($defaults, $attribs);
 		$elm =  
 			$this->blade('layouts.head').
-			$this->container(
+			$this->container(['id' => 'content'])->inject(
 				$this->div(['class' => 'row justify-content-center'])->inject(
 					$this->div(['class' => 'col-md-12'])->inject(
 						$this->div(['class' => 'card'])->inject(
@@ -886,6 +886,7 @@ class HtmlHelper {
 				).
 				''
 			).
+			$attribs['modal'].
 			$this->blade('layouts.foot')
 		;
 		return $elm;
@@ -903,7 +904,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function boutiquePassword($attribs = [], ViewErrorBag $errors) {
+	public function boutiquePassword($attribs = [], ViewErrorBag $errors = NULL) {
 		$defaults = [
 			'id' => 'password', 
 			'label' => __('Password'),
@@ -926,7 +927,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function boutiquePasswordConfirm($attribs = [], ViewErrorBag $errors) {
+	public function boutiquePasswordConfirm($attribs = [], ViewErrorBag $errors = NULL) {
 		$defaults = [
 			'id' => 'password-confirm',
 			'name' => 'password_confirmation',
@@ -982,7 +983,7 @@ class HtmlHelper {
 	 * @access 	public
 	 * @since	1.0
 	 */
-	public function boutiqueText($attribs = [], ViewErrorBag $errors) {
+	public function boutiqueText($attribs = [], ViewErrorBag $errors = NULL) {
 		return $this->boutiqueInput('text', $attribs, $errors);
 	}
 	
@@ -3434,14 +3435,14 @@ class HtmlHelper {
 			'wrapclass'			=> '',
 		);
 		$attribs = $this->_merge($defaults, $attribs);
-		$attribs = $this->addclass($attribs, 'form-control');
+		$attribs = $this->addclass($attribs, 'form-select');
 		if ($attribs['selectize']): // simply added to prevent default selectpicker class being assigned
 			unset($attribs['selectize']);
 		elseif ($attribs['combobox']):
 			$attribs = $this->addclass($attribs, 'combobox');
 			unset($attribs['combobox']);
 		else:
-			$attribs = $this->addclass($attribs, 'selectpicker');
+			//$attribs = $this->addclass($attribs, 'selectpicker');
 		endif;
 		$cols = (isset($attribs['cols'])) ? $attribs['cols'] : FALSE;
 		$size = (isset($attribs['size'])) ? $attribs['size'] : FALSE;

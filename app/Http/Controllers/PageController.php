@@ -30,8 +30,6 @@ use Log;
 class PageController extends Controller {
 
     use RolePermissions, ValidateFromCache;
-
-    protected $_overrideRoles = ['administrator', 'superadmin'];
     
     /**
      * Create a new controller instance.
@@ -60,6 +58,16 @@ class PageController extends Controller {
         $this->stockModel           = $stockModel;
         $this->stockRepository      = $stockRepository;
     
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function dashboard()
+    {
+        return view('pages.dashboard');
     }
 
     /**

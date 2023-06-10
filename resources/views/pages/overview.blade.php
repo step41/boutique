@@ -1,7 +1,7 @@
 <?php 
 
     $output = '';
-    $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My Overview');
+    $title = H::h4(H::a(['href' => route('page.dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My Overview');
 
     $output .= 
         H::boutiqueLayout([

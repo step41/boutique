@@ -50,7 +50,20 @@ textarea {
 	overflow-y: auto;
 	max-height: 400px;
 }
-
+/* blur for content behind modals */
+.modal-open #header,
+.modal-open #content,
+.modal-open #footer
+{
+	filter: blur(2px);
+}
+.active-user-name,
+.active-user-role {
+	font-weight: 700;
+}
+.active-user-name {
+	color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+}
 
 
 
@@ -134,6 +147,12 @@ textarea {
     li:hover {
         background-color: darken($body-tertiary-bg-dark, 6);
     }
+}
+
+
+/* Select styles */
+select[disabled] {
+	@include hideSelectArrow;
 }
 
 
@@ -277,7 +296,7 @@ textarea {
 	float: left; 
 	font-size: 90%;
 	margin: 4px 0 8px 0;
-	padding: 0 10px;
+	padding: 5px 10px;
 	text-align: left;
 	width: 100%;
 }

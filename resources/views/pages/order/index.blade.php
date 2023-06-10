@@ -3,7 +3,7 @@
     $type = 'order';
     $types = INF::pluralize($type);
     $static = $dynamic = $rows = '';
-    $title = H::h4(H::a(['href' => route('dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
+    $title = H::h4(H::a(['href' => route('page.dashboard'), 'text' => H::i(['class' => 'bi-speedometer']).'&nbsp; Dashboard: ']).' &nbsp;My '.ucfirst($types));
 
     if (!empty($orders) && $orders->count()):
         foreach ($orders as $order):
@@ -62,8 +62,8 @@
                 H::boutiqueSearchFields().
                 H::div(['data-async' => TRUE])
                 // table content will be dynamically loaded here...
-            ).
-            H::blade('modals.'.$type)
+            ),
+            'modal' => H::blade('modals.'.$type, get_defined_vars())
         ])
     ;
 

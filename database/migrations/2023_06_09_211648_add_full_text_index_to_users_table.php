@@ -14,8 +14,8 @@ return new class extends Migration
     {
         if (env('APP_ENV') !== 'testing'):
             DB::connection('mysql')->statement('
-                CREATE FULLTEXT INDEX FT_products_name_style_brand_desc
-                    ON `products` (`product_name`, `style`, `brand`, `description`)
+                CREATE FULLTEXT INDEX FT_users_name_email_shop_name_shop_domain
+                    ON `users` (`name`, `email`, `shop_name`, `shop_domain`)
                     WITH parser ngram
             ');
         endif;
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         if (env('APP_ENV') !== 'testing'):
-            DB::connection('mysql')->statement('ALTER TABLE `products` DROP INDEX FT_products_name_style_brand_desc;');
+            DB::connection('mysql')->statement('ALTER TABLE `users` DROP INDEX FT_users_name_email_shop_name_shop_domain;');
         endif;
     }
 };

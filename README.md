@@ -23,7 +23,14 @@
 - - Bootstrap v5.3+
 ## Setup:
 - Note: These instructions assume you are running a current version of Ubuntu. The below details may vary if your OS is different.
-- Download and install Docker desktop app (if not already installed). I used v3.7 but newer versions may work as well.
+- Download and install the following items (if not already installed):
+- - Containerd.io
+- - Docker-ce
+- - Docker-ce-cli
+- - Docker-ce-rootless-extras
+- - Docker-compose
+- - Docker-compose-plugin
+- - Docker-buildx-plugin
 - Download this git repo and extract to directory of your choice
 - Open a terminal window and navigate to your extracted directory
 - Copy the .env file (provided separately by me) to the root of your extracted directory

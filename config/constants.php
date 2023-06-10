@@ -37,5 +37,7 @@ return array(
 
 	/* General Framework and Application Constants */
 	'ACRONYMS_UCASE_NOSPLIT'				=> 'HTML,PHP,ISBN,PDF',
+	'VALIDATION_PWD_LENGTHMIN'				=> 8,
+	'VALIDATION_PWD_LENGTHMAX'				=> 32,
 
 );

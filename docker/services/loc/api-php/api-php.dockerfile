@@ -9,12 +9,6 @@ WORKDIR /var/www/html
 # config port
 EXPOSE 9000
 
-# add repository for alt packages
-#RUN apt-get update && apt-get install -y software-properties-common
-#RUN apt-get install -y gnupg
-#RUN apt-get install -y ca-certificates
-#RUN LC_ALL=en_US.UTF-8 add-apt-repository -y -u 'jammy' ppa:ondrej/php
-
 # setup dependencies
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
@@ -70,11 +64,13 @@ RUN apt-get update && apt-get upgrade -y \
     && docker-php-ext-install zip \
     && CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install sockets \
     && pecl install xmlrpc-1.0.0RC3 && docker-php-ext-enable xmlrpc \
-    && pecl install xdebug && docker-php-ext-enable xdebug \
+    && pecl install xdebug-3.2.1 \
+    # disabling xdebug activation for now since it causes php-fpm to crash
+    #&& docker-php-ext-enable xdebug \
     && pecl install memcached && docker-php-ext-enable memcached \
     && pecl install mongodb && docker-php-ext-enable mongodb \
     && pecl install redis && docker-php-ext-enable redis \
-    && yes '' | pecl install imagick && docker-php-ext-enable imagick
+    && yes '' | pecl install imagick && docker-php-ext-enable imagick 
 
 # clean up
 RUN docker-php-source delete \
@@ -84,7 +80,7 @@ RUN docker-php-source delete \
     && rm -rf /tmp/* /var/tmp/*
 
 # add content and configs
-COPY ./docker/services/loc/api-php/usr/local/etc/php/conf.d/custom.ini                             /usr/local/etc/php/conf.d/custom.ini
+COPY ./docker/services/loc/api-php/usr/local/etc/php/conf.d/custom.ini                              /usr/local/etc/php/conf.d/custom.ini
 COPY ./docker/services/loc/api-php/usr/local/etc/php-fpm.d/www.conf                                 /usr/local/etc/php-fpm.d/www.conf
 
 # create logging and run dir

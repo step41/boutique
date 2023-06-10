@@ -450,6 +450,21 @@ is to set its parent element to preserve-3d. Like following:
 @mixin br50p {
 	@include border-radius(50%);
 }
+
+@mixin hideSelectArrow {
+	& {
+		/* for Firefox */
+		-moz-appearance: none;
+		/* for Chrome */
+		-webkit-appearance: none;
+		appearance: none;
+	}
+
+	/* For IE10 */
+	&::-ms-expand {
+		display: none;
+	}	
+}
 @mixin tabular {
 	background-color: $table-gutter-color;
 	border-collapse: separate;

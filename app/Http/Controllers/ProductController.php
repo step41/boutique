@@ -21,8 +21,6 @@ use Session;
 class ProductController extends Controller {
 
     use RolePermissions, ValidateFromCache;
-
-    protected $_overrideRoles = ['administrator', 'superadmin'];
     
     /**
      * Create a new controller instance.

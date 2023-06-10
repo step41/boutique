@@ -6,7 +6,6 @@ services:
     build:
       context: ./
       dockerfile: ./docker/services/loc/api-apache/api-apache.dockerfile
-    image: ubuntu/apache2:latest
     container_name: api-apache
     restart: always
     env_file:
@@ -29,7 +28,6 @@ services:
     build:
       context: ./
       dockerfile: ./docker/services/loc/api-php/api-php.dockerfile
-    image: nanoninja/php-fpm:8.1
     container_name: api-php
     restart: always
     env_file:
@@ -50,7 +48,6 @@ services:
     build:
       context: ./
       dockerfile: ./docker/services/loc/api-mysql/api-mysql.dockerfile
-    image: ubuntu/mysql:latest
     container_name: api-mysql
     restart: always
     env_file:

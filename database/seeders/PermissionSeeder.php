@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -81,7 +82,6 @@ class PermissionSeeder extends Seeder
                 'add orders',
                 'add products',
                 'add stocks',
-                'add users',
                 'update orders',
                 'update products',
                 'update stocks',
@@ -96,7 +96,7 @@ class PermissionSeeder extends Seeder
         ];
     
         Schema::disableForeignKeyConstraints();
-        //Artisan::call('optimize:clear');
+        Artisan::call('optimize:clear');
         DB::disableQueryLog();
         DB::table('role_has_permissions')->delete();
         DB::table('model_has_permissions')->delete();

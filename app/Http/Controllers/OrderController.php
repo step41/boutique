@@ -21,8 +21,6 @@ use Session;
 class OrderController extends Controller {
 
     use RolePermissions, ValidateFromCache;
-
-    protected $_overrideRoles = ['administrator', 'superadmin'];
     
     /**
      * Create a new controller instance.

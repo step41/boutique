@@ -120,6 +120,8 @@
 				f.find('input[name="search"]').off('keyup').on('keyup', function(e) {
 					if (e.which === 13) {
 						e.preventDefault();
+						// Reset page to 1
+						$(':input[name="page"]').val(1);
 						f.trigger('submit');
 					}
 				});
