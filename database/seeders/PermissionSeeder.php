@@ -116,7 +116,11 @@ class PermissionSeeder extends Seeder
         endforeach;
         $users = User::all();
         foreach ($users as $user):
-            $user->assignRole('manager');
+            if ($user->id === 1):
+                $user->assignRole('superadmin');
+            else:
+                $user->assignRole('manager');
+            endif;
         endforeach;
         
     }

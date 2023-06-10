@@ -146,7 +146,10 @@ trait RolePermissions
 
 			elseif ($model instanceof User):
 
-				$override = (Auth::user()->roles()->first()->id >= $model->roles()->first()->id);
+				$owner = (Auth::user()->id === $model->id);
+				$elevated = (Auth::user()->hasPermissionTo('manage users'));
+
+				$override = ($owner || $elevated);
 
 			endif;
 

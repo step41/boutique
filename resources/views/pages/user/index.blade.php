@@ -20,10 +20,9 @@
                     H::td(H::div(['data-bp' => '1200', 'text' => date('m/d/Y', strtotime($user->trial_starts_at))])).
                     H::td(H::div(['data-bp' => '1200', 'text' => date('m/d/Y', strtotime($user->trial_ends_at))])).
                     H::td(H::div(['data-bp' => '992', 'text' => date('m/d/Y', strtotime($user->created_at))])).
-                    ((Auth::user() && Auth::user()->hasPermissionTo('update '.$types)) ? 
-                        H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'copy', 'data-id' => $user->id, 'text' => __('Copy')])])).
+                    ((Auth::user() && (Auth::user()->hasPermissionTo('update '.$types) || Auth::user()->id === $user->id)) ? 
                         H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'edit', 'data-id' => $user->id, 'text' => __('Edit')])]))
-                    : '').
+                    : H::td(H::div('&nbsp;'))).
                     ((Auth::user() && Auth::user()->hasPermissionTo('view '.$types)) ? 
                         H::td(H::div(['text' => H::a(['href' => '#', 'data-action' => 'view', 'data-id' => $user->id, 'text' => __('View')])]))
                     : '')
@@ -45,10 +44,7 @@
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'trial_starts_at', 'text' => __('Trial Start')])])).
                         H::th(H::div(['data-bp' => '1200', 'text' => H::a(['href' => '#', 'data-orderby' => 'trial_ends_at', 'text' => __('Trial End')])])).
                         H::th(H::div(['data-bp' => '992', 'text' => H::a(['href' => '#', 'data-orderby' => 'created_at', 'text' => __('Created')])])).
-                        ((Auth::user() && Auth::user()->hasPermissionTo('update '.$types)) ? 
-                            H::th(H::div()).
-                            H::th(H::div())
-                        : '').
+                        H::th(H::div('&nbsp;')).
                         ((Auth::user() && Auth::user()->hasPermissionTo('view '.$types)) ? 
                             H::th(H::div())
                         : '')
@@ -62,7 +58,7 @@
         $dynamic .= H::h4(['class' => 'msg-no-records', 'text' => 'No '.$types.' found']);
     endif;
 
-    $button = H::button(['id' => $type.'_show', 'class' => 'btn-md btn-primary float-end', 'data-action' => 'add', 'text' => 'Add '.ucfirst($type)]);
+    $button = '';
     $static .= 
         H::boutiqueLayout([
             'title' => $title, 

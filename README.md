@@ -47,18 +47,18 @@
 - Run the following command to build and seed the database: `php artisan migrate:fresh --seed` (~20 mins to complete)
 - Run `npm install && npm run prod` to populate node modules and push files to public
 - Visit [My Boutique](https://myboutique.loc) to login to the app
-- For quick access you can use the credentials below. This account has been assigned the "Manager" role within the app. To add "delete ..." functionality to this user, simply upgrade their role to "Administrator" in the database. (Table: model_has_roles, Model ID: 23, Role ID: 5):
-- - User: larhonda.hovis@foo.com
-- - Pass: cghmpbKXXK
+- For quick access you can use the credentials below. This account has been assigned the "superadmin" role within the app. All other user accounts are set to "manager" access level which is more restricted.
+- - User: root@myboutique.loc
+- - Pass: password
 ## Notes:
 - There are no bugs that I'm aware of, but the project was built in just a few days. If you have any problems getting this project up and running, please don't hesitate to reach out to me and I can push a bug fix to the repo.
 - I tried to make the setup instructions as clear as possible, but it's quite possible I missed something. If so, please let me know and I'll add the missing steps.
 - The .env file is not included in this repo for security reasons. Please contact me if you did not receive a copy of this file.
 - Migrations and seeders have been included for demo purposes. However, for ease of use, a final export SQL file is also included in /database/data. 
 - I implemented every feature request in the requirements along with a whole lot of extra features. This was done purely for *wow* factor. Under real-world conditions, we obviously don't just add features without going through proper channels. :) 
-- For demonstration purposes only, I utilized the RBAC to prevent deletion of most records. To meet the requirements of full CRUD capability, an existing user account can be changed to a higher-level access, giving them instant access to delete or other admin-level functionality.
+- For demonstration purposes only, I utilized the RBAC to prevent deletion of most records if you are not an "administrator" or "superadmin". To meet the requirements of full CRUD capability, an existing user account can be changed to a higher-level access, giving them instant access to delete or other admin-level functionality.
 - Soft deletes have been implemented on most tables in the database. This was not a requirement, but simply something I thought might be nice for a demo app.
-- The database still contains the password_hash and password_plain columns for demo purposes only. These would obviously need to be removed in a production environment.
+- The database column password_hash was dropped and the password_plain column was renamed to password_confirm and kept in plain text format for demo purposes only. The plain text column would obviously need to be removed in a production environment.
 - The site design is responsive and auto-hides some less critical data for optimal display purposes. To view all data, your viewing screen must be 1440px or larger. These media breakpoints are easily adjustable in the code.
 - The docker scripts will automatically create a self-signed certificate to match your test domain and allow access through SSL. If you want the browser warning to go away, simply export the cert and import it into your Certificate Authorities in your current browser. Restart the browser for the changes to take effect.
 - The current repo contains some packages and classes that are not currently in use. These packages were imported in anticipation of use but ultimately were not needed and can be safely ignored. The demo app will only utilize packages that it requires so there's no additional overhead to the application performance. 

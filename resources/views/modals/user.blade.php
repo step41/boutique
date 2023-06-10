@@ -63,6 +63,15 @@
                 'required' => TRUE,
             )).
             H::password(array(
+                'id' => 'password_current', 
+                'label' => T::_('Current Password'), 
+                'placeholder' => T::_('Required for password changes'), 
+                'validate' => array(
+                    'required' => (($isElv) ? FALSE : TRUE),
+                    'ifSet' => (($isElv) ? '' : 'password, password_confirm'),
+                ), 
+            )).
+            H::password(array(
                 'id' => 'password', 
                 'label' => T::_('New Password'), 
                 'placeholder' => T::_('Enter a new password to change the current'), 

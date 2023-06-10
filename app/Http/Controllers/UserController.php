@@ -6,9 +6,11 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Repositories\RoleRepository;
 use App\Facades\Message as MSG;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Traits\RolePermissions;
 use App\Traits\ValidateFromCache;
+use App\Classes\Validator;
 use Auth;
 use Session;
 
@@ -54,8 +56,8 @@ class UserController extends Controller {
 
             if ($user->count()):
 
-                // Additional check for ownership or override access
-                if (Auth::user()->id != $id && $this->userHasOverride($user)):
+                // Cannot delete own account
+                if (Auth::user()->id != $id):
                 
                     $user->delete();
 
@@ -102,7 +104,7 @@ class UserController extends Controller {
 
         if ($this->userCan('view users')):
 
-            $input = $request->all();
+            $input = $request->query();
 
             $users = $this->repository->getAllWithRoles();
             
@@ -144,7 +146,7 @@ class UserController extends Controller {
 
         if ($this->userCan('add users')):
 
-            $input = $request->all();
+            $input = $request->post();
 
             if ($this->validateFromCache($input)):
 
@@ -172,51 +174,88 @@ class UserController extends Controller {
      */
     public function update(Request $request, $id) {
 
-        if ($this->userCan('update users')):
+        $input = $request->post();
 
-            $input = $request->all();
+        if ($this->validateFromCache($input)):
 
-            if ($this->validateFromCache($input)):
+            $user = $this->repository->get($id);
 
-                $user = $this->repository->get($id);
+            if ($user->count()):
 
-                if ($user->count()):
-
-                    // Additional check for ownership or override access
-                    if ($this->userHasOverride($user)):
-                    
-                        // Check for password changes
-                        if (empty($input['password']) || empty($input['password_confirm'])):
-                            unset($input['password']);
-                        endif;
-
-                        // Capture role for sync
-                        $role = $input['role_id'];
-                        
-                        // Remove role and password confirm from general input
-                        unset($input['role_id'], $input['password_confirm']);
-
-                        $user->fill($input)->save();
-
-                        // Limit role change if current user
-                        if (Auth::user()->id != $id):
-                            $user->roles()->sync($role);
-                        endif;
-
-                        return MSG::success('User updated successfully');
-                    
-                    endif;
+                // Additional check for ownership or override access
+                if ($this->validatePassword($user, $input) && $this->userHasOverride($user)):
                 
-                else:
-    
-                    return MSG::danger('Invalid user identifier');
-    
+                    // Remove password fields from input to avoid blank password hashing
+                    if (empty($input['password']) || empty($input['password_confirm'])):
+                        unset($input['password'], $input['password_confirm']);
+                    endif;
+
+                    $user->fill($input)->save();
+
+                    // Limit role change if current user
+                    if (Auth::user()->id != $id && Auth::user()->roles()->first()->id >= $user->roles()->first()->id):
+                        $user->roles()->sync($input['role_id']);
+                    endif;
+
+                    return MSG::success('User updated successfully');
+                
                 endif;
+                
+            else:
+
+                return MSG::danger('Invalid user identifier');
 
             endif;
 
         endif;
 
     }
+
+	/**
+	 * Custom validation rules that handle server-side specific validation requirements.
+	 *
+     * @uses    MSG::validation()
+     * 
+	 * @param	object				$user			    The user account to be affected
+	 * @param	object				$post			    The post array values
+	 * @access  protected
+	 * @return  mixed
+	 * @since	5.0
+	 */
+	protected function validatePassword($user = NULL, $post = NULL) {
+        $hash = $user->password;
+        $text = $post['password_current'];
+		$err = __('Password changes require a valid current password');
+		$ov = new Validator($post);
+		$ov->callback([$this, 'validatePasswordCurrent'], $err, [$text, $hash])->validateIfSet('password', 'New Password');
+		$ov->callback([$this, 'validatePasswordCurrent'], $err, [$text, $hash])->validateIfSet('password_confirm', 'Confirm Password');
+		if ($ov->hasErrors()):
+			MSG::validation($ov->getAllErrors());
+			return FALSE;
+		endif;
+		return TRUE;
+	}
+
+	/**
+	 * Verifies current password against database in the event of a password change request.
+	 *
+	 * @uses	Auth::user()
+	 * @uses	Hash::check()
+	 *
+	 * @return	boolean									Returns TRUE if validation passes, otherwise FALSE
+	 * @access 	public
+	 * @since	5.0
+	 */
+	public function validatePasswordCurrent(...$args) {
+		if (Auth::user() && Auth::user()->hasPermissionTo('manage users')):
+			return TRUE;
+		elseif (!empty($args) && count($args) >= 4):
+            [$key, $val, $text, $hash] = $args;
+            return Hash::check($text, $hash);
+        endif;
+		return FALSE;
+	}
+	
+
 
 }

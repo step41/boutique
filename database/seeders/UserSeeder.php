@@ -21,7 +21,10 @@ class UserSeeder extends Seeder
         $records = DF::prepForSeed($file);
         foreach ($records as $record):
             // Add password hash using built-in bcrypt so we can eventually remove the password_hash and password_plain cols
-            $record['password'] = $record['password_plain'];
+            $record['password_confirm'] = $record['password_plain'];
+            $record['password'] = $record['password_confirm'];
+            // Remove plain and hash columns
+            unset($record['password_plain'], $record['password_hash']);
             User::create($record);
         endforeach;
     }

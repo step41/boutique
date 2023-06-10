@@ -231,13 +231,13 @@
 	
 			let id = (BCU.itemId && BCU.action === 'edit') ? '/' + BCU.itemId : '';
 			
-			BCU.bv = BV.build(BCU.formWrite);
+			//BCU.bv = BV.build(BCU.formWrite);
 			
-			if (BCU.bv.hasErrors()) {
-				return false;
-			}
+			//if (BCU.bv.hasErrors()) {
+			//	return false;
+			//}
 		
-			BV.clearErrors(BCU.formWrite);
+			//BV.clearErrors(BCU.formWrite);
 	
 			$.ajax({
 				type: (BCU.action === 'edit') ? 'put' : 'post',
